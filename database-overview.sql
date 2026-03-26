@@ -1,0 +1,2 @@
+create database multivendor_ecommerce;
+use multivendor_ecommerce;
