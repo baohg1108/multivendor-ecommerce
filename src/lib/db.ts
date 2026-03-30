@@ -6,6 +6,8 @@ declare global {
 
 export const db = globalThis.prisma || new PrismaClient();
 
+console.log("APP DB:", process.env.DATABASE_URL);
+
 if (process.env.NODE_ENV !== "production") globalThis.prisma = db;
 
 // Source - https://stackoverflow.com/q/69427050
