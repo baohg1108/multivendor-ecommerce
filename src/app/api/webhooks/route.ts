@@ -56,7 +56,7 @@ export async function POST(req: Request) {
   if (evt.type === "user.created" || evt.type === "user.updated") {
     console.log("userId: ", evt.data.id);
     const data = JSON.parse(body).data;
-    // console.log("user data --> ", data);
+    console.log("user data --> ", data);
     const user: Partial<User> = {
       id: data.id,
       name: `${data.first_name} ${data.last_name}`,
