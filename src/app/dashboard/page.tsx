@@ -13,5 +13,5 @@ export default async function DashboardPage() {
   if (user.privateMetadata.role === "ADMIN") redirect("/dashboard/admin");
 
   if (user.privateMetadata.role === "SELLER") redirect("/dashboard/seller");
-  return <div>Dashboard Page</div>;
+  return <div>Dashboard Page Tets hahahah</div>;
 }
