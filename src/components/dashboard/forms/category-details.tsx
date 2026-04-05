@@ -35,19 +35,24 @@ import {
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import ImageUpload from "../shared/image-upload";
 
 interface CategoryDetailsProps {
   data?: Category;
+  cloudinary_key: string;
 }
 
-const CategoryDetails: React.FC<CategoryDetailsProps> = ({ data }) => {
+const CategoryDetails: React.FC<CategoryDetailsProps> = ({
+  data,
+  cloudinary_key,
+}) => {
   // form hook for managing form statte and validation
   const form = useForm<z.infer<typeof CategoryFormSchema>>({
     mode: "onChange",
     resolver: zodResolver(CategoryFormSchema),
     defaultValues: {
       name: data?.name || "",
-      image: data?.image || [],
+      image: data?.image ? [{ url: data.image }] : [],
       url: data?.url || "",
       featured: data?.featured || false,
     },
@@ -61,7 +66,7 @@ const CategoryDetails: React.FC<CategoryDetailsProps> = ({ data }) => {
     if (data) {
       form.reset({
         name: data?.name || "",
-        image: data?.image || [],
+        image: data?.image ? [{ url: data.image }] : [],
         url: data?.url || "",
         featured: data?.featured || false,
       });
@@ -90,6 +95,32 @@ const CategoryDetails: React.FC<CategoryDetailsProps> = ({ data }) => {
               onSubmit={form.handleSubmit(handleSubmit)}
               className="space-y-4"
             >
+              {/* image upload */}
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <ImageUpload
+                        type="profile"
+                        cloudinary_key={cloudinary_key}
+                        value={field.value.map((image) => image.url)}
+                        disabled={isLoading}
+                        onChange={(url) => field.onChange([{ url }])}
+                        onRemove={(url) =>
+                          field.onChange([
+                            ...field.value.filter(
+                              (current) => current.url !== url,
+                            ),
+                          ])
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage></FormMessage>
+                  </FormItem>
+                )}
+              />
               {/* category name */}
               <FormField
                 disabled={isLoading}
