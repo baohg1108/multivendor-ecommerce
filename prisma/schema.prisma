@@ -8,11 +8,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  relationMode =  "prisma"
-  url = env("DATABASE_URL")
+  provider     = "mysql"
+  relationMode = "prisma"
 }
-
 
 enum Role {
   USER
@@ -20,16 +18,24 @@ enum Role {
   ADMIN
 }
 
-
 model User {
-  id String @id @default(uuid())
-  name String
-  email String @unique
+  id      String @id @default(uuid())
+  name    String
+  email   String @unique
   picture String @db.Text
-  role Role @default(USER)
+  role    Role   @default(USER)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model Category {
+  id       String  @id @default(uuid())
+  name     String
+  image    String
+  url      String
+  featured Boolean @default(false)
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
