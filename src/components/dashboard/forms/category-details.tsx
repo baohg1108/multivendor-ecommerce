@@ -1,7 +1,7 @@
 "use client";
 
 // React
-import React from "react";
+import React, { use } from "react";
 import { FC } from "react";
 import { useEffect } from "react";
 
@@ -37,6 +37,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import ImageUpload from "../shared/image-upload";
 
+// Queries
+import { upsertCategory } from "@/queries/category";
+
+// Utils
+import { v4 } from "uuid";
+
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 interface CategoryDetailsProps {
   data?: Category;
   cloudinary_key: string;
@@ -46,6 +54,9 @@ const CategoryDetails: React.FC<CategoryDetailsProps> = ({
   data,
   cloudinary_key,
 }) => {
+  // Initializing nessary hooks and states
+  const router = useRouter();
+
   // form hook for managing form statte and validation
   const form = useForm<z.infer<typeof CategoryFormSchema>>({
     mode: "onChange",
@@ -75,8 +86,40 @@ const CategoryDetails: React.FC<CategoryDetailsProps> = ({
 
   // Submit handler for form submission
   const handleSubmit = async (values: z.infer<typeof CategoryFormSchema>) => {
-    // Here you would typically send the form data to your backend API
-    console.log("Form submitted with values:", values);
+    // console.log("Form values:", JSON.stringify(values));
+    try {
+      // updating category data
+      const response = await upsertCategory({
+        id: data?.id ? data.id : v4(),
+        name: values.name,
+        image: values.image[0].url,
+        url: values.url,
+        featured: values.featured,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      // sonner toast for success
+      toast.success(
+        data?.id
+          ? "Category has been updated successfully!"
+          : `Congratulations! The \`${response?.name}\` category has been created successfully!`,
+      );
+
+      // redicrect or refresh data
+      if (data?.id) {
+        router.refresh();
+      } else {
+        router.push("/dashboard/admin/categories");
+      }
+    } catch (error) {
+      console.error("Error submitting category form:", error);
+
+      // sonner toast for error
+      toast.error("Oops! Something went wrong", {
+        description: (error as Error).message,
+      });
+    }
   };
   return (
     <AlertDialog>
@@ -123,14 +166,17 @@ const CategoryDetails: React.FC<CategoryDetailsProps> = ({
               />
               {/* category name */}
               <FormField
-                disabled={isLoading}
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel>Category Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Category Name" {...field} />
+                      <Input
+                        placeholder="Category Name"
+                        {...field}
+                        disabled={isLoading}
+                      />
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>
@@ -138,14 +184,17 @@ const CategoryDetails: React.FC<CategoryDetailsProps> = ({
               />
               {/* category URL */}
               <FormField
-                disabled={isLoading}
                 control={form.control}
                 name="url"
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormLabel>Category URL</FormLabel>
                     <FormControl>
-                      <Input placeholder="/category-url" {...field} />
+                      <Input
+                        placeholder="/category-url"
+                        {...field}
+                        disabled={isLoading}
+                      />
                     </FormControl>
                     <FormMessage></FormMessage>
                   </FormItem>

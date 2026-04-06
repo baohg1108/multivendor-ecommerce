@@ -76,6 +76,7 @@ export async function POST(req: Request) {
         email: user.email!,
         picture: user.picture!,
         role: user.role || "USER",
+        updatedAt: new Date(),
       },
     });
 
