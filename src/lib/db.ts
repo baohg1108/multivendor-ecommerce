@@ -1,30 +1,33 @@
+// import { PrismaClient } from "@prisma/client";
+
+// declare global {
+//   var prisma: PrismaClient | undefined;
+// }
+
+// export const db = globalThis.prisma || new PrismaClient();
+
+// // console.log("APP DB:", process.env.DATABASE_URL);
+
+// if (process.env.NODE_ENV !== "production") globalThis.prisma = db;
+
 import { PrismaClient } from "@prisma/client";
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 
 declare global {
   var prisma: PrismaClient | undefined;
 }
 
-export const db = globalThis.prisma || new PrismaClient();
+const url = new URL(process.env.DATABASE_URL!);
 
-console.log("APP DB:", process.env.DATABASE_URL);
+const adapter = new PrismaMariaDb({
+  host: url.hostname,
+  port: Number(url.port) || 3306,
+  user: url.username,
+  password: url.password,
+  database: url.pathname.slice(1),
+  connectionLimit: 5,
+});
+
+export const db = globalThis.prisma || new PrismaClient({ adapter });
 
 if (process.env.NODE_ENV !== "production") globalThis.prisma = db;
-
-// Source - https://stackoverflow.com/q/69427050
-// Posted by Forgotten-Storm
-// Retrieved 2026-03-28, License - CC BY-SA 4.0
-
-// import { PrismaClient } from "@prisma/client";
-
-// let prisma: PrismaClient;
-
-// if (process.env.NODE_ENV === "production") {
-//   prisma = new PrismaClient();
-// } else {
-//   if (!global.prisma) {
-//     global.prisma = new PrismaClient();
-//   }
-//   prisma = global.prisma;
-// }
-
-// export default prisma;

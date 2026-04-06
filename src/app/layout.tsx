@@ -17,6 +17,10 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 
+// Toast
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/sonner";
+
 // Fonts
 const interFont = Inter({ subsets: ["latin"] });
 const barlowFont = Barlow({
@@ -47,6 +51,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <SonnerToaster position="bottom-left"></SonnerToaster>
           </ThemeProvider>
         </body>
       </html>
