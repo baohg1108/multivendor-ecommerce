@@ -10,6 +10,7 @@ import { SubCategory } from "@prisma/client";
 import { db } from "@/lib/db";
 
 // Prisma model
+import { getAllCategories } from "./category";
 
 export const upsertSubCategory = async (subCategory: SubCategory) => {
   try {
@@ -97,6 +98,9 @@ export const upsertSubCategory = async (subCategory: SubCategory) => {
 
 export const getAllSubCategories = async () => {
   const subCategories = await db.subCategory.findMany({
+    include: {
+      category: true,
+    },
     orderBy: {
       updatedAt: "desc",
     },

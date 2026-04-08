@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 // components
-import CategoryDetails from "@/components/dashboard/forms/category-details";
 import { CustomModal } from "@/components/dashboard/shared/custom-modal";
 
 // UI
@@ -46,15 +45,18 @@ import {
 } from "lucide-react";
 
 // queries
-import { deleteCategory, getCategory } from "@/queries/category";
+import { getAllCategories } from "@/queries/category";
 
 // table
 import { ColumnDef } from "@tanstack/react-table";
 
 // types
 import { Category } from "@prisma/client";
+import { SubCategoryWithCategoryType } from "@/lib/types";
+import SubCategoryDetails from "@/components/dashboard/forms/subCategory-deatils";
+import { deleteSubCategory, getSubCategory } from "@/queries/subCategory";
 
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<SubCategoryWithCategoryType>[] = [
   {
     accessorKey: "image",
     header: "",
@@ -85,12 +87,17 @@ export const columns: ColumnDef<Category>[] = [
     cell: ({ row }) => <span>{row.original.url}</span>,
   },
   {
+    accessorKey: "category",
+    header: "Category",
+    cell: ({ row }) => <span>{row.original.category.name}</span>,
+  },
+  {
     accessorKey: "featured",
     header: "Featured",
     cell: ({ row }) => (
-      <span className="flex justify-center">
+      <span className="text-muted-foreground flex justify-center">
         {row.original.featured ? (
-          <BadgeCheck className="text-green-500" />
+          <BadgeCheck className="stroke-green-500" />
         ) : (
           <BadgeMinus />
         )}
@@ -98,102 +105,95 @@ export const columns: ColumnDef<Category>[] = [
     ),
   },
   {
-    id: "action",
-    cell: ({ row }) => <CellActions rowData={row.original} />,
+    id: "actions",
+    cell: ({ row }) => {
+      const rowData = row.original;
+      return <CellActions rowData={rowData} />;
+    },
   },
 ];
 
 interface CellActionsProps {
-  rowData: Category;
+  rowData: SubCategoryWithCategoryType;
 }
 
 const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
   const { setOpen, setClose } = useModal();
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  if (!rowData?.id) return null;
+  // get categories
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const categories = await getAllCategories();
+      setCategories(categories);
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <AlertDialog>
       <DropdownMenu>
-        {/* Trigger */}
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-
-        {/* Content */}
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
-          {/* Edit */}
           <DropdownMenuItem
             className="flex gap-2"
             onClick={() => {
               setOpen(
                 <CustomModal>
-                  <CategoryDetails data={{ ...rowData }} />
+                  <SubCategoryDetails
+                    categories={categories}
+                    data={{ ...rowData }}
+                  ></SubCategoryDetails>
                 </CustomModal>,
                 async () => {
                   return {
-                    rowData: await getCategory(rowData.id),
+                    rowData: await getSubCategory(rowData.id),
                   };
                 },
               );
             }}
           >
             <Edit size={15} />
-            Edit Details
+            <span>Edit Details</span>
           </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-
-          {/* Delete */}
-          <DropdownMenuItem asChild className="flex gap-2">
-            <AlertDialogTrigger>
-              <div className="flex items-center gap-2">
-                <Trash size={15} />
-                Delete category
-              </div>
-            </AlertDialogTrigger>
-          </DropdownMenuItem>
+          <DropdownMenuSeparator></DropdownMenuSeparator>
+          <AlertDialogTrigger asChild>
+            <DropdownMenuItem className="flex gap-2" onClick={() => {}}>
+              <Trash size={15} />
+              <span>Delete Category</span>
+            </DropdownMenuItem>
+          </AlertDialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      {/* Alert Dialog */}
       <AlertDialogContent className="max-w-lg">
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogTitle className="text-left">
+            Are you absolutely sure?
+          </AlertDialogTitle>
+          <AlertDialogDescription className="text-left">
             This action cannot be undone. This will permanently delete the
-            category and all associated data.
+            subCategory and related data
           </AlertDialogDescription>
         </AlertDialogHeader>
-
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-
+        <AlertDialogFooter className="flex items-center">
+          <AlertDialogCancel className="mb-2">Cancel</AlertDialogCancel>
           <AlertDialogAction
-            disabled={loading}
-            className="bg-destructive text-white"
+            className="bg-destructive hover:bg-destructive mb-2 text-white"
             onClick={async () => {
-              try {
-                setLoading(true);
-                await deleteCategory(rowData.id);
-
-                toast.success("Category deleted", {
-                  description: "The category has been deleted successfully.",
-                });
-
-                router.refresh();
-                setClose();
-              } catch (err) {
-                toast.error("Error deleting category");
-              } finally {
-                setLoading(false);
-              }
+              await deleteSubCategory(rowData.id);
+              toast.success("SubCategory deleted successfully", {
+                description: "The subCategory has been deleted.",
+              });
+              router.refresh();
+              setClose();
             }}
           >
             Delete
