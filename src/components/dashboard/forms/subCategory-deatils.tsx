@@ -81,6 +81,9 @@ const SubCategoryDetails: React.FC<CategoryDetailsProps> = ({
   // Loading status based on form submission
   const isLoading = form.formState.isSubmitting;
 
+  const formData = form.watch(); // Watch form data for changes
+  console.log("Form data:", formData);
+
   // Reset form values when data changes
   useEffect(() => {
     if (data) {
