@@ -19,7 +19,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/provider/modal-provider";
-import { Search } from "lucide-react";
+import Link from "next/link";
+import { FilePlus2, Search } from "lucide-react";
 import { CustomModal } from "../dashboard/shared/custom-modal";
 
 interface DataTableProps<TData, TValue> {
@@ -29,6 +30,7 @@ interface DataTableProps<TData, TValue> {
   searchPlaceholder?: string;
   actionButtonContext?: React.ReactNode;
   modalChildren?: React.ReactNode;
+  newTabLink?: string;
   heading?: string;
   subheading?: string;
   noHeader?: true;
@@ -41,6 +43,7 @@ export default function DataTable<TData, TValue>({
   searchPlaceholder,
   actionButtonContext,
   modalChildren,
+  newTabLink,
   heading,
   subheading,
   noHeader,
@@ -75,23 +78,33 @@ export default function DataTable<TData, TValue>({
           />
         </div>
 
-        {modalChildren && (
-          <Button
-            className="flex gap-2"
-            onClick={() => {
-              setOpen(
-                <CustomModal
-                  heading={heading || ""}
-                  subheading={subheading || ""}
-                >
-                  {modalChildren}
-                </CustomModal>,
-              );
-            }}
-          >
-            {actionButtonContext}
-          </Button>
-        )}
+        <div className="flex gap-x-2">
+          {modalChildren && (
+            <Button
+              className="flex- gap-2"
+              onClick={() => {
+                if (modalChildren)
+                  setOpen(
+                    <CustomModal
+                      heading={heading || ""}
+                      subheading={subheading || ""}
+                    >
+                      {modalChildren}
+                    </CustomModal>,
+                  );
+              }}
+            >
+              {actionButtonContext}
+            </Button>
+          )}
+          {newTabLink && (
+            <Link href={newTabLink}>
+              <Button variant="outline">
+                <FilePlus2 className="me-1"></FilePlus2> Create in new page
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="border bg-background rounded-lg">

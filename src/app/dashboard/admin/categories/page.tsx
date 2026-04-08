@@ -4,7 +4,7 @@ import { getAllCategories } from "@/queries/category";
 import { Plus } from "lucide-react";
 import { columns } from "./columns";
 
-export default async function AdminCategoryPage() {
+export default async function AdminCategoriesPage() {
   // fetching stores data from are found
   const categories = await getAllCategories();
 
@@ -22,9 +22,10 @@ export default async function AdminCategoryPage() {
         </>
       }
       modalChildren={<CategoryDetails />}
+      newTabLink="/dashboard/admin/categories/new"
       filterValue="name"
       data={categories}
-      searchPlaceholder="Search categories..."
+      searchPlaceholder="Search categories name..."
       columns={columns}
     />
   );
