@@ -1,21 +1,10 @@
 generator client {
-  provider   = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider     = "mysql"
   relationMode = "prisma"
-    url      = env("DATABASE_URL") 
-}
-
-model Category {
-  id        String   @id
-  name      String
-  image     String
-  url       String
-  featured  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime
 }
 
 model User {
@@ -32,4 +21,33 @@ enum user_role {
   USER
   SELLER
   ADMIN
+}
+
+model Category {
+  id       String  @id @default(uuid())
+  name     String
+  image    String
+  url      String
+  featured Boolean @default(false)
+
+  subCategories SubCategory[] @relation("CategoryToSubCategory")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SubCategory {
+  id       String  @id @default(uuid())
+  name     String
+  image    String
+  url      String
+  featured Boolean @default(false)
+
+  categoryId String
+  category   Category @relation("CategoryToSubCategory", fields: [categoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
 }
