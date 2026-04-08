@@ -55,3 +55,41 @@ export const adminDashboardSidebarOptions = [
     link: "/dashboard/admin/shipping",
   },
 ];
+
+export const sellerDashboardSidebarOptions = [
+  {
+    label: "Dashboard",
+    icon: "dashboard",
+    link: "/dashboard/seller",
+  },
+  {
+    label: "Products",
+    icon: "products",
+    link: "/dashboard/seller/products",
+  },
+  {
+    label: "Orders",
+    icon: "box-list",
+    link: "/dashboard/seller/orders",
+  },
+  {
+    label: "Inventory",
+    icon: "inventory",
+    link: "/dashboard/seller/inventory",
+  },
+  {
+    label: "Coupon",
+    icon: "coupon",
+    link: "/dashboard/seller/coupons",
+  },
+  {
+    label: "Shipping",
+    icon: "shipping",
+    link: "/dashboard/seller/shipping",
+  },
+  {
+    label: "Settings",
+    icon: "settings",
+    link: "/dashboard/seller/settings",
+  },
+];
