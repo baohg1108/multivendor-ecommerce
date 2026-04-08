@@ -1,8 +1,7 @@
 "use client";
 
 // React
-import React, { use } from "react";
-import { FC } from "react";
+import React from "react";
 import { useEffect } from "react";
 
 // Pisma model
@@ -47,13 +46,9 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 interface CategoryDetailsProps {
   data?: Category;
-  cloudinary_key: string;
 }
 
-const CategoryDetails: React.FC<CategoryDetailsProps> = ({
-  data,
-  cloudinary_key,
-}) => {
+const CategoryDetails: React.FC<CategoryDetailsProps> = ({ data }) => {
   // Initializing nessary hooks and states
   const router = useRouter();
 
@@ -147,7 +142,6 @@ const CategoryDetails: React.FC<CategoryDetailsProps> = ({
                     <FormControl>
                       <ImageUpload
                         type="profile"
-                        cloudinary_key={cloudinary_key}
                         value={field.value.map((image) => image.url)}
                         disabled={isLoading}
                         onChange={(url) => field.onChange([{ url }])}

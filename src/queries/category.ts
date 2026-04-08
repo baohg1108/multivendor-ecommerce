@@ -1,10 +1,4 @@
 "use server";
-// fucntion: upsertCategory
-// Description: Upsert a category into database, upadting if it exists creating new one
-// permission: admin only
-// paraments:
-// -category: category object containing details of the category to be upserted
-//
 
 // Cleck
 import { currentUser } from "@clerk/nextjs/server";
@@ -16,14 +10,6 @@ import { Category } from "@prisma/client";
 import { db } from "@/lib/db";
 
 // Prisma model
-
-// type UpsertCategpryInput = {
-//   id: string;
-//   name: string;
-//   url: string;
-//   image: string;
-//   featured: boolean;
-// };
 
 export const upsertCategory = async (category: Category) => {
   try {
@@ -99,4 +85,46 @@ export const upsertCategory = async (category: Category) => {
     console.error("Error upserting category:", error);
     throw error;
   }
+};
+
+export const getAllCategories = async () => {
+  const categories = await db.category.findMany({
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+  return categories;
+};
+
+export const getCategory = async (categoryId: string) => {
+  if (!categoryId) {
+    throw new Error("Please provide category ID");
+  }
+
+  // retrieve category by id from database
+  const category = await db.category.findUnique({
+    where: { id: categoryId },
+  });
+  return category;
+};
+
+export const deleteCategory = async (categoryId: string) => {
+  const user = await currentUser();
+
+  if (!user) return;
+
+  if (user.privateMetadata.role !== "ADMIN") {
+    throw new Error("Unauthorized Access: Admin Privileges Required for Entry");
+  }
+
+  if (!categoryId) {
+    throw new Error("Please provide category ID");
+  }
+
+  const response = await db.category.delete({
+    where: {
+      id: categoryId,
+    },
+  });
+  return response;
 };
