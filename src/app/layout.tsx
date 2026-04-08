@@ -18,7 +18,7 @@ import {
 } from "@clerk/nextjs";
 
 // Toast
-import { Toaster as SonnerToaster } from "@/components/ui/sonner";
+// import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/sonner";
 
 // Fonts
@@ -51,7 +51,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
-            <SonnerToaster position="bottom-left"></SonnerToaster>
+            <Toaster position="bottom-left"></Toaster>
           </ThemeProvider>
         </body>
       </html>
