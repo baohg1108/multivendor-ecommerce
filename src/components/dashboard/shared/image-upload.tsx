@@ -31,7 +31,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
 
   if (type === "profile") {
     return (
-      <div className="relative inset-x-96 rounded-full w-52 h-52  bg-gray-200 border-2 border-white shadow-2xl">
+      <div className="relative rounded-full w-52 h-52  bg-gray-200 border-2 border-white shadow-2xl">
         {value.length > 0 && (
           <Image
             src={value[0]}

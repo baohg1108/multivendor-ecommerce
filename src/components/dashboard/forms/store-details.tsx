@@ -98,8 +98,9 @@ const StoreDetails: React.FC<StoreDetailsProps> = ({ data }) => {
       const response = await upsertCategory({
         id: data?.id ? data.id : v4(),
         name: values.name,
+        image: values.logo[0]?.url || "",
         url: values.url,
-        featured: values.featured,
+        featured: values.featured ?? false,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -149,8 +150,7 @@ const StoreDetails: React.FC<StoreDetailsProps> = ({ data }) => {
                   control={form.control}
                   name="logo"
                   render={({ field }) => (
-                    // <FormItem className="absolute -bottom-20 -left-48 z-10">
-                    <FormItem className="absolute -bottom-20 -left-48 z-10 inset-x-20">
+                    <FormItem className="absolute -bottom-20 left-6 z-10 flex w-52 flex-col items-center">
                       <FormControl>
                         <ImageUpload
                           type="profile"
@@ -166,7 +166,7 @@ const StoreDetails: React.FC<StoreDetailsProps> = ({ data }) => {
                           }
                         />
                       </FormControl>
-                      <FormMessage></FormMessage>
+                      <FormMessage className="mt-2 text-center" />
                     </FormItem>
                   )}
                 />
