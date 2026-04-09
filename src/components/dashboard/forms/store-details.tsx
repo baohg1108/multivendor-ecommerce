@@ -5,7 +5,7 @@ import React from "react";
 import { useEffect } from "react";
 
 // Pisma model
-import { Store } from "@prisma/client";
+import { Store, StoreStatus } from "@prisma/client";
 
 // Form hadling
 import * as z from "zod";
@@ -37,7 +37,7 @@ import { Button } from "@/components/ui/button";
 import ImageUpload from "../shared/image-upload";
 
 // Queries
-import { upsertCategory } from "@/queries/category";
+import { upsertStore } from "@/queries/store";
 
 // Utils
 import { v4 } from "uuid";
@@ -92,34 +92,43 @@ const StoreDetails: React.FC<StoreDetailsProps> = ({ data }) => {
 
   // Submit handler for form submission
   const handleSubmit = async (values: z.infer<typeof StoreFormSchema>) => {
-    // console.log("Form values:", JSON.stringify(values));
     try {
       // updating category data
-      const response = await upsertCategory({
+      const normalizedStatus: StoreStatus =
+        values.status === "ACTIVE" ||
+        values.status === "BANNED" ||
+        values.status === "DISABLED"
+          ? values.status
+          : "PENDING";
+
+      const response = await upsertStore({
         id: data?.id ? data.id : v4(),
         name: values.name,
-        image: values.logo[0]?.url || "",
+        description: values.description,
+        email: values.email,
+        phone: values.phone,
+        logo: values.logo[0]?.url || "",
+        cover: values.cover[0]?.url || "",
         url: values.url,
+        status: normalizedStatus,
         featured: values.featured ?? false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       });
 
       // sonner toast for success
       toast.success(
         data?.id
-          ? "Category has been updated successfully!"
-          : `Congratulations! The \`${response?.name}\` category has been created successfully!`,
+          ? "Store has been updated successfully!"
+          : `Congratulations! The \`${response?.name}\` store has been created successfully!`,
       );
 
       // redicrect or refresh data
       if (data?.id) {
         router.refresh();
       } else {
-        router.push("/dashboard/admin/categories");
+        router.push(`/dashboard/seller/stores/${response?.url}`);
       }
     } catch (error) {
-      console.error("Error submitting category form:", error);
+      console.error("Error submitting store form:", error);
 
       // sonner toast for error
       toast.error("Oops! Something went wrong", {
