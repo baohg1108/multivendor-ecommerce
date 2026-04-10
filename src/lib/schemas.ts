@@ -1,7 +1,6 @@
-import { describe } from "node:test";
 import * as z from "zod";
 
-// category form schema
+// Category form schema
 export const CategoryFormSchema = z.object({
   name: z
     .string({
@@ -35,7 +34,7 @@ export const CategoryFormSchema = z.object({
   featured: z.boolean().default(false),
 });
 
-// sub category form schema
+// Sub category form schema
 export const SubCategoryFormSchema = z.object({
   name: z
     .string({
@@ -70,7 +69,7 @@ export const SubCategoryFormSchema = z.object({
   categoryId: z.string().uuid(),
 });
 
-// store form schema
+// Store form schema
 export const StoreFormSchema = z.object({
   name: z
     .string({
@@ -109,7 +108,7 @@ export const StoreFormSchema = z.object({
     })
     .regex(/^\+?\d+$/, {
       message:
-        "Store phone number can only contain digits and an optional leading ",
+        "Store phone number can only contain digits and an optional leading +",
     }),
   logo: z.object({ url: z.string() }).array().length(1, "Choose a logo image"),
   cover: z
@@ -133,4 +132,132 @@ export const StoreFormSchema = z.object({
     }),
   featured: z.boolean().default(false).optional(),
   status: z.string().default("PENDING").optional(),
+});
+
+// Product form schema
+export const ProductFormSchema = z.object({
+  name: z
+    .string({
+      required_error: "Product name is required",
+      invalid_type_error: "Product name must be a string",
+    })
+    .min(2, { message: "Product name must be at least 2 characters long" })
+    .max(100, { message: "Product name must be at most 100 characters long" })
+    .regex(/^(?!.*(?:[-_]){2,})[a-zA-Z0-9\s\-]+$/, {
+      message:
+        "Product name can only contain letters, numbers, spaces, and hyphens",
+    }),
+  description: z
+    .string({
+      required_error: "Product description is required",
+      invalid_type_error: "Product description must be a string",
+    })
+    .min(30, {
+      message: "Product description must be at least 30 characters long",
+    })
+    .max(1000, {
+      message: "Product description must be at most 1000 characters long",
+    }),
+  variantName: z
+    .string({
+      required_error: "Variant name is required",
+      invalid_type_error: "Variant name must be a string",
+    })
+    .min(2, { message: "Variant name must be at least 2 characters long" })
+    .max(100, { message: "Variant name must be at most 100 characters long" })
+    .regex(/^(?!.*(?:[-_]){2,})[a-zA-Z0-9\s\-]+$/, {
+      message:
+        "Variant name can only contain letters, numbers, spaces, and hyphens",
+    }),
+  variantDescription: z
+    .string({
+      required_error: "Variant description is required",
+      invalid_type_error: "Variant description must be a string",
+    })
+    .min(30, {
+      message: "Variant description must be at least 30 characters long",
+    })
+    .max(1000, {
+      message: "Variant description must be at most 1000 characters long",
+    })
+    .optional(),
+
+  images: z
+    .object({ url: z.string() })
+    .array()
+    .min(3, { message: "Product must have at least 3 images" })
+    .max(6, { message: "Product must have at most 6 images" }),
+
+  categoryId: z
+    .string({
+      required_error: "Product category ID is mandatory",
+      invalid_type_error: "Product category ID must be a string",
+    })
+    .uuid(),
+
+  subCategoryId: z
+    .string({
+      required_error: "Product sub-category ID is mandatory",
+      invalid_type_error: "Product sub-category ID must be a string",
+    })
+    .uuid(),
+
+  isSale: z.boolean().default(false),
+  brand: z
+    .string({
+      required_error: "Product brand is required",
+      invalid_type_error: "Product brand must be a string",
+    })
+    .min(2, { message: "Product brand must be at least 2 characters long" })
+    .max(50, { message: "Product brand must be at most 50 characters long" }),
+
+  sku: z
+    .string({
+      required_error: "Product SKU is required",
+      invalid_type_error: "Product SKU must be a string",
+    })
+    .min(6, { message: "Product SKU must be at least 6 characters long" })
+    .max(50, { message: "Product SKU must be at most 50 characters long" }),
+
+  keywords: z
+    .string({
+      required_error: "Product keywords are required",
+      invalid_type_error: "Product keywords must be a string",
+    })
+    .array()
+    .min(5, { message: "Product keywords must have at least 5 items" })
+    .max(10, { message: "Product keywords must have at most 10 items" }),
+
+  colors: z.object({
+    color: z
+      .string()
+      .array()
+      .min(1, { message: "Product must have at least 1 color" })
+      .refine((colors) => colors.every((c) => c.length > 0), {
+        message: "All color inputs must be filled",
+      }),
+
+    sizes: z
+      .object({
+        size: z.string(),
+        quantity: z
+          .number()
+          .min(1, { message: "Product size quantity must be at least 1" }),
+        price: z
+          .number()
+          .min(0.01, { message: "Product size price must be at least 0.01" }),
+        discount: z.number().min(0).default(0),
+      })
+      .array()
+      .min(1, { message: "Product must have at least 1 size" })
+      .refine(
+        (sizes) =>
+          sizes.every(
+            (s) => s.size.length > 0 && s.quantity > 0 && s.price > 0,
+          ),
+        {
+          message: "All size inputs must be filled correctly",
+        },
+      ),
+  }),
 });

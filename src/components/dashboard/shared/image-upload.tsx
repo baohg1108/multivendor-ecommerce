@@ -1,11 +1,13 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import Image from "next/image";
 import {
   CldUploadWidget,
   CloudinaryUploadWidgetResults,
 } from "next-cloudinary";
+import { Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ImageUploadProps {
   disabled?: boolean;
@@ -56,7 +58,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
               >
                 <svg
                   viewBox=" 0 0 640 512"
-                  fill="white"
+                  fill="currentColor"
                   height="1em"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -117,7 +119,68 @@ const ImageUpload: FC<ImageUploadProps> = ({
       </div>
     );
   } else {
-    return <div></div>;
+    return (
+      <div className="w-full space-y-3">
+        <div className="mb-4 flex items-center gap-4">
+          {value.length > 0 &&
+            !dontShowPreview &&
+            value.map((imageUrl) => (
+              <div
+                key={imageUrl}
+                className="relative w-[200px] min-h-[100px] max-h-[200px]"
+              >
+                {/* delete image btn */}
+                <div className="z-10 absolute top-2 right-2">
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="icon"
+                    className="rounded-full"
+                    onClick={() => onRemove(imageUrl)}
+                    // disabled={disabled}
+                  >
+                    <Trash className="w-4 h-4" />
+                  </Button>
+                </div>
+                {/* images */}
+                <Image
+                  fill
+                  className="object-cover rounded-md"
+                  alt=""
+                  src={imageUrl}
+                ></Image>
+              </div>
+            ))}
+        </div>
+
+        <CldUploadWidget onSuccess={onUpload} uploadPreset={"admin-product"}>
+          {({ open }) => {
+            const onClick = () => {
+              open();
+            };
+
+            return (
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                disabled={disabled}
+                onClick={onClick}
+              >
+                <svg
+                  viewBox=" 0 0 640 512"
+                  fill="white"
+                  height="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M213.1 32L168 80H80C35.8 80 0 115.8 0 160v240c0 44.2 35.8 80 80 80h480c44.2 0 80-35.8 80-80V160c0-44.2-35.8-80-80-80h-88l-45.1-48H213.1zM320 400c-79.5 0-144-64.5-144-144s64.5-144 144-144 144 64.5 144 144-64.5 144-144 144zm0-240c-52.9 0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96z" />{" "}
+                </svg>
+                <span>Upload Image</span>
+              </button>
+            );
+          }}
+        </CldUploadWidget>
+      </div>
+    );
   }
 };
 
