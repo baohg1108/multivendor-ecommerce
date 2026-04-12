@@ -1,4 +1,5 @@
 import { getAllCategories } from "@/queries/category";
+import { getAllSubCategories } from "@/queries/subCategory";
 import { ProductDetails } from "@/components/dashboard/forms/product-details";
 
 export default async function SellerNewProductPage({
@@ -8,5 +9,16 @@ export default async function SellerNewProductPage({
 }) {
   const { storeUrl } = await params;
   const categories = await getAllCategories();
-  return <ProductDetails categories={categories} storeUrl={storeUrl} />;
+  const subCategories = await getAllSubCategories();
+
+  return (
+    <ProductDetails
+      categories={categories}
+      subCategories={subCategories.map((subCategory) => ({
+        id: subCategory.id,
+        name: subCategory.name,
+        categoryId: subCategory.categoryId,
+      }))}
+    />
+  );
 }
