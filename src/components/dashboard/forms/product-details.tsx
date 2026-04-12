@@ -40,6 +40,8 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { ProductWithVariantType } from "@/lib/types";
 
+import ImagesPreviewGrid from "../shared/images-preview-grid";
+
 interface ProductDetailsProps {
   data?: ProductWithVariantType;
   categories: Category[];
@@ -54,6 +56,18 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
   const debugContext = `${categories.length}:${storeUrl}`;
   // Initializing nessary hooks and states
   const router = useRouter();
+
+  const [subCategories, setSubCategories] = React.useState<Category[]>([]);
+
+  const [colors, setColors] = React.useState<{ color: string }[]>([
+    { color: "" },
+  ]);
+
+  const [images, setImages] = React.useState<{ url: string }[]>([]);
+
+  const [sizes, setSizes] = React.useState<
+    { size: string; quantity: number; price: number; discount: number }[]
+  >([{ size: "", quantity: 1, price: 0.01, discount: 0 }]);
 
   // form hook for managing form statte and validation
   const form = useForm<z.infer<typeof ProductFormSchema>>({
@@ -85,8 +99,20 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
     },
   });
 
+  // useEffect to update subcategories when category changes
+  // useEffect(() => {
+  //   const getSubCategories = async () => {
+  //     const res = await getAllCategoriesForCategory(form.watch().categoryId);
+  //     setSubCategories(res);
+  //   };
+  //   getSubCategories();
+  // }, [form.watch("categoryId")]);
+
   // Loading status based on form submission
   const isLoading = form.formState.isSubmitting;
+
+  // extract errors state from form
+  const errors = form.formState.errors;
 
   // Reset form values when data changes
   useEffect(() => {
@@ -137,6 +163,32 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
       });
     }
   };
+
+  const [keywords, setKeywords] = React.useState<string[]>([]);
+
+  interface Keyword {
+    id: string;
+    text: string;
+  }
+
+  const handleAddition = (keyword: Keyword) => {
+    if (keywords.length === 10) return;
+    setKeywords([...keywords, keyword.text]);
+  };
+
+  const handleDeleteKeyword = (index: number) => {
+    setKeywords(keywords.filter((_, i) => i !== index));
+  };
+
+  useEffect(() => {
+    form.setValue(
+      "colors.color",
+      colors.map((item) => item.color),
+    );
+    form.setValue("colors.sizes", sizes);
+    form.setValue("keywords", keywords);
+  }, [colors, sizes, keywords]);
+
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -147,7 +199,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
               ? `Update ${data?.name} product information`
               : "Let's create a product. You can edit product settings later from the settings tabs."}
           </CardDescription>
-          <p className="sr-only">{debugContext}</p>
+          {/* <p className="sr-only">{debugContext}</p> */}
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -155,29 +207,50 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
               onSubmit={form.handleSubmit(handleSubmit)}
               className="space-y-4"
             >
-              {/* Images cover */}
+              {/* Images - colors */}
               <div className="flex flex-col gap-y-6 xl:flex-row">
                 <FormField
                   control={form.control}
                   name="images"
                   render={({ field }) => (
-                    <FormItem className="flex w-full flex-col items-start gap-y-2">
-                      <FormLabel>Product Images</FormLabel>
+                    <FormItem className="w-full xl:border-r">
+                      {/* <FormLabel>Product Images</FormLabel> */}
                       <FormControl>
-                        <ImageUpload
-                          // dontShowPreview
-                          type="standard"
-                          value={(field.value || []).map((image) => image.url)}
-                          disabled={isLoading}
-                          onChange={(url) => field.onChange([{ url }])}
-                          onRemove={(url) =>
-                            field.onChange([
-                              ...(field.value || []).filter(
-                                (current) => current.url !== url,
-                              ),
-                            ])
-                          }
-                        />
+                        <>
+                          <ImagesPreviewGrid
+                            images={form.getValues().images}
+                            onRemove={(url) =>
+                              field.onChange([
+                                ...(field.value || []).filter(
+                                  (current) => current.url !== url,
+                                ),
+                              ])
+                            }
+                          />
+                          <FormMessage className="!mt-4"></FormMessage>
+                          <ImageUpload
+                            dontShowPreview
+                            type="standard"
+                            value={(field.value || []).map(
+                              (image) => image.url,
+                            )}
+                            disabled={isLoading}
+                            onChange={(url) => {
+                              setImages((prevImages) => {
+                                const updatedImages = [...prevImages, { url }];
+                                field.onChange(updatedImages);
+                                return updatedImages;
+                              });
+                            }}
+                            onRemove={(url) =>
+                              field.onChange([
+                                ...(field.value || []).filter(
+                                  (current) => current.url !== url,
+                                ),
+                              ])
+                            }
+                          />
+                        </>
                       </FormControl>
                       <FormMessage className="mt-2 text-center" />
                     </FormItem>
@@ -217,7 +290,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                         disabled={isLoading}
                       />
                     </FormControl>
-                    <FormMessage></FormMessage>
                   </FormItem>
                 )}
               />
