@@ -255,13 +255,14 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                           <ImagesPreviewGrid
                             images={field.value || []}
                             onRemove={(url) =>
-                              field.onChange([
-                                ...(field.value || []).filter(
-                                  (current) => current.url !== url,
+                              field.onChange(
+                                (field.value || []).filter(
+                                  (img) => img.url !== url,
                                 ),
-                              ])
+                              )
                             }
                           />
+                          <FormMessage className="mt-4!"></FormMessage>
                           <ImageUpload
                             dontShowPreview
                             type="standard"
