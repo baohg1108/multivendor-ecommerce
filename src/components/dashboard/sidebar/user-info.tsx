@@ -6,14 +6,15 @@ import { Badge } from "@/components/ui/badge";
 
 export default function UserInfo({ user }: { user: User | null }) {
   const role = user?.privateMetadata.role?.toString();
+
   return (
     <div>
       <div>
         <Button
-          className="w-full mt-5 mb-4 flex items-center justify-between py-10"
+          className="my-4 flex w-full items-center justify-between py-10"
           variant="ghost"
         >
-          <div className="flex items-center text-left gap-2">
+          <div className="flex min-w-0 items-center gap-2 text-left">
             <Avatar className="w-16 h-16">
               <AvatarImage
                 src={user?.imageUrl}
@@ -23,16 +24,20 @@ export default function UserInfo({ user }: { user: User | null }) {
                 {user?.firstName} {user?.lastName}
               </AvatarFallback>
             </Avatar>
-            <div className="flex flex-col gap-y-1">
-              {user?.firstName} {user?.lastName}
-              <span className="text-muted-foreground">
-                {user?.emailAddresses[0].emailAddress}
+            <div className="flex min-w-0 flex-col gap-y-1">
+              <span className="truncate font-medium">
+                {user?.firstName} {user?.lastName}
               </span>
               <span className="w-fit">
                 <Badge variant="secondary" className="capitalize">
-                  {role?.toLocaleLowerCase()} Dashboard
+                  {role ? `${role.toLocaleLowerCase()} Dashboard` : "Dashboard"}
                 </Badge>
-                {role}
+              </span>
+              <span
+                className="max-w-45 truncate text-sm text-muted-foreground"
+                title={user?.emailAddresses[0].emailAddress}
+              >
+                {user?.emailAddresses[0].emailAddress}
               </span>
             </div>
           </div>

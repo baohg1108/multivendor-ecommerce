@@ -18,17 +18,26 @@ interface SidebarProps {
 const Sidebar: FC<SidebarProps> = async ({ isAdmin, stores }) => {
   const user = await currentUser();
   return (
-    <div className="w-75 border-r h-screen p-4 flex flex-col fixed top-0 left-0 bottom-0">
-      <Logo width="100%" height="180px" />
-      <span className="mt-3" />
-      {user && <UserInfo user={user}></UserInfo>}
-      {!isAdmin && stores && <StoreSwitcher stores={stores}></StoreSwitcher>}
-      {isAdmin ? (
-        <SidebarNavAdmin menuLinks={adminDashboardSidebarOptions} />
-      ) : (
-        <SidebarNavSeller menuLinks={sellerDashboardSidebarOptions} />
+    <aside className="fixed inset-y-0 left-0 z-30 flex h-screen w-[300px] flex-col border-r bg-background p-4">
+      <div className="shrink-0">
+        <Logo width="100%" height="140px" />
+      </div>
+      <div className="mt-3 shrink-0">
+        {user && <UserInfo user={user}></UserInfo>}
+      </div>
+      {!isAdmin && stores && (
+        <div className="mt-2 shrink-0">
+          <StoreSwitcher stores={stores}></StoreSwitcher>
+        </div>
       )}
-    </div>
+      <div className="mt-3 min-h-0 flex-1 overflow-y-auto pr-1">
+        {isAdmin ? (
+          <SidebarNavAdmin menuLinks={adminDashboardSidebarOptions} />
+        ) : (
+          <SidebarNavSeller menuLinks={sellerDashboardSidebarOptions} />
+        )}
+      </div>
+    </aside>
   );
 };
 

@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Header() {
   return (
-    <div className="fixed z-20 md:left-75 left-0 top-0 right-0 p-4 bg-background/80 backdrop-blur-md flex gap-4 items-center border-b">
+    <div className="fixed left-0 right-0 top-0 z-20 flex items-center gap-4 border-b bg-background/80 p-4 backdrop-blur-md md:left-[300px]">
       <div className="flex items-center gap-2 ml-auto">
         <UserButton />
         <ThemeToggle></ThemeToggle>

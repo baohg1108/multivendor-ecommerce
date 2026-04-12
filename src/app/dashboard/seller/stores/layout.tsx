@@ -24,9 +24,9 @@ export default async function SellerStoresLayout({
   return (
     <div className="h-full w-full flex">
       <Sidebar stores={stores}></Sidebar>
-      <div className="w-full ml-75">
+      <div className="w-full md:ml-[300px]">
         <Header></Header>
-        <div className="w-full mt-18.75 p-4">{children}</div>
+        <div className="w-full p-4 pt-[75px]">{children}</div>
       </div>
     </div>
   );

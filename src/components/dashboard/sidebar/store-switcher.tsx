@@ -28,7 +28,10 @@ interface StoreSwitcherProps extends PopoverTriggerProps {
   stores: Array<{ name: string; url: string }>;
 }
 
-export const StoreSwitcher: FC<StoreSwitcherProps> = ({ stores, className }) => {
+export const StoreSwitcher: FC<StoreSwitcherProps> = ({
+  stores,
+  className,
+}) => {
   const params = useParams<{ storeUrl?: string }>();
   const router = useRouter();
 
@@ -62,7 +65,9 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = ({ stores, className }) => 
           className={cn("w-62.5 justify-between", className)}
         >
           <StoreIcon className="mr-2 w-4 h-4"></StoreIcon>
-          {activeStore?.label || "Select a store"}
+          <span className="min-w-0 flex-1 truncate text-left">
+            {activeStore?.label || "Select a store"}
+          </span>
           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50"></ChevronsUpDown>
         </Button>
       </PopoverTrigger>
