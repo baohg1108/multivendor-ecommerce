@@ -1,6 +1,9 @@
 import { Input } from "@/components/ui/input";
-import { Minus, Plus } from "lucide-react";
-import React from "react";
+import { cn } from "@/lib/utils";
+import { Minus, PaintBucket, Plus } from "lucide-react";
+import React, { useState } from "react";
+
+import { SketchPicker } from "react-color";
 
 export interface Detail {
   [key: string]: string | number | boolean | undefined;
@@ -32,19 +35,24 @@ const MinusButton = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
-interface ClickToAddInputProps {
-  details: Detail[];
-  setDetails: React.Dispatch<React.SetStateAction<Detail[]>>;
-  initialDetail: Detail;
+interface ClickToAddInputProps<T extends Detail> {
+  details: T[];
+  setDetails: React.Dispatch<React.SetStateAction<T[]>>;
+  initialDetail: T;
   header: string;
+  colorPicker?: boolean;
 }
 
-const ClickToAddInputs: React.FC<ClickToAddInputProps> = ({
+const ClickToAddInputs = <T extends Detail>({
   details,
   setDetails,
-  initialDetail = {},
+  initialDetail = {} as T,
   header,
-}) => {
+  colorPicker,
+}: ClickToAddInputProps<T>) => {
+  // state to manage toggling color picker
+  const [colorPickerIndex, setColorPickerIndex] = useState<number | null>(null);
+
   // function to handle changes in details properties
   const handleDetailsChange = (
     index: number,
@@ -70,6 +78,7 @@ const ClickToAddInputs: React.FC<ClickToAddInputProps> = ({
     const updatedDetails = details.filter((_, i) => i !== index);
     setDetails(updatedDetails);
   };
+
   return (
     <div className="flex flex-col gap-y-4">
       {/* header */}
@@ -78,10 +87,44 @@ const ClickToAddInputs: React.FC<ClickToAddInputProps> = ({
       {details.length === 0 && (
         <PlusButton onClick={handleAddDetail}></PlusButton>
       )}
+      {/* map through details if no render input fields */}
       {details.map((detail, index) => (
         <div key={index} className="flex items-center gap-x-4">
           {Object.keys(detail).map((property, propIndex) => (
             <div key={propIndex} className="flex items-center gap-x-4">
+              {/* Color picker toggle */}
+              {property === "color" && colorPicker && (
+                <div className="flex gap-x-4">
+                  <button
+                    type="button"
+                    className="cursor-pointer"
+                    onClick={() =>
+                      setColorPickerIndex(
+                        colorPickerIndex === index ? null : index,
+                      )
+                    }
+                  >
+                    <PaintBucket></PaintBucket>
+                  </button>
+                  <span
+                    className="w-8 h-8 rouunded-full"
+                    style={{ backgroundColor: detail[property] as string }}
+                  ></span>
+                </div>
+              )}
+              {/*color picker*/}
+              {colorPickerIndex === index &&
+                property === "color" &&
+                colorPicker && (
+                  <SketchPicker
+                    color={detail[property] as string}
+                    onChange={(e) =>
+                      handleDetailsChange(index, property, e.hex)
+                    }
+                  ></SketchPicker>
+                )}
+
+              {/* Input field */}
               <Input
                 className="w-28"
                 type={typeof detail[property] === "number" ? "number" : "text"}
