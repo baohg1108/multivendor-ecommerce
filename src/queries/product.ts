@@ -173,3 +173,24 @@ export const upsertProduct = async (
     throw new Error("Failed to upsert product");
   }
 };
+
+// function:getProductMainInfo
+export const getProductMainInfo = async (productId: string) => {
+  const product = await db.product.findUnique({
+    where: {
+      id: productId,
+    },
+  });
+
+  if (!product) return null;
+
+  return {
+    productId: product.id,
+    name: product.name,
+    description: product.description,
+    brand: product.brand,
+    categoryId: product.categoryId,
+    subCategoryId: product.subCategoryId,
+    storeId: product.storeId,
+  };
+};

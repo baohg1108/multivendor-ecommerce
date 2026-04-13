@@ -60,7 +60,7 @@ import { upsertProduct } from "@/queries/product";
 import { v4 } from "uuid";
 import type { SubCategory } from "@prisma/client";
 interface ProductDetailsProps {
-  data?: ProductWithVariantType;
+  data?: Partial<ProductWithVariantType>;
   categories: Category[];
   storeUrl: string;
 }
