@@ -5,31 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// helper function to generate a unique slug
-// export const generateUniqueSlug = async (
-//   baseSlug: string,
-//   model: keyof PrismaClient,
-//   field: string = "slug",
-//   separator: string = "-",
-// ) => {
-//   let slug = baseSlug;
-//   let suffix = 1;
-
-//   while (true) {
-//     const existingRecord = await (db[model] as any).findFirst({
-//       where: {
-//         [field]: slug,
-//       },
-//     });
-//     if (!existingRecord) {
-//       break;
-//     }
-//     slug = `${slug}${separator}${suffix}`;
-//     suffix++;
-//   }
-//   return slug;
-// };
-
 // helper function to grid classnames depending on length of images
 export const getGridClassName = (length: number) => {
   switch (length) {

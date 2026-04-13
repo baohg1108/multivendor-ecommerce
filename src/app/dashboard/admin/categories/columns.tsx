@@ -52,7 +52,7 @@ import { deleteCategory, getCategory } from "@/queries/category";
 import { ColumnDef } from "@tanstack/react-table";
 
 // types
-import { Category } from "@prisma/client";
+import type { Category } from "@prisma/client";
 
 export const columns: ColumnDef<Category>[] = [
   {

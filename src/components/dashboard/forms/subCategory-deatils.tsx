@@ -5,7 +5,7 @@ import React from "react";
 import { useEffect } from "react";
 
 // Pisma model
-import { Category, SubCategory } from "@prisma/client";
+import type { Category, SubCategory } from "@prisma/client";
 
 // Form hadling
 import * as z from "zod";

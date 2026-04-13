@@ -51,8 +51,8 @@ import { getAllCategories } from "@/queries/category";
 import { ColumnDef } from "@tanstack/react-table";
 
 // types
-import { Category } from "@prisma/client";
-import { SubCategoryWithCategoryType } from "@/lib/types";
+import type { Category } from "@prisma/client";
+import type { SubCategoryWithCategoryType } from "@/lib/types";
 import SubCategoryDetails from "@/components/dashboard/forms/subCategory-deatils";
 import { deleteSubCategory, getSubCategory } from "@/queries/subCategory";
 
