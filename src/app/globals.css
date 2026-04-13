@@ -256,3 +256,7 @@
   font-weight: 600;
   transition-duration: 0.3s;
 }
+
+.perspective-1000 {
+  perspective: 1000px;
+}

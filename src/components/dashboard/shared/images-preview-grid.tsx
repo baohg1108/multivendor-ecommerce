@@ -1,23 +1,53 @@
 import Image from "next/image";
+import React, { useEffect } from "react";
 
 import NoImageImg from "../../../../public/assets/images/image.png";
 import { cn } from "@/lib/utils";
 
 import { getGridClassName } from "@/lib/utils";
 import { Trash } from "lucide-react";
+import { SetStateAction } from "react";
+import { getDominantColors } from "@/lib/utils";
+import ColorPalette from "./colors-palette";
 
 interface ImagePreviewGridProps {
   images: { url: string }[];
   onRemove: (value: string) => void;
+  colors?: { color: string }[];
+  setColors: React.Dispatch<SetStateAction<{ color: string }[]>>;
 }
 
 const ImagesPreviewGrid: React.FC<ImagePreviewGridProps> = ({
   images,
   onRemove,
+  colors,
+  setColors,
 }) => {
   const imagesLength = images.length;
 
   const GridClassName = getGridClassName(imagesLength);
+  const [colorPalettes, setColorPalettes] = React.useState<string[][]>([]);
+
+  useEffect(() => {
+    const fetchPalettes = async () => {
+      const palettes = await Promise.all(
+        images.map(async (img) => {
+          try {
+            return await getDominantColors(img.url);
+          } catch {
+            return [];
+          }
+        }),
+      );
+
+      setColorPalettes(palettes);
+    };
+
+    if (imagesLength > 0) {
+      fetchPalettes();
+    }
+  }, [images, imagesLength]);
+
   if (imagesLength === 0) {
     return (
       <div>
@@ -35,7 +65,7 @@ const ImagesPreviewGrid: React.FC<ImagePreviewGridProps> = ({
       <div className="max-w-4xl">
         <div
           className={cn(
-            "grid h-[800px] overflow-hidden bg-white rounded-md",
+            "grid h-[800px] overflow-hidden rounded-md bg-white",
             GridClassName,
           )}
         >
@@ -59,12 +89,17 @@ const ImagesPreviewGrid: React.FC<ImagePreviewGridProps> = ({
               />
               <div
                 className={cn(
-                  "absolute top-0 left-0 right-0 bottom-0 hidden group-hover:flex bg-white/55 cursor-pointer items-center justify-center flex-col gap-y-3 transition-all duration-500",
+                  "absolute inset-0 hidden cursor-pointer items-center justify-center bg-white/55 transition-all duration-500 group-hover:flex",
                   {
                     "!pb-[40%]": images.length === 1,
                   },
                 )}
               >
+                <ColorPalette
+                  setColors={setColors}
+                  extractedColors={colorPalettes[i]}
+                  colors={colors}
+                />
                 <button
                   className="Btn"
                   type="button"
