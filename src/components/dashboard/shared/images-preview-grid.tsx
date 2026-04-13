@@ -65,7 +65,7 @@ const ImagesPreviewGrid: React.FC<ImagePreviewGridProps> = ({
       <div className="max-w-4xl">
         <div
           className={cn(
-            "grid h-[800px] overflow-hidden rounded-md bg-white",
+            "grid h-200 overflow-hidden rounded-md bg-white",
             GridClassName,
           )}
         >
@@ -89,9 +89,9 @@ const ImagesPreviewGrid: React.FC<ImagePreviewGridProps> = ({
               />
               <div
                 className={cn(
-                  "absolute inset-0 hidden cursor-pointer items-center justify-center bg-white/55 transition-all duration-500 group-hover:flex",
+                  "absolute inset-0 hidden cursor-pointer items-center justify-center gap-2 bg-white/55 p-2 transition-all duration-500 group-hover:flex",
                   {
-                    "!pb-[40%]": images.length === 1,
+                    "pb-[40%]!": images.length === 1,
                   },
                 )}
               >
@@ -101,14 +101,13 @@ const ImagesPreviewGrid: React.FC<ImagePreviewGridProps> = ({
                   colors={colors}
                 />
                 <button
-                  className="Btn"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-white shadow transition hover:bg-blue-700"
+                  title="Delete image"
+                  aria-label="Delete image"
                   type="button"
                   onClick={() => onRemove(img.url)}
                 >
-                  <div className="sign">
-                    <Trash size={18}></Trash>
-                  </div>
-                  <div className="text">Delete</div>
+                  <Trash size={16} />
                 </button>
               </div>
             </div>

@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 
 // Pisma model
-import { Category } from "@prisma/client";
+import type { Category } from "@prisma/client";
 
 // Form hadling
 import * as z from "zod";
@@ -46,7 +46,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 
-import { ProductWithVariantType } from "@/lib/types";
+import type { ProductWithVariantType } from "@/lib/types";
 
 import ImagesPreviewGrid from "../shared/images-preview-grid";
 import ClickToAddInputs from "./click-to-add";
@@ -56,34 +56,28 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import ReactTags from "@/components/dashboard/forms/react-tags";
 
-interface SubCategoryOption {
-  id: string;
-  name: string;
-  categoryId: string;
-}
-
+import { upsertProduct } from "@/queries/product";
+import { v4 } from "uuid";
+import type { SubCategory } from "@prisma/client";
 interface ProductDetailsProps {
   data?: ProductWithVariantType;
   categories: Category[];
-  subCategories: SubCategoryOption[];
+  storeUrl: string;
 }
 
 export const ProductDetails: React.FC<ProductDetailsProps> = ({
   data,
   categories,
-  subCategories: initialSubCategories,
+  storeUrl,
 }) => {
   // Initializing nessary hooks and states
   const router = useRouter();
 
-  // Satae of subCategories
-  const [subCategories, setSubCategories] = React.useState<SubCategoryOption[]>(
-    initialSubCategories || [],
-  );
+  // State of subCategories
+  const [subCategories, setSubCategories] = React.useState<SubCategory[]>([]);
 
   // State of colors
   const [colors, setColors] = React.useState<{ color: string }[]>([
-    // ...(data?.colors?.length ? data.colors : [{ color: "" }]),
     { color: "" },
   ]);
 
@@ -92,7 +86,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
     { size: string; quantity: number; price: number; discount: number }[]
   >([{ size: "", quantity: 1, price: 0.01, discount: 0 }]);
 
-  // form hook for managing form statte and validation
+  // Form hook for managing form statte and validation
   const form = useForm<z.infer<typeof ProductFormSchema>>({
     mode: "onChange",
     resolver: zodResolver(ProductFormSchema),
@@ -127,35 +121,25 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
     name: "categoryId",
   });
 
+  // UseEffect to get subCategories when user pick/change category
+  useEffect(() => {
+    const getSubCategories = async () => {
+      const res = await getAllSubCategoriesForCategory(selectedCategoryId);
+      setSubCategories(res);
+    };
+
+    if (selectedCategoryId) {
+      getSubCategories();
+    }
+  }, [selectedCategoryId]);
+
   // extract error state form state and validation
   const errors = form.formState.errors;
 
   // Loading status based on form submission
   const isLoading = form.formState.isSubmitting;
 
-  // UseEffect to get subcategories based on category selection
-  useEffect(() => {
-    if (!selectedCategoryId) {
-      form.setValue("subCategoryId", "");
-      return;
-    }
-
-    let isActive = true;
-    const fetchSubCategories = async () => {
-      const res = await getAllSubCategoriesForCategory(selectedCategoryId);
-      if (isActive) {
-        setSubCategories(res);
-      }
-    };
-
-    fetchSubCategories();
-
-    return () => {
-      isActive = false;
-    };
-  }, [selectedCategoryId, form]);
-
-  // Reset form values when data changes
+  // reset form values when data changes
   useEffect(() => {
     if (data) {
       form.reset({
@@ -185,34 +169,44 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
     }
   }, [data, form]);
 
-  useEffect(() => {
-    if (!selectedCategoryId) {
-      form.setValue("subCategoryId", "");
-      return;
-    }
-
-    const selectedSubCategoryId = form.getValues("subCategoryId");
-    const isValidSubCategory = subCategories.some(
-      (item) =>
-        item.id === selectedSubCategoryId &&
-        item.categoryId === selectedCategoryId,
-    );
-
-    if (!isValidSubCategory) {
-      form.setValue("subCategoryId", "");
-    }
-  }, [selectedCategoryId, subCategories, form]);
-
   // Submit handler for form submission
   const handleSubmit = async (values: z.infer<typeof ProductFormSchema>) => {
     try {
-      console.info("Product payload", values);
+      // upserting category data
+      await upsertProduct(
+        {
+          productId: data?.productId ? data.productId : v4(),
+          variantId: data?.variantId ? data.variantId : v4(),
+          name: values.name,
+          description: values.description,
+          variantName: values.variantName,
+          variantDescription: values.variantDescription || "",
+          images: values.images,
+          categoryId: values.categoryId,
+          subCategoryId: values.subCategoryId,
+          isSale: values.isSale || false,
+          brand: values.brand,
+          sku: values.sku,
+          colors,
+          sizes,
+          keywords: values.keywords || [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        storeUrl,
+      );
+
       toast.success(
-        data?.productId
+        data?.productId && data?.variantId
           ? "Product has been updated successfully!"
           : "Product form is valid and ready to connect to your product API.",
       );
-      router.refresh();
+
+      if (data?.productId && data?.variantId) {
+        router.refresh();
+      } else {
+        router.push(`/dashboard/seller/stores/${storeUrl}/products`);
+      }
     } catch (error) {
       console.error("Error submitting product form:", error);
 
@@ -244,14 +238,12 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
 
   // whenerever colors, sizes, or keywords change, update the form values accordingly
   useEffect(() => {
-    // form.setValue(
-    //   "colors.color",
-    //   colors.map((item) => item.color),
-    // );
-    form.setValue("colors", colors);
-    form.setValue("sizes", sizes);
+    form.setValue("colors", {
+      color: colors.map((item) => item.color),
+      sizes,
+    });
     form.setValue("keywords", keywords);
-  }, [colors, sizes, keywords]);
+  }, [colors, sizes, keywords, form]);
 
   return (
     <AlertDialog>
@@ -293,7 +285,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                             colors={colors}
                             setColors={setColors}
                           />
-                          <FormMessage className="mt-4!"></FormMessage>
                           <ImageUpload
                             dontShowPreview
                             type="standard"
@@ -322,9 +313,9 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                               ])
                             }
                           />
+                          <FormMessage className="mt-2 text-center" />
                         </div>
                       </FormControl>
-                      <FormMessage className="mt-2 text-center" />
                     </FormItem>
                   )}
                 />
@@ -544,13 +535,13 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                 <FormField
                   control={form.control}
                   name="keywords"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem className="relative flex-1">
                       <FormLabel> Product Keywords</FormLabel>
                       <FormControl>
                         <ReactTags
                           handleAddition={handleAddition}
-                          // handleDeleteKeyword={handleDeleteKeyword}
+                          handleDeleteKeyword={handleDeleteKeyword}
                           placeholder="Keywords (e.g., summer, cotton, etc.)"
                           classNames={{
                             tagInputField:

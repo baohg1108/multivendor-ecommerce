@@ -5,7 +5,7 @@ import React from "react";
 import { useEffect } from "react";
 
 // Pisma model
-import { Store, StoreStatus } from "@prisma/client";
+import type { Store, StoreStatus } from "@prisma/client";
 
 // Form hadling
 import * as z from "zod";

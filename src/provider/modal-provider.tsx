@@ -1,7 +1,7 @@
 "use client";
 
 // Prisma models
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 
 // React
 import React, { useContext, useEffect, useState } from "react";
