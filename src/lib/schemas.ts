@@ -179,8 +179,8 @@ export const ProductFormSchema = z.object({
     })
     .max(1000, {
       message: "Variant description must be at most 1000 characters long",
-    })
-    .optional(),
+    }),
+  // .optional(),
 
   images: z
     .object({ url: z.string() })

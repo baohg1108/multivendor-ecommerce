@@ -96,6 +96,18 @@ export const getAllCategories = async () => {
   return categories;
 };
 
+export const getAllSubCategoriesForCategory = async (categoryId: string) => {
+  const subCategories = await db.subCategory.findMany({
+    where: {
+      categoryId: categoryId,
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+  return subCategories;
+};
+
 export const getCategory = async (categoryId: string) => {
   if (!categoryId) {
     throw new Error("Please provide category ID");

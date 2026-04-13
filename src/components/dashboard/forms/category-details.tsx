@@ -194,7 +194,7 @@ const CategoryDetails: React.FC<CategoryDetailsProps> = ({ data }) => {
                   </FormItem>
                 )}
               />
-              {/*  */}
+              {/* featured */}
               <FormField
                 control={form.control}
                 name="featured"
