@@ -51,6 +51,7 @@ import { Minus, Plus, X } from "lucide-react";
 import { ProductWithVariantType } from "@/lib/types";
 
 import ImagesPreviewGrid from "../shared/images-preview-grid";
+import ClickToAddInputs from "./click-to-add";
 
 interface SubCategoryOption {
   id: string;
@@ -72,17 +73,16 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
   // Initializing nessary hooks and states
   const router = useRouter();
 
+  // State of colors
   const [colors, setColors] = React.useState<{ color: string }[]>([
-    ...(data?.colors?.length ? data.colors : [{ color: "" }]),
+    // ...(data?.colors?.length ? data.colors : [{ color: "" }]),
+    { color: "" },
   ]);
 
+  // State of sizes
   const [sizes, setSizes] = React.useState<
     { size: string; quantity: number; price: number; discount: number }[]
-  >(
-    data?.sizes?.length
-      ? data.sizes
-      : [{ size: "", quantity: 1, price: 0.01, discount: 0 }],
-  );
+  >([{ size: "", quantity: 1, price: 0.01, discount: 0 }]);
 
   const [keywords, setKeywords] = React.useState<string[]>(
     data?.keywords || [],
@@ -128,6 +128,9 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
       subCategories.filter((item) => item.categoryId === selectedCategoryId),
     [selectedCategoryId, subCategories],
   );
+
+  // extract error state form state and validation
+  const errors = form.formState.errors;
 
   // Loading status based on form submission
   const isLoading = form.formState.isSubmitting;
@@ -200,6 +203,8 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
     }
   };
 
+  // console.log("color", colors);
+
   const handleAddKeyword = () => {
     const normalizedKeyword = keywordInput.trim();
     if (!normalizedKeyword || keywords.length === 10) return;
@@ -224,6 +229,18 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
     form.setValue("keywords", keywords);
   }, [colors, sizes, keywords, form]);
 
+  // Whenever colors or sizes change, update the form values accordingly
+  useEffect(() => {
+    form.setValue("colors", colors);
+    form.setValue("sizes", sizes);
+  }, [colors, sizes]);
+
+  console.log(
+    "color + sizes",
+    form.getValues("colors"),
+    form.getValues("sizes"),
+  );
+
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -244,6 +261,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
             >
               {/* Images - colors */}
               <div className="flex flex-col gap-y-6 xl:flex-row">
+                {/* Images */}
                 <FormField
                   control={form.control}
                   name="images"
@@ -298,6 +316,20 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                     </FormItem>
                   )}
                 />
+                {/* Colors */}
+                <div className="w-full flex flex-col gap-y-3 xl:pl-5">
+                  <ClickToAddInputs
+                    details={colors}
+                    setDetails={setColors}
+                    initialDetail={{ color: "" }}
+                    header="Colors"
+                  ></ClickToAddInputs>
+                  {errors.colors && (
+                    <span className="text-sm font-medium text-destructive">
+                      {errors.colors.message}
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Name */}
@@ -318,6 +350,44 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   </FormItem>
                 )}
               />
+
+              {/* Description */}
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Product Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Product Description"
+                        {...field}
+                        disabled={isLoading}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              {/* Size */}
+              <div className="w-full flex flex-col gap-3 xl:pl-5">
+                <ClickToAddInputs
+                  details={sizes}
+                  setDetails={setSizes}
+                  initialDetail={{
+                    size: "",
+                    quantity: 1,
+                    price: 0.01,
+                    discount: 0,
+                  }}
+                  header="Sizes, Quantity, Prices, and Discounts"
+                ></ClickToAddInputs>
+                {errors.sizes && (
+                  <span className="text-sm font-medium text-destructive">
+                    {errors.sizes.message}
+                  </span>
+                )}
+              </div>
 
               <div className="grid gap-6 md:grid-cols-2">
                 <FormField
@@ -356,24 +426,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   )}
                 />
               </div>
-
-              {/* Description */}
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Product Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Product Description"
-                        {...field}
-                        disabled={isLoading}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
 
               <FormField
                 control={form.control}
