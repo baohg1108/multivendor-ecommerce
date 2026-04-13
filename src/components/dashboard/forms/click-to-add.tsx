@@ -1,46 +1,68 @@
-"use client";
-
-import type { FC } from "react";
-import { CircleMinus, CirclePlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-
-interface ClickToAddProps {
-  onAdd: () => void;
-  onRemove: () => void;
-  disableAdd?: boolean;
-  disableRemove?: boolean;
+export interface Detail {
+  [key: string]: string | number | boolean | undefined;
 }
 
-const ClickToAdd: FC<ClickToAddProps> = ({
-  onAdd,
-  onRemove,
-  disableAdd,
-  disableRemove,
+interface ClickToAddInputProps {
+  details: Detail[];
+  setDetails: React.Dispatch<React.SetStateAction<Detail[]>>;
+  initialDetail: Detail[];
+  header: string;
+}
+
+const ClickToAddInputs: React.FC<ClickToAddInputProps> = ({
+  details,
+  setDetails,
+  initialDetail = {},
+  header,
 }) => {
-  return (
-    <div className="flex items-center gap-1">
-      <Button
+  const PlusButton = ({ onClick }: { onClick: () => void }) => {
+    return (
+      <button
         type="button"
-        size="icon"
-        variant="ghost"
-        onClick={onRemove}
-        disabled={disableRemove}
-        className="rounded-full"
+        title="Add new detail"
+        className="group cursor-pointer outline-none hover:rotate-90 duration-300"
+        onClick={onClick}
       >
-        <CircleMinus className="h-7 w-7 text-blue-400" />
-      </Button>
-      <Button
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="50"
+          height="50"
+          viewBox="0 0 16 16"
+          className="w-8 h-8 stroke-blue-400 fill-none group-hover:fill-blue-primary group-active:fill-blue-primary"
+        >
+          <path d="M8 0a8 8 0 100 16A8 8 0 008 0zM6.5 4.5a.5.5 0 011 0v3a.5.5 0 01-.5.5H4a.5.5 0 010-1h2a.5.5 0 01.5.5v-3z"></path>
+          <path d="M16 0a8 8 0 100 16A8 8 0 008 0zM6.5 4.5a.5.5 0 011 0v3a.5.5 0 01-.5.5H4a.5.5 0 010-1h2a.5.5 0 01.5.5v-3z"></path>
+        </svg>
+      </button>
+    );
+  };
+
+  const MinusButton = ({ onClick }: { onClick: () => void }) => {
+    return (
+      <button
         type="button"
-        size="icon"
-        variant="ghost"
-        onClick={onAdd}
-        disabled={disableAdd}
-        className="rounded-full"
+        title="Remove detail"
+        className="group cursor-pointer outline-none hover:rotate-90 duration-300"
+        onClick={onClick}
       >
-        <CirclePlus className="h-7 w-7 text-blue-400" />
-      </Button>
-    </div>
-  );
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="50"
+          height="50"
+          viewBox="0 0 16 16"
+          className="w-8 h-8 stroke-blue-400 fill-none group-hover:fill-blue-primary group-active:fill-blue-primary"
+        >
+          <path d="M8 0a8 8 0 100 16A8 8 0 008 0zM6.5 4.5a.5.5 0 011 0v3a.5.5 0 01-.5.5H4a.5.5 0 010-1h2a.5.5 0 01.5.5v-3z"></path>
+          <path d="M16 0a8 8 0 100 16A8 8 0 008 0zM6.5 4.5a.5.5 0 011 0v3a.5.5 0 01-.5.5H4a.5.5 0 010-1h2a.5.5 0 01.5.5v-3z"></path>
+        </svg>
+      </button>
+    );
+  };
+  return <div className="flex flex-col gap-y-4"
+  >
+    {/* header */}
+    <div></div>
+  </div>;
 };
 
-export default ClickToAdd;
+export default ClickToAddInputs;

@@ -1,8 +1,5 @@
-import { Prisma } from "@/generated/prisma/browser";
-import { PrismaClient } from "@/generated/prisma/internal/class";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { db } from "./db";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -49,4 +46,38 @@ export const getGridClassName = (length: number) => {
     default:
       return "";
   }
+};
+
+export const getDominantColors = async (
+  imageUrl: string,
+): Promise<string[]> => {
+  if (typeof window === "undefined") {
+    return [];
+  }
+
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    img.crossOrigin = "Anonymous";
+    img.src = imageUrl;
+    img.onload = async () => {
+      try {
+        const { getPalette } = await import("colorthief");
+        const palette = await getPalette(img, { colorCount: 4 });
+        const colors = (palette || []).map((color) =>
+          color.hex().toUpperCase(),
+        );
+
+        resolve(colors);
+      } catch (error) {
+        reject(
+          error instanceof Error
+            ? error
+            : new Error("Failed to get image palette"),
+        );
+      }
+    };
+    img.onerror = () => {
+      reject(new Error("Failed to load image"));
+    };
+  });
 };

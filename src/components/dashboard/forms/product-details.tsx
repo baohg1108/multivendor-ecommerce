@@ -249,7 +249,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   name="images"
                   render={({ field }) => (
                     <FormItem className="w-full xl:border-r">
-                      {/* <FormLabel>Product Images</FormLabel> */}
                       <FormControl>
                         <div className="space-y-4">
                           <ImagesPreviewGrid
@@ -261,6 +260,8 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                                 ),
                               )
                             }
+                            colors={colors}
+                            setColors={setColors}
                           />
                           <FormMessage className="mt-4!"></FormMessage>
                           <ImageUpload
@@ -522,10 +523,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
 
                 <div className="space-y-2">
                   {colors.map((colorItem, index) => (
-                    <div
-                      key={`${index}-${colorItem.color}`}
-                      className="flex items-center gap-2"
-                    >
+                    <div key={index} className="flex items-center gap-2">
                       <Input
                         value={colorItem.color}
                         onChange={(event) => {
@@ -586,10 +584,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
 
                 <div className="space-y-3">
                   {sizes.map((sizeItem, index) => (
-                    <div
-                      key={`${index}-${sizeItem.size}`}
-                      className="grid gap-2 md:grid-cols-12"
-                    >
+                    <div key={index} className="grid gap-2 md:grid-cols-12">
                       <Input
                         className="md:col-span-3"
                         value={sizeItem.size}
