@@ -189,7 +189,7 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
 
                 router.refresh();
                 setClose();
-              } catch (err) {
+              } catch {
                 toast.error("Error deleting category");
               } finally {
                 setLoading(false);

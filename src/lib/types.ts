@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+import { getAllStoreProducts } from "@/queries/product";
 import type { Category, SubCategory } from "@prisma/client";
 export interface DashboardSidebarMenuInterface {
   label: string;
@@ -31,3 +33,7 @@ export type ProductWithVariantType = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type StoreProductType = Prisma.PromiseReturnType<
+  typeof getAllStoreProducts
+>[0];
