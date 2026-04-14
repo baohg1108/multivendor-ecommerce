@@ -1,5 +1,4 @@
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import { Minus, PaintBucket, Plus } from "lucide-react";
 import React, { useState } from "react";
 
@@ -39,7 +38,7 @@ interface ClickToAddInputProps<T extends Detail> {
   details: T[];
   setDetails: React.Dispatch<React.SetStateAction<T[]>>;
   initialDetail: T;
-  header: string;
+  header?: string;
   colorPicker?: boolean;
 }
 

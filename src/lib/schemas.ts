@@ -152,11 +152,8 @@ export const ProductFormSchema = z.object({
       required_error: "Product description is required",
       invalid_type_error: "Product description must be a string",
     })
-    .min(30, {
-      message: "Product description must be at least 30 characters long",
-    })
-    .max(1000, {
-      message: "Product description must be at most 1000 characters long",
+    .min(200, {
+      message: "Product description must be at least 200 characters long",
     }),
   variantName: z
     .string({
@@ -169,39 +166,29 @@ export const ProductFormSchema = z.object({
       message:
         "Variant name can only contain letters, numbers, spaces, and hyphens",
     }),
-  variantDescription: z
-    .string({
-      required_error: "Variant description is required",
-      invalid_type_error: "Variant description must be a string",
-    })
-    .min(30, {
-      message: "Variant description must be at least 30 characters long",
-    })
-    .max(1000, {
-      message: "Variant description must be at most 1000 characters long",
-    }),
-  // .optional(),
-
+  variantDescription: z.string().optional(),
   images: z
     .object({ url: z.string() })
     .array()
     .min(3, { message: "Product must have at least 3 images" })
     .max(6, { message: "Product must have at most 6 images" }),
-
+  variantImages: z
+    .object({ url: z.string() })
+    .array()
+    .min(1, { message: "Variant must have exactly 1 image" })
+    .max(1, { message: "Variant must have exactly 1 image" }),
   categoryId: z
     .string({
       required_error: "Product category ID is mandatory",
       invalid_type_error: "Product category ID must be a string",
     })
     .uuid(),
-
   subCategoryId: z
     .string({
       required_error: "Product sub-category ID is mandatory",
       invalid_type_error: "Product sub-category ID must be a string",
     })
     .uuid(),
-
   isSale: z.boolean().default(false),
   brand: z
     .string({
@@ -210,7 +197,6 @@ export const ProductFormSchema = z.object({
     })
     .min(2, { message: "Product brand must be at least 2 characters long" })
     .max(50, { message: "Product brand must be at most 50 characters long" }),
-
   sku: z
     .string({
       required_error: "Product SKU is required",
@@ -218,46 +204,55 @@ export const ProductFormSchema = z.object({
     })
     .min(6, { message: "Product SKU must be at least 6 characters long" })
     .max(50, { message: "Product SKU must be at most 50 characters long" }),
-
   keywords: z
-    .string({
-      required_error: "Product keywords are required",
-      invalid_type_error: "Product keywords must be a string",
-    })
+    .string()
     .array()
     .min(5, { message: "Product keywords must have at least 5 items" })
     .max(10, { message: "Product keywords must have at most 10 items" }),
 
-  colors: z.object({
-    color: z
-      .string()
-      .array()
-      .min(1, { message: "Product must have at least 1 color" })
-      .refine((colors) => colors.every((c) => c.length > 0), {
-        message: "All color inputs must be filled",
-      }),
-
-    sizes: z
-      .object({
-        size: z.string(),
-        quantity: z
-          .number()
-          .min(1, { message: "Product size quantity must be at least 1" }),
-        price: z
-          .number()
-          .min(0.01, { message: "Product size price must be at least 0.01" }),
-        discount: z.number().min(0).default(0),
-      })
-      .array()
-      .min(1, { message: "Product must have at least 1 size" })
-      .refine(
-        (sizes) =>
-          sizes.every(
-            (s) => s.size.length > 0 && s.quantity > 0 && s.price > 0,
-          ),
-        {
-          message: "All size inputs must be filled correctly",
-        },
-      ),
-  }),
+  // ✅ Top-level — not nested inside colors
+  colors: z
+    .object({ color: z.string() })
+    .array()
+    .min(1, { message: "Product must have at least 1 color" }),
+  sizes: z
+    .object({
+      size: z.string(),
+      quantity: z.number().min(1, { message: "Quantity must be at least 1" }),
+      price: z.number().min(0.01, { message: "Price must be at least 0.01" }),
+      discount: z.number().min(0).default(0),
+    })
+    .array()
+    .min(1, { message: "Product must have at least 1 size" })
+    .refine(
+      (sizes) =>
+        sizes.every((s) => s.size.length > 0 && s.quantity > 0 && s.price > 0),
+      { message: "All size inputs must be filled correctly" },
+    ),
+  product_specs: z
+    .object({ name: z.string(), value: z.string() })
+    .array()
+    .min(1, { message: "Provide at least one product spec" })
+    .refine(
+      (specs) => specs.every((s) => s.name.length > 0 && s.value.length > 0),
+      { message: "All product spec inputs must be filled correctly" },
+    ),
+  variant_specs: z
+    .object({ name: z.string(), value: z.string() })
+    .array()
+    .min(1, { message: "Provide at least one variant spec" })
+    .refine(
+      (specs) => specs.every((s) => s.name.length > 0 && s.value.length > 0),
+      { message: "All variant spec inputs must be filled correctly" },
+    ),
+  questions: z
+    .object({ question: z.string(), answer: z.string() })
+    .array()
+    .min(1, { message: "Provide at least one question" })
+    .refine(
+      (questions) =>
+        questions.every((q) => q.question.length > 0 && q.answer.length > 0),
+      { message: "All question inputs must be filled correctly" },
+    ),
+  saleEndDate: z.string().optional(),
 });

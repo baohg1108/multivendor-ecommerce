@@ -17,7 +17,7 @@ export default async function AdminSubCategoriesPage() {
 
   return (
     <DataTable
-      actionButtonContext={
+      actionButtonText={
         <div className="flex items-center gap-2">
           <Plus size={15} />
           <span>Create Subcategory</span>
