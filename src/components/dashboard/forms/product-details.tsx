@@ -59,6 +59,7 @@ import ReactTags from "@/components/dashboard/forms/react-tags";
 import { upsertProduct } from "@/queries/product";
 import { v4 } from "uuid";
 import type { SubCategory } from "@prisma/client";
+
 interface ProductDetailsProps {
   data?: Partial<ProductWithVariantType>;
   categories: Category[];
@@ -199,7 +200,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
       toast.success(
         data?.productId && data?.variantId
           ? "Product has been updated successfully!"
-          : "Product form is valid and ready to connect to your product API.",
+          : "Product has been created successfully!",
       );
 
       if (data?.productId && data?.variantId) {
@@ -215,6 +216,13 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
         description: (error as Error).message,
       });
     }
+  };
+
+  const handleInvalidSubmit = () => {
+    toast.error("Cannot create product yet", {
+      description:
+        "Please check required fields (images, colors, sizes, category, subcategory, keywords) and try again.",
+    });
   };
 
   // handle keywords input
@@ -238,12 +246,37 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
 
   // whenerever colors, sizes, or keywords change, update the form values accordingly
   useEffect(() => {
-    form.setValue("colors", {
-      color: colors.map((item) => item.color),
-      sizes,
+    form.setValue(
+      "colors",
+      {
+        color: colors.map((item) => item.color),
+        sizes,
+      },
+      {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true,
+      },
+    );
+    form.setValue("keywords", keywords, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
     });
-    form.setValue("keywords", keywords);
   }, [colors, sizes, keywords, form]);
+
+  const colorErrorMessage =
+    errors.colors?.color?.message ||
+    (Array.isArray(errors.colors?.color)
+      ? errors.colors?.color.find((item) => item?.message)?.message
+      : undefined) ||
+    errors.colors?.message;
+
+  const sizeErrorMessage =
+    errors.colors?.sizes?.message ||
+    (Array.isArray(errors.colors?.sizes)
+      ? errors.colors?.sizes.find((item) => item?.message)?.message
+      : undefined);
 
   return (
     <AlertDialog>
@@ -260,7 +293,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
         <CardContent>
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(handleSubmit)}
+              onSubmit={form.handleSubmit(handleSubmit, handleInvalidSubmit)}
               className="space-y-4"
             >
               {/* ==================== Images - colors  ====================*/}
@@ -328,9 +361,9 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                     header="Colors"
                     colorPicker
                   ></ClickToAddInputs>
-                  {errors.colors && (
+                  {colorErrorMessage && (
                     <span className="text-sm font-medium text-destructive">
-                      {errors.colors.message}
+                      {colorErrorMessage}
                     </span>
                   )}
                 </div>
@@ -392,6 +425,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                           disabled={isLoading}
                         />
                       </FormControl>
+                      <FormMessage></FormMessage>
                     </FormItem>
                   )}
                 />
@@ -409,6 +443,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                           disabled={isLoading}
                         />
                       </FormControl>
+                      <FormMessage></FormMessage>
                     </FormItem>
                   )}
                 />
@@ -549,6 +584,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                           }}
                         ></ReactTags>
                       </FormControl>
+                      <FormMessage></FormMessage>
                     </FormItem>
                   )}
                 ></FormField>
@@ -584,6 +620,11 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   }}
                   header="Sizes, Quantity, Prices, and Discounts"
                 ></ClickToAddInputs>
+                {sizeErrorMessage && (
+                  <span className="text-sm font-medium text-destructive">
+                    {sizeErrorMessage}
+                  </span>
+                )}
               </div>
 
               {/* ==================== Is on Sale ==================== */}
