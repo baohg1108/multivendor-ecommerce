@@ -15,7 +15,7 @@ export default async function AdminCategoriesPage() {
 
   return (
     <DataTable
-      actionButtonContext={
+      actionButtonText={
         <>
           <Plus size={15} />
           Create Category

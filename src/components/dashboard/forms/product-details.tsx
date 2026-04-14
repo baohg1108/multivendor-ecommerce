@@ -1,7 +1,7 @@
 "use client";
 
 // React
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { useEffect } from "react";
 
 // Pisma model
@@ -59,7 +59,17 @@ import ReactTags from "@/components/dashboard/forms/react-tags";
 import { upsertProduct } from "@/queries/product";
 import { v4 } from "uuid";
 import type { SubCategory } from "@prisma/client";
+import { format } from "date-fns";
 
+// React date picker
+import DateTimePicker from "react-datetime-picker";
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+// Jodit react
+import JoditEditor from "jodit-react";
 interface ProductDetailsProps {
   data?: Partial<ProductWithVariantType>;
   categories: Category[];
@@ -74,18 +84,40 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
   // Initializing nessary hooks and states
   const router = useRouter();
 
+  // Jodit editor ref
+  const productDescEditor = React.useRef(null);
+  const variantDescEditor = React.useRef(null);
+
   // State of subCategories
   const [subCategories, setSubCategories] = React.useState<SubCategory[]>([]);
 
   // State of colors
-  const [colors, setColors] = React.useState<{ color: string }[]>([
-    { color: "" },
-  ]);
+  const [colors, setColors] = React.useState<{ color: string }[]>(
+    data?.colors || [{ color: "" }],
+  );
+
+  // State of images
+  const [images, setImages] = React.useState<{ url: string }[]>([]);
 
   // State of sizes
   const [sizes, setSizes] = React.useState<
     { size: string; quantity: number; price: number; discount: number }[]
   >([{ size: "", quantity: 1, price: 0.01, discount: 0 }]);
+
+  // product specs
+  const [productSpecs, setProductSpecs] = React.useState<
+    { name: string; value: string }[]
+  >(data?.product_specs || [{ name: "", value: "" }]);
+
+  // variant specs
+  const [variantSpecs, setVariantSpecs] = React.useState<
+    { name: string; value: string }[]
+  >(data?.variant_specs || [{ name: "", value: "" }]);
+
+  // question
+  const [questions, setQuestions] = React.useState<
+    { question: string; answer: string }[]
+  >(data?.questions || [{ question: "", answer: "" }]);
 
   // Form hook for managing form statte and validation
   const form = useForm<z.infer<typeof ProductFormSchema>>({
@@ -97,23 +129,30 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
       variantName: data?.variantName || "",
       variantDescription: data?.variantDescription || "",
       images: data?.images || [],
+      variantImages: data?.variantImage ? [{ url: data.variantImage }] : [],
       categoryId: data?.categoryId || "",
       subCategoryId: data?.subCategoryId || "",
       brand: "",
       sku: data?.sku || "",
-      colors: {
-        color: data?.colors?.map((color) => color.color) || [""],
-        sizes: data?.sizes || [
-          {
-            size: "",
-            quantity: 1,
-            price: 0.01,
-            discount: 0,
-          },
-        ],
-      },
+      // colors: {
+      //   color: data?.colors?.map((color) => color.color) || [""],
+      //   sizes: data?.sizes || [
+      //     {
+      //       size: "",
+      //       quantity: 1,
+      //       price: 0.01,
+      //       discount: 0,
+      //     },
+      //   ],
+      // },
+      colors: data?.colors || [{ color: "" }],
+      sizes: data?.sizes,
+      product_specs: data?.product_specs || [],
+      variant_specs: data?.variant_specs || [],
       keywords: data?.keywords || [],
       isSale: data?.isSale || false,
+      saleEndDate:
+        data?.saleEndDate || format(new Date(), "yyyy-MM-dd'T'HH:mm:ss"),
     },
   });
 
@@ -149,21 +188,15 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
         variantName: data?.variantName || "",
         variantDescription: data?.variantDescription || "",
         images: data?.images || [],
+        variantImages: data?.variantImage ? [{ url: data.variantImage }] : [],
         categoryId: data?.categoryId || "",
         subCategoryId: data?.subCategoryId || "",
         brand: "",
         sku: data?.sku || "",
-        colors: {
-          color: data?.colors?.map((color) => color.color) || [""],
-          sizes: data?.sizes || [
-            {
-              size: "",
-              quantity: 1,
-              price: 0.01,
-              discount: 0,
-            },
-          ],
-        },
+        colors: data?.colors || [{ color: "" }],
+        sizes: data?.sizes || [
+          { size: "", quantity: 1, price: 0.01, discount: 0 },
+        ],
         keywords: data?.keywords || [],
         isSale: data?.isSale || false,
       });
@@ -183,14 +216,19 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
           variantName: values.variantName,
           variantDescription: values.variantDescription || "",
           images: values.images,
+          variantImage: values.variantImages[0]?.url,
           categoryId: values.categoryId,
           subCategoryId: values.subCategoryId,
           isSale: values.isSale || false,
+          saleEndDate: values.saleEndDate,
           brand: values.brand,
           sku: values.sku,
-          colors,
-          sizes,
-          keywords: values.keywords || [],
+          colors: values.colors,
+          sizes: values.sizes,
+          product_specs: values.product_specs,
+          variant_specs: values.variant_specs,
+          keywords: values.keywords,
+          questions: values.questions,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -246,37 +284,12 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
 
   // whenerever colors, sizes, or keywords change, update the form values accordingly
   useEffect(() => {
-    form.setValue(
-      "colors",
-      {
-        color: colors.map((item) => item.color),
-        sizes,
-      },
-      {
-        shouldValidate: true,
-        shouldDirty: true,
-        shouldTouch: true,
-      },
-    );
-    form.setValue("keywords", keywords, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  }, [colors, sizes, keywords, form]);
-
-  const colorErrorMessage =
-    errors.colors?.color?.message ||
-    (Array.isArray(errors.colors?.color)
-      ? errors.colors?.color.find((item) => item?.message)?.message
-      : undefined) ||
-    errors.colors?.message;
-
-  const sizeErrorMessage =
-    errors.colors?.sizes?.message ||
-    (Array.isArray(errors.colors?.sizes)
-      ? errors.colors?.sizes.find((item) => item?.message)?.message
-      : undefined);
+    form.setValue("colors", colors);
+    form.setValue("sizes", sizes);
+    form.setValue("keywords", keywords);
+    form.setValue("product_specs", productSpecs);
+    form.setValue("variant_specs", variantSpecs);
+  }, [colors, sizes, keywords, productSpecs, variantSpecs, data]);
 
   return (
     <AlertDialog>
@@ -361,9 +374,9 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                     header="Colors"
                     colorPicker
                   ></ClickToAddInputs>
-                  {colorErrorMessage && (
+                  {errors.colors && (
                     <span className="text-sm font-medium text-destructive">
-                      {colorErrorMessage}
+                      {errors.colors.message}
                     </span>
                   )}
                 </div>
@@ -409,44 +422,59 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                 />
               </div>
 
-              {/*==================== Description + Variant Description ====================*/}
-              <div className="flex flex-col lg:flex-row gap-4">
+              {/* ==================== Product and variant description editors (Tabs) */}
+              <Tabs defaultValue="product" className="w-full">
+                <TabsList className="w-full grid-cols-2 grid">
+                  <TabsTrigger value="product">Product Description</TabsTrigger>
+                  <TabsTrigger value="variant">Variant Description</TabsTrigger>
+                </TabsList>
+                <TabsContent value="product">
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormControl>
+                          <JoditEditor
+                            ref={productDescEditor}
+                            value={form.getValues().description}
+                            onChange={(content) => {
+                              form.setValue("description", content);
+                            }}
+                          ></JoditEditor>
+                        </FormControl>
+                        <FormMessage></FormMessage>
+                      </FormItem>
+                    )}
+                  />
+                </TabsContent>
+                <TabsContent value="variant">
+                  <FormField
+                    control={form.control}
+                    name="variantDescription"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormControl>
+                          <JoditEditor
+                            ref={variantDescEditor}
+                            value={form.getValues().variantDescription || ""}
+                            onChange={(content) => {
+                              form.setValue("variantDescription", content);
+                            }}
+                          ></JoditEditor>
+                        </FormControl>
+                        <FormMessage></FormMessage>
+                      </FormItem>
+                    )}
+                  />
+                </TabsContent>
+              </Tabs>
+
+              {/*==================== Product Description + Variant Description ====================*/}
+              <div className="flex flex-col lg:flex-row gap-4 hidden">
                 {/* Product Description */}
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Product Description</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Product Description"
-                          {...field}
-                          disabled={isLoading}
-                        />
-                      </FormControl>
-                      <FormMessage></FormMessage>
-                    </FormItem>
-                  )}
-                />
+
                 {/* Variant Description */}
-                <FormField
-                  control={form.control}
-                  name="variantDescription"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Variant Description</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Variant Description"
-                          {...field}
-                          disabled={isLoading}
-                        />
-                      </FormControl>
-                      <FormMessage></FormMessage>
-                    </FormItem>
-                  )}
-                />
               </div>
 
               {/*==================== Categories + Subcategories ====================*/}
@@ -565,31 +593,72 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                 />
               </div>
 
-              {/* ==================== Keyword ==================== */}
-              <div className="space-y-6">
+              {/* ==================== Variant Images +  Keyword ==================== */}
+              {/* Keyword */}
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/* Variant Images */}
                 <FormField
                   control={form.control}
-                  name="keywords"
-                  render={() => (
-                    <FormItem className="relative flex-1">
-                      <FormLabel> Product Keywords</FormLabel>
-                      <FormControl>
-                        <ReactTags
-                          handleAddition={handleAddition}
-                          handleDeleteKeyword={handleDeleteKeyword}
-                          placeholder="Keywords (e.g., summer, cotton, etc.)"
-                          classNames={{
-                            tagInputField:
-                              "bg-background border rounded-md p-2 w-full focus:outline-none",
-                          }}
-                        ></ReactTags>
-                      </FormControl>
-                      <FormMessage></FormMessage>
-                    </FormItem>
+                  name="variantImages"
+                  render={({ field }) => (
+                    <div className="border-r pr-10">
+                      <FormItem>
+                        <FormLabel className="ml-14">Variant Images</FormLabel>
+                        <FormControl>
+                          <div className="space-y-4">
+                            <ImageUpload
+                              dontShowPreview
+                              type="profile"
+                              value={(field.value || []).map(
+                                (image) => image.url,
+                              )}
+                              disabled={isLoading}
+                              onChange={(url) => {
+                                field.onChange([{ url }]);
+                              }}
+                              onRemove={(url) =>
+                                field.onChange([
+                                  ...(field.value || []).filter(
+                                    (current) => current.url !== url,
+                                  ),
+                                ])
+                              }
+                            />
+                            <FormMessage className="mt-2 text-center" />
+                          </div>
+                        </FormControl>
+                      </FormItem>
+                    </div>
                   )}
-                ></FormField>
+                />
+
+                {/* Keywords */}
+                <div className="w-full flex-1 space-y-3">
+                  <FormField
+                    control={form.control}
+                    name="keywords"
+                    render={() => (
+                      <FormItem className="relative flex-1">
+                        <FormLabel> Product Keywords</FormLabel>
+                        <FormControl>
+                          <ReactTags
+                            handleAddition={handleAddition}
+                            handleDeleteKeyword={handleDeleteKeyword}
+                            placeholder="Keywords (e.g., summer, cotton, etc.)"
+                            classNames={{
+                              tagInputField:
+                                "bg-background border rounded-md p-2 w-full focus:outline-none",
+                            }}
+                          ></ReactTags>
+                        </FormControl>
+                        <FormMessage></FormMessage>
+                      </FormItem>
+                    )}
+                  ></FormField>
+                </div>
               </div>
 
+              {/* ========== */}
               <div className="flex flex-wrap gap-1">
                 {keywords.map((k, i) => (
                   <div
@@ -620,34 +689,128 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   }}
                   header="Sizes, Quantity, Prices, and Discounts"
                 ></ClickToAddInputs>
-                {sizeErrorMessage && (
+                {errors.sizes && (
                   <span className="text-sm font-medium text-destructive">
-                    {sizeErrorMessage}
+                    {errors.sizes.message}
                   </span>
                 )}
               </div>
 
-              {/* ==================== Is on Sale ==================== */}
-              <FormField
-                control={form.control}
-                name="isSale"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>Is on Sale</FormLabel>
-                      <FormDescription>
-                        Is this product as on sale
-                      </FormDescription>
-                    </div>
-                  </FormItem>
+              {/* ==================== Product and variant specs  ====================*/}
+              {/* Product specs */}
+              <Tabs defaultValue="productSpecs" className="w-full">
+                <TabsList className="w-full grid-cols-2 grid">
+                  <TabsTrigger value="productSpecs">
+                    Product Specification
+                  </TabsTrigger>
+                  <TabsTrigger value="variantSpecs">
+                    Variant Specification
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="productSpecs">
+                  <div className="w-full flex flex-col gap-3 xl:pl-5">
+                    <ClickToAddInputs
+                      details={productSpecs}
+                      setDetails={setProductSpecs}
+                      initialDetail={{
+                        name: "",
+                        value: "",
+                      }}
+                      header="Fill Product Specification here"
+                    ></ClickToAddInputs>
+                    {errors.product_specs && (
+                      <span className="text-sm font-medium text-destructive">
+                        {errors.product_specs.message}
+                      </span>
+                    )}
+                  </div>
+                </TabsContent>
+                {/* variant specs */}
+                <TabsContent value="variantSpecs">
+                  <div className="w-full flex flex-col gap-3 xl:pl-5">
+                    <ClickToAddInputs
+                      details={variantSpecs}
+                      setDetails={setVariantSpecs}
+                      initialDetail={{
+                        name: "",
+                        value: "",
+                      }}
+                      header="Fill Product Variant Specification here"
+                    ></ClickToAddInputs>
+                    {errors.product_specs && (
+                      <span className="text-sm font-medium text-destructive">
+                        {errors.product_specs.message}
+                      </span>
+                    )}
+                  </div>
+                </TabsContent>
+              </Tabs>
+
+              {/* Questions  */}
+              <div className="w-full flex flex-col gap-3 xl:pl-5">
+                <ClickToAddInputs
+                  details={questions}
+                  setDetails={setQuestions}
+                  initialDetail={{
+                    question: "",
+                    answer: "",
+                  }}
+                  header="Answer and Question"
+                ></ClickToAddInputs>
+                {errors.questions && (
+                  <span className="text-sm font-medium text-destructive">
+                    {errors.questions.message}
+                  </span>
                 )}
-              />
+              </div>
+
+              {/* ==================== Is on Sale + Sale end date ==================== */}
+              {/* Is on Sale */}
+              <div className="flex border rounded-md">
+                <FormField
+                  control={form.control}
+                  name="isSale"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 p-4">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Is on Sale</FormLabel>
+                        <FormDescription>
+                          Is this product as on sale
+                        </FormDescription>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                {/* Sale end date */}
+                {form.getValues().isSale && (
+                  <FormField
+                    control={form.control}
+                    name="saleEndDate"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 p-4">
+                        <FormControl>
+                          <DateTimePicker
+                            onChange={(date) => {
+                              field.onChange(
+                                date
+                                  ? format(date, "yyyy-MM-dd'T'HH:mm:ss")
+                                  : "",
+                              );
+                            }}
+                            value={field.value ? new Date(field.value) : null}
+                          ></DateTimePicker>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                )}
+              </div>
 
               <Button type="submit" disabled={isLoading}>
                 {isLoading

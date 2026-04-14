@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { ProductWithVariantType } from "@/lib/types";
 import { currentUser } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
+import { spec } from "node:test/reporters";
 import slugify from "slugify";
 
 const generateUniqueSlug = async (
@@ -104,6 +105,18 @@ export const upsertProduct = async (
       description: product.description,
       slug: productSlug,
       brand: product.brand,
+      specs: {
+        create: product.product_specs.map((spec) => ({
+          name: spec.name,
+          value: spec.value,
+        })),
+      },
+      questions: {
+        create: product.questions.map((question) => ({
+          question: question.question,
+          value: question.answer,
+        })),
+      },
       store: { connect: { id: store.id } },
       category: { connect: { id: product.categoryId } },
       subCategory: { connect: { id: product.subCategoryId } },
@@ -114,10 +127,18 @@ export const upsertProduct = async (
     const commonVariantData = {
       variantName: product.variantName,
       variantDescription: product.variantDescription,
+      variantImage: product.variantImage,
       slug: variantSlug,
       isSale: product.isSale,
+      saleEndDate: product.isSale ? product.saleEndDate : "",
       sku: product.sku,
       keywords: product.keywords.join(","),
+      specs: {
+        create: product.variant_specs.map((spec) => ({
+          name: spec.name,
+          value: spec.value,
+        })),
+      },
       images: {
         create: product.images.map((image) => ({
           url: image.url,
