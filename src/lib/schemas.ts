@@ -256,3 +256,25 @@ export const ProductFormSchema = z.object({
     ),
   saleEndDate: z.string().optional(),
 });
+
+// Store default shipping details form schema
+export const StoreShippingFormSchema = z.object({
+  defaultShippingService: z
+    .string({
+      required_error: "Shipping service name is required",
+      // invalid_type_error: "Default shipping service must be a string",
+    })
+    .min(2, {
+      message: "Shipping service name must be at least 2 characters long",
+    })
+    .max(50, {
+      message: "Shipping service name must be at most 50 characters long",
+    }),
+  defaultShippingFeePerItem: z.number(),
+  defaultShippingFeeForAdditionalItem: z.number(),
+  defaultShippingFeeFixed: z.number(),
+  defaultShippingFeePerKg: z.number(),
+  defaultDeliveryTimeMin: z.number(),
+  defaultDeliveryTimeMax: z.number(),
+  returnPolicy: z.string(),
+});
