@@ -1,10 +1,12 @@
 "use server";
 
 import { db } from "@/lib/db";
+import { StoreDefaultShippingType } from "@/lib/types";
 
 import { currentUser } from "@clerk/nextjs/server";
 
 import { Prisma, StoreStatus } from "@prisma/client";
+import error from "next/dist/api/error";
 
 type UpsertStoreInput = {
   id: string;
@@ -124,6 +126,80 @@ export const upsertStore = async (store: UpsertStoreInput) => {
     });
 
     return storeDetails;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getStoreDefaultShippingDetails = async (storeUrl: string) => {
+  try {
+    if (!storeUrl) throw new Error("Store url is required !");
+
+    const store = await db.store.findUnique({
+      where: {
+        url: storeUrl,
+      },
+      select: {
+        defaultShippingService: true,
+        defaultShippingFeePerItem: true,
+        defaultShippingFeeForAdditionalItem: true,
+        defaultShippingFeePerKg: true,
+        defaultShippingFeeFixed: true,
+        defaultDeliveryTimeMin: true,
+        defaultDeliveryTimeMax: true,
+        returnPolicy: true,
+      },
+    });
+
+    if (!store) throw new Error("Store not found !");
+
+    return store;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateStoreDefaultShippingDetails = async ({
+  storeUrl,
+  details,
+}: {
+  storeUrl: string;
+  details: StoreDefaultShippingType;
+}) => {
+  try {
+    const user = await currentUser();
+
+    if (!user) throw new Error("Unauthenticated");
+
+    if (user.privateMetadata.role !== "SELLER") {
+      throw new Error(
+        "Unauthorized Accesss: Seller Privileges Required for Entry",
+      );
+    }
+    if (!storeUrl) throw new Error("Store url is required !");
+    if (!details)
+      throw new Error("Store default shipping details are required !");
+
+    const check_ownership = await db.store.findUnique({
+      where: {
+        url: storeUrl,
+        userId: user.id,
+      },
+    });
+    if (!check_ownership) {
+      throw new Error(
+        "Make sure you have the permission to update this store !",
+      );
+    }
+
+    const updatedStore = await db.store.update({
+      where: {
+        url: storeUrl,
+        userId: user.id,
+      },
+      data: details,
+    });
+    return updatedStore;
   } catch (error) {
     throw error;
   }
