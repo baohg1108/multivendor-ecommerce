@@ -202,7 +202,7 @@ const StoreDefaultShippingDetails: React.FC<
               <div className="flex flex-wrap gap-4">
                 <FormField
                   control={form.control}
-                  name="defaultShippingFeeForKg"
+                  name="defaultShippingFeePerKg"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>Shipping Fee Per Kg</FormLabel>
@@ -246,10 +246,10 @@ const StoreDefaultShippingDetails: React.FC<
               <div className="flex flex-wrap gap-4">
                 <FormField
                   control={form.control}
-                  name="defaultShippingTimeMin"
+                  name="defaultDeliveryTimeMin"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Minimum Shipping Time</FormLabel>
+                      <FormLabel>Minimum Delivery Time</FormLabel>
                       <FormControl>
                         <NumberInput
                           defaultValue={field.value}
@@ -263,13 +263,13 @@ const StoreDefaultShippingDetails: React.FC<
                   )}
                 />
 
-                {/* default shipping time max */}
+                {/* default delivery time max */}
                 <FormField
                   control={form.control}
-                  name="defaultShippingTimeMax"
+                  name="defaultDeliveryTimeMax"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Maximum Shipping Time</FormLabel>
+                      <FormLabel>Maximum Delivery Time</FormLabel>
                       <FormControl>
                         <NumberInput
                           defaultValue={field.value}

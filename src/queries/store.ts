@@ -6,7 +6,8 @@ import { StoreDefaultShippingType } from "@/lib/types";
 import { currentUser } from "@clerk/nextjs/server";
 
 import { Prisma, StoreStatus } from "@prisma/client";
-import error from "next/dist/api/error";
+
+import { ShippingRate } from "@prisma/client";
 
 type UpsertStoreInput = {
   id: string;
@@ -90,11 +91,10 @@ export const upsertStore = async (store: UpsertStoreInput) => {
       cover: store.cover,
       featured: store.featured ?? false,
       status: store.status ?? StoreStatus.PENDING,
-      returnPolicy: store.returnPolicy,
-      defaultShippingService: store.defaultShippingService,
-      defaultShippingFees: store.defaultShippingFees,
-      defaultDeliveryTimeMin: store.defaultDeliveryTimeMin,
-      defaultDeliveryTimeMax: store.defaultDeliveryTimeMax,
+      returnPolicy: store.returnPolicy ?? undefined,
+      defaultShippingService: store.defaultShippingService ?? undefined,
+      defaultDeliveryTimeMin: store.defaultDeliveryTimeMin ?? undefined,
+      defaultDeliveryTimeMax: store.defaultDeliveryTimeMax ?? undefined,
     };
 
     const createData: Prisma.StoreCreateInput = {
@@ -107,11 +107,10 @@ export const upsertStore = async (store: UpsertStoreInput) => {
       cover: store.cover,
       featured: store.featured ?? false,
       status: store.status ?? StoreStatus.PENDING,
-      returnPolicy: store.returnPolicy,
-      defaultShippingService: store.defaultShippingService,
-      defaultShippingFees: store.defaultShippingFees,
-      defaultDeliveryTimeMin: store.defaultDeliveryTimeMin,
-      defaultDeliveryTimeMax: store.defaultDeliveryTimeMax,
+      returnPolicy: store.returnPolicy ?? undefined,
+      defaultShippingService: store.defaultShippingService ?? undefined,
+      defaultDeliveryTimeMin: store.defaultDeliveryTimeMin ?? undefined,
+      defaultDeliveryTimeMax: store.defaultDeliveryTimeMax ?? undefined,
       user: {
         connect: { id: user.id },
       },
@@ -200,6 +199,110 @@ export const updateStoreDefaultShippingDetails = async ({
       data: details,
     });
     return updatedStore;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getStoreShippingRates = async (storeUrl: string) => {
+  try {
+    const user = await currentUser();
+
+    if (!user) throw new Error("Unauthenticated");
+
+    if (user.privateMetadata.role !== "SELLER") {
+      throw new Error(
+        "Unauthorized Accesss: Seller Privileges Required for Entry",
+      );
+    }
+
+    if (!storeUrl) throw new Error("Store url is required !");
+
+    const store = await db.store.findFirst({
+      where: {
+        url: storeUrl,
+        userId: user.id,
+      },
+    });
+
+    if (!store) throw new Error("Store could not be found!");
+
+    const countries = await db.country.findMany({
+      orderBy: { name: "asc" },
+    });
+
+    const shippingRates = await db.shippingRate.findMany({
+      where: {
+        storeId: store.id,
+      },
+    });
+
+    const rateMap = new Map();
+    shippingRates.forEach((rate) => {
+      rateMap.set(rate.countryId, rate);
+    });
+
+    const result = countries.map((country) => ({
+      countryId: country.id,
+      countryName: country.name,
+      shippingRate: rateMap.get(country.id) || null,
+    }));
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching store shipping rates:", error);
+    throw error;
+  }
+};
+
+export const upsertShippingRate = async (
+  storeUrl: string,
+  shippingRate: ShippingRate,
+) => {
+  try {
+    const user = await currentUser();
+
+    if (!user) throw new Error("Unauthenticated");
+
+    if (user.privateMetadata.role !== "SELLER") {
+      throw new Error(
+        "Unauthorized Accesss: Seller Privileges Required for Entry",
+      );
+    }
+
+    const check_ownership = await db.store.findUnique({
+      where: {
+        url: storeUrl,
+        userId: user.id,
+      },
+    });
+    if (!check_ownership) {
+      throw new Error(
+        "Make sure you have the permission to update this store !",
+      );
+    }
+
+    if (!shippingRate) throw new Error("Please provide shipping rate data");
+
+    if (!shippingRate.countryId)
+      throw new Error("Please provide a country for this shipping rate");
+
+    const store = await db.store.findUnique({
+      where: {
+        url: storeUrl,
+        userId: user.id,
+      },
+    });
+    if (!store) throw new Error("Please provide a valid store URL");
+
+    const shippingRateDetails = await db.shippingRate.upsert({
+      where: {
+        id: shippingRate.id,
+      },
+      update: { ...shippingRate, storeId: store.id },
+      create: { ...shippingRate, storeId: store.id },
+    });
+    return shippingRateDetails;
   } catch (error) {
     throw error;
   }
