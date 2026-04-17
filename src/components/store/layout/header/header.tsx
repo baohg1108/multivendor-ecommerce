@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
+import Cart from "./cart";
 import UserMenu from "./user-menu/user-menu";
 
 export default function StoreHeader() {
@@ -11,9 +11,9 @@ export default function StoreHeader() {
             <Link href="/">
               <h1 className="font-extrabold text-3xl font-mono">GoShop</h1>
             </Link>
-            <div className="flex">
+            <div className="flex lg:hidden">
               <UserMenu />
-              <div className="w-44"></div>
+              <Cart></Cart>
             </div>
           </div>
         </div>
