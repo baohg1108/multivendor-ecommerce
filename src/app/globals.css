@@ -260,3 +260,8 @@
 .perspective-1000 {
   perspective: 1000px;
 }
+
+.user-avatar .cl-avatarBox {
+  height: 80px !important;
+  width: 80px !important;
+}
