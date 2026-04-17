@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { Country } from "./types";
+import { countries } from "@/data/countries";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -56,3 +58,34 @@ export const getDominantColors = async (
     };
   });
 };
+
+// define helper functions to get user country
+const DEFAULT_COUNTRY: Country = {
+  name: "Viet Nam",
+  code: "VN",
+  city: "",
+  region: "",
+};
+
+export default async function getUserCountry(): Promise<Country> {
+  let userCountry: Country = DEFAULT_COUNTRY;
+  try {
+    const response = await fetch(
+      `https://ipinfo.io/?token=${process.env.IP_INFO_TOKEN}`,
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      userCountry = {
+        name:
+          countries.find((c) => c.code === data.country)?.name || data.country,
+        code: data.country,
+        city: data.city || "",
+        region: data.region || "",
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching user country:", error);
+  }
+  return userCountry;
+}

@@ -1,12 +1,7 @@
-import { UserButton } from "@clerk/nextjs";
-import { seedCountries } from "@/migration-scripts/seed-contries";
+import getUserCountry from "@/lib/utils";
 
 export default async function StoreHomePage() {
-  await seedCountries();
+  const res = await getUserCountry();
 
-  return (
-    <div className="">
-      <UserButton />
-    </div>
-  );
+  return <div></div>;
 }
