@@ -22,9 +22,9 @@ export default async function UserMenu() {
           <Image
             src={user.imageUrl}
             alt={user.fullName!}
-            width={40}
-            height={40}
-            className="rounded-full"
+            width={30}
+            height={30}
+            className="rounded-full mt-2"
           />
         ) : (
           <div className="flex h-11 items-center py-0 mx-2 cursor-pointer">

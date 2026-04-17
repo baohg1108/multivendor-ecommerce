@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { getAllStoreProducts } from "@/queries/product";
 import type { Category, ShippingRate, SubCategory } from "@prisma/client";
 import { getStoreDefaultShippingDetails } from "@/queries/store";
+import { countries } from "../data/countries.js";
 export interface DashboardSidebarMenuInterface {
   label: string;
   icon: string;
@@ -55,3 +56,12 @@ export type CountryWithShippingRatesType = {
   countryName: string;
   shippingRate: ShippingRate;
 };
+
+export interface Country {
+  name: string;
+  code: string;
+  city: string;
+  region: string;
+}
+
+export type SelectMenuOption = (typeof countries)[number];

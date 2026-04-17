@@ -3,8 +3,29 @@ import Cart from "./cart";
 import UserMenu from "./user-menu/user-menu";
 import DownloadApp from "./download-app";
 import Search from "./search/search";
+import { cookies } from "next/headers";
+import { Country } from "@/lib/types";
+import CountryLanguageCurrencySelector from "./country-lang-curr-selector";
+import { countries } from "../../../../data/countries";
 
-export default function StoreHeader() {
+export default async function StoreHeader() {
+  // get cookies from the store
+  const cookieStore = await cookies();
+  const userCountryCookie = cookieStore.get("userCountry");
+
+  // set default country to US if cookie is not found
+  let userCountry: Country = {
+    name: "United States",
+    city: "",
+    code: "US",
+    region: "",
+  };
+
+  // if cookie exists
+  if (userCountryCookie) {
+    userCountry = JSON.parse(userCountryCookie.value) as Country;
+  }
+
   return (
     <div className="bg-linear-to-r from-slate-500 to-slate-800">
       <div className="h-full w-full lg:flex text-white px-4 lg:px-12">
@@ -26,6 +47,7 @@ export default function StoreHeader() {
             <DownloadApp />
           </div>
           {/* Country selector */}
+          <CountryLanguageCurrencySelector userCountry={userCountry} />
           <UserMenu></UserMenu>
           <Cart></Cart>
         </div>
