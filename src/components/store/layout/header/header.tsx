@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Cart from "./cart";
 import UserMenu from "./user-menu/user-menu";
+import DownloadApp from "./download-app";
+import Search from "./search/search";
 
 export default function StoreHeader() {
   return (
@@ -16,6 +18,16 @@ export default function StoreHeader() {
               <Cart></Cart>
             </div>
           </div>
+          {/* Search input */}
+          <Search></Search>
+        </div>
+        <div className="hidden lg:flex w-full lg:w-fit lg:mt-2 justify-end mt-1.5 pl-6">
+          <div className="lg:flex">
+            <DownloadApp />
+          </div>
+          {/* Country selector */}
+          <UserMenu></UserMenu>
+          <Cart></Cart>
         </div>
       </div>
     </div>
