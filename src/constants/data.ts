@@ -1,4 +1,102 @@
-export const adminDashboardSidebarOptions = [
+// export const adminDashboardSidebarOptions = [
+//   {
+//     label: "Dashboard",
+//     icon: "dashboard",
+//     link: "/dashboard/admin",
+//   },
+//   {
+//     label: "Stores",
+//     icon: "store",
+//     link: "/dashboard/admin/stores",
+//   },
+//   {
+//     label: "Orders",
+//     icon: "box-list",
+//     link: "/dashboard/admin/orders",
+//   },
+//   {
+//     label: "Categories",
+//     icon: "categories",
+//     link: "/dashboard/admin/categories",
+//   },
+//   {
+//     label: "Sub-Categories",
+//     icon: "categories",
+//     link: "/dashboard/admin/subCategories",
+//   },
+//   {
+//     label: "Settings",
+//     icon: "settings",
+//     link: "/dashboard/admin/settings",
+//   },
+//   {
+//     label: "Three Boxes",
+//     icon: "three-boxes",
+//     link: "/dashboard/admin/three-boxes",
+//   },
+//   {
+//     label: "Products",
+//     icon: "products",
+//     link: "/dashboard/admin/products",
+//   },
+//   {
+//     label: "Inventory",
+//     icon: "inventory",
+//     link: "/dashboard/admin/inventory",
+//   },
+//   {
+//     label: "Coupon",
+//     icon: "coupon",
+//     link: "/dashboard/admin/coupons",
+//   },
+//   {
+//     label: "Shipping",
+//     icon: "shipping",
+//     link: "/dashboard/admin/shipping",
+//   },
+// ];
+
+// export const sellerDashboardSidebarOptions = [
+//   {
+//     label: "Dashboard",
+//     icon: "dashboard",
+//     link: "/dashboard/seller",
+//   },
+//   {
+//     label: "Products",
+//     icon: "products",
+//     link: "/dashboard/seller/products",
+//   },
+//   {
+//     label: "Orders",
+//     icon: "box-list",
+//     link: "/dashboard/seller/orders",
+//   },
+//   {
+//     label: "Inventory",
+//     icon: "inventory",
+//     link: "/dashboard/seller/inventory",
+//   },
+//   {
+//     label: "Coupon",
+//     icon: "coupon",
+//     link: "/dashboard/seller/coupons",
+//   },
+//   {
+//     label: "Shipping",
+//     icon: "shipping",
+//     link: "/dashboard/seller/shipping",
+//   },
+//   {
+//     label: "Settings",
+//     icon: "settings",
+//     link: "/dashboard/seller/settings",
+//   },
+// ];
+
+import { DashboardSidebarMenuInterface } from "@/lib/types";
+
+export const adminDashboardSidebarOptions: DashboardSidebarMenuInterface[] = [
   {
     label: "Dashboard",
     icon: "dashboard",
@@ -8,11 +106,6 @@ export const adminDashboardSidebarOptions = [
     label: "Stores",
     icon: "store",
     link: "/dashboard/admin/stores",
-  },
-  {
-    label: "Orders",
-    icon: "box-list",
-    link: "/dashboard/admin/orders",
   },
   {
     label: "Categories",
@@ -25,71 +118,52 @@ export const adminDashboardSidebarOptions = [
     link: "/dashboard/admin/subCategories",
   },
   {
-    label: "Settings",
-    icon: "settings",
-    link: "/dashboard/admin/settings",
-  },
-  {
-    label: "Three Boxes",
-    icon: "three-boxes",
-    link: "/dashboard/admin/three-boxes",
-  },
-  {
-    label: "Products",
-    icon: "products",
-    link: "/dashboard/admin/products",
-  },
-  {
-    label: "Inventory",
-    icon: "inventory",
-    link: "/dashboard/admin/inventory",
-  },
-  {
-    label: "Coupon",
-    icon: "coupon",
-    link: "/dashboard/admin/coupons",
-  },
-  {
-    label: "Shipping",
-    icon: "shipping",
-    link: "/dashboard/admin/shipping",
+    label: "Offer Tags",
+    icon: "offer",
+    link: "/dashboard/admin/offer-tags",
   },
 ];
 
-export const sellerDashboardSidebarOptions = [
+export const SellerDashboardSidebarOptions: DashboardSidebarMenuInterface[] = [
   {
     label: "Dashboard",
     icon: "dashboard",
-    link: "/dashboard/seller",
+    link: "",
   },
   {
     label: "Products",
     icon: "products",
-    link: "/dashboard/seller/products",
+    link: "products",
   },
   {
     label: "Orders",
     icon: "box-list",
-    link: "/dashboard/seller/orders",
+    link: "orders",
   },
   {
-    label: "Inventory",
-    icon: "inventory",
-    link: "/dashboard/seller/inventory",
+    label: "Flash Sales",
+    icon: "flame",
+    link: "flash-sales",
   },
+
   {
-    label: "Coupon",
+    label: "Coupons",
     icon: "coupon",
-    link: "/dashboard/seller/coupons",
+    link: "coupons",
   },
   {
     label: "Shipping",
     icon: "shipping",
-    link: "/dashboard/seller/shipping",
+    link: "shipping",
+  },
+  {
+    label: "Chat",
+    icon: "chat",
+    link: "chat",
   },
   {
     label: "Settings",
     icon: "settings",
-    link: "/dashboard/seller/settings",
+    link: "settings",
   },
 ];

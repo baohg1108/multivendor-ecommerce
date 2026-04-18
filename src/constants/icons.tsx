@@ -11,6 +11,9 @@ import {
   InventoryIcon,
   CouponIcon,
   ShippingIcon,
+  OfferIcon,
+  FlameIcon,
+  ChatIcon,
 } from "@/components/dashboard/icons";
 
 export const icons = [
@@ -50,8 +53,8 @@ export const icons = [
     path: SettingsIcon,
   },
   {
-    label: "Three Boxes",
-    value: "three-boxes",
+    label: "ThreeBoxes",
+    value: "threeboxes",
     path: ThreeBoxesIcon,
   },
   {
@@ -70,8 +73,23 @@ export const icons = [
     path: CouponIcon,
   },
   {
-    label: "Shipping",
+    label: "shipping",
     value: "shipping",
     path: ShippingIcon,
+  },
+  {
+    label: "Offer",
+    value: "offer",
+    path: OfferIcon,
+  },
+  {
+    label: "Flash Sales",
+    value: "flame",
+    path: FlameIcon,
+  },
+  {
+    label: "Chat",
+    value: "chat",
+    path: ChatIcon,
   },
 ];

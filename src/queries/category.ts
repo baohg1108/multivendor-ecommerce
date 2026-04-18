@@ -44,8 +44,6 @@ export const upsertCategory = async (category: Category) => {
         ],
       },
     });
-    console.log("existCategory:", existCategory);
-    console.log("category being upserted:", category);
 
     // throw error if category with same name or alias already exists
     if (existCategory) {

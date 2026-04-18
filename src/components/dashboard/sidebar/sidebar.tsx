@@ -5,7 +5,7 @@ import UserInfo from "./user-info";
 import SidebarNavAdmin from "./nav-admin";
 import {
   adminDashboardSidebarOptions,
-  sellerDashboardSidebarOptions,
+  SellerDashboardSidebarOptions,
 } from "@/constants/data";
 import { Store } from "@prisma/client";
 import SidebarNavSeller from "./nav-seller";
@@ -34,7 +34,7 @@ const Sidebar: FC<SidebarProps> = async ({ isAdmin, stores }) => {
         {isAdmin ? (
           <SidebarNavAdmin menuLinks={adminDashboardSidebarOptions} />
         ) : (
-          <SidebarNavSeller menuLinks={sellerDashboardSidebarOptions} />
+          <SidebarNavSeller menuLinks={SellerDashboardSidebarOptions} />
         )}
       </div>
     </aside>
