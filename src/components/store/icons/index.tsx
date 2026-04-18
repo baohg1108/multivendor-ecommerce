@@ -3,5 +3,6 @@ import MessageIcon from "./message";
 import WishlistIcon from "./wishlist";
 import CartIcon from "./cart";
 import AppIcon from "./app";
+import SendIcon from "./send";
 
-export { OrderIcon, MessageIcon, WishlistIcon, CartIcon, AppIcon };
+export { OrderIcon, MessageIcon, WishlistIcon, CartIcon, AppIcon, SendIcon };
