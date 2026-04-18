@@ -1,7 +1,7 @@
 "use client";
 
 // React
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 
 // Pisma model
@@ -44,7 +44,6 @@ import {
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Textarea } from "@/components/ui/textarea";
 
 import type { ProductWithVariantType } from "@/lib/types";
 
@@ -60,6 +59,7 @@ import { upsertProduct } from "@/queries/product";
 import { v4 } from "uuid";
 import type { SubCategory } from "@prisma/client";
 import { format } from "date-fns";
+import { OfferTag } from "@prisma/client";
 
 // React date picker
 import DateTimePicker from "react-datetime-picker";
@@ -74,12 +74,14 @@ interface ProductDetailsProps {
   data?: Partial<ProductWithVariantType>;
   categories: Category[];
   storeUrl: string;
+  offerTags: OfferTag[];
 }
 
 export const ProductDetails: React.FC<ProductDetailsProps> = ({
   data,
   categories,
   storeUrl,
+  offerTags,
 }) => {
   // Initializing nessary hooks and states
   const router = useRouter();
@@ -97,8 +99,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
   );
 
   // State of images
-  const [images, setImages] = React.useState<{ url: string }[]>([]);
-
   // State of sizes
   const [sizes, setSizes] = React.useState<
     { size: string; quantity: number; price: number; discount: number }[]
@@ -132,19 +132,9 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
       variantImages: data?.variantImage ? [{ url: data.variantImage }] : [],
       categoryId: data?.categoryId || "",
       subCategoryId: data?.subCategoryId || "",
+      offerTagId: data?.offerTagId || "",
       brand: "",
       sku: data?.sku || "",
-      // colors: {
-      //   color: data?.colors?.map((color) => color.color) || [""],
-      //   sizes: data?.sizes || [
-      //     {
-      //       size: "",
-      //       quantity: 1,
-      //       price: 0.01,
-      //       discount: 0,
-      //     },
-      //   ],
-      // },
       colors: data?.colors || [{ color: "" }],
       sizes: data?.sizes,
       product_specs: data?.product_specs || [],
@@ -191,6 +181,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
         variantImages: data?.variantImage ? [{ url: data.variantImage }] : [],
         categoryId: data?.categoryId || "",
         subCategoryId: data?.subCategoryId || "",
+        offerTagId: data?.offerTagId || "",
         brand: "",
         sku: data?.sku || "",
         colors: data?.colors || [{ color: "" }],
@@ -219,6 +210,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
           variantImage: values.variantImages[0]?.url,
           categoryId: values.categoryId,
           subCategoryId: values.subCategoryId,
+          offerTagId: values.offerTagId,
           isSale: values.isSale || false,
           saleEndDate: values.saleEndDate,
           brand: values.brand,
@@ -289,7 +281,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
     form.setValue("keywords", keywords);
     form.setValue("product_specs", productSpecs);
     form.setValue("variant_specs", variantSpecs);
-  }, [colors, sizes, keywords, productSpecs, variantSpecs, data]);
+  }, [colors, sizes, keywords, productSpecs, variantSpecs, data, form]);
 
   return (
     <AlertDialog>
@@ -432,7 +424,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   <FormField
                     control={form.control}
                     name="description"
-                    render={({ field }) => (
+                    render={() => (
                       <FormItem className="flex-1">
                         <FormControl>
                           <JoditEditor
@@ -452,7 +444,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   <FormField
                     control={form.control}
                     name="variantDescription"
-                    render={({ field }) => (
+                    render={() => (
                       <FormItem className="flex-1">
                         <FormControl>
                           <JoditEditor
@@ -548,6 +540,39 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                         </Select>
                       </FormControl>
                       <FormMessage></FormMessage>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  disabled={isLoading}
+                  control={form.control}
+                  name="offerTagId"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <Select
+                        disabled={isLoading || categories.length == 0}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              defaultValue={field.value}
+                              placeholder="Select an offer"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {offerTags &&
+                            offerTags.map((offer) => (
+                              <SelectItem key={offer.id} value={offer.id}>
+                                {offer.name}
+                              </SelectItem>
+                            ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />

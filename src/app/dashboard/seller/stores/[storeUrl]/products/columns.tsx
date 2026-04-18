@@ -5,8 +5,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 // components
-import CategoryDetails from "@/components/dashboard/forms/category-details";
-import { CustomModal } from "@/components/dashboard/shared/custom-modal";
 
 // UI
 import {
@@ -135,6 +133,21 @@ export const columns: ColumnDef<StoreProductType>[] = [
     ),
   },
   {
+    accessorKey: "offerTag",
+    header: "Offer",
+    cell: ({ row }) => {
+      const offerTag = row.original.offerTag;
+      return <span>{offerTag ? offerTag.name : "-"}</span>;
+    },
+  },
+  {
+    accessorKey: "brand",
+    header: "Brand",
+    cell: ({ row }) => {
+      return <span>{row.original.brand}</span>;
+    },
+  },
+  {
     accessorKey: "new-variant",
     header: "",
     cell: ({ row }) => {
@@ -174,7 +187,7 @@ interface CellActionsProps {
 }
 
 const CellActions: React.FC<CellActionsProps> = ({ productId }) => {
-  const { setOpen, setClose } = useModal();
+  const { setClose } = useModal();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 

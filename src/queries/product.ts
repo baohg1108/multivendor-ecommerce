@@ -120,6 +120,9 @@ export const upsertProduct = async (
       store: { connect: { id: store.id } },
       category: { connect: { id: product.categoryId } },
       subCategory: { connect: { id: product.subCategoryId } },
+      ...(product.offerTagId
+        ? { offerTag: { connect: { id: product.offerTagId } } }
+        : {}),
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
     };
@@ -212,6 +215,7 @@ export const getProductMainInfo = async (productId: string) => {
     brand: product.brand,
     categoryId: product.categoryId,
     subCategoryId: product.subCategoryId,
+    offerTagId: product.offerTagId || "",
     storeId: product.storeId,
   };
 };
@@ -234,6 +238,7 @@ export const getAllStoreProducts = async (storeUrl: string) => {
     include: {
       category: true,
       subCategory: true,
+      offerTag: true,
       variants: {
         include: {
           images: true,
