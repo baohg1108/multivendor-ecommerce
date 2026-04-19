@@ -33,7 +33,7 @@ const ProductList: React.FC<Props> = ({ products, title, link, arrow }) => {
       {products.length > 0 ? (
         <div
           className={cn(
-            "flex flex-wrap flex-col -translate-x-5 w-[calc(100%+3rem)] sm:w-[calc(100%+1.5rem)]",
+            "flex flex-wrap  -translate-x-5 w-[calc(100%+3rem)] sm:w-[calc(100%+1.5rem)]",
             {
               "mt-2": title,
             },
