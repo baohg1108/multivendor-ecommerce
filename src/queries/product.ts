@@ -8,7 +8,7 @@ import { PrismaClient } from "@prisma/client";
 import { AnyNull } from "@prisma/client/runtime/client";
 import { spec } from "node:test/reporters";
 import slugify from "slugify";
-import { VariantImage } from "@/lib/types";
+import { VariantImageType } from "@/lib/types";
 
 const generateUniqueSlug = async (
   baseSlug: string,
@@ -325,12 +325,14 @@ export const getProducts = async (
     }));
 
     // extract variant image foro the product
-    const variantImages: VariantImage[] = filteredVariants.map((variant) => ({
-      url: `/product/${product.slug}/${variant.slug}`,
-      image: variant.variantImage
-        ? variant.variantImage
-        : variant.images[0].url,
-    }));
+    const variantImages: VariantImageType[] = filteredVariants.map(
+      (variant) => ({
+        url: `/product/${product.slug}/${variant.slug}`,
+        image: variant.variantImage
+          ? variant.variantImage
+          : variant.images[0].url,
+      }),
+    );
 
     return {
       id: product.id,
@@ -348,13 +350,13 @@ export const getProducts = async (
   //   where: wherClause,
   // });
 
-  const totalCount = products.length;
+  const totalCount = productsWithFilteredVariants.length;
 
   // calculate total pages based on total count and page size
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return {
-    products,
+    products: productsWithFilteredVariants,
     totalCount,
     totalPages,
     currentPage,
