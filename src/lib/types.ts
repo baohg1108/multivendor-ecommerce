@@ -13,7 +13,7 @@ import type {
 } from "@prisma/client";
 import { getStoreDefaultShippingDetails } from "@/queries/store";
 import { countries } from "../data/countries.js";
-import { Size } from "@prisma/client";
+import { Size, Color } from "@prisma/client";
 export interface DashboardSidebarMenuInterface {
   label: string;
   icon: string;

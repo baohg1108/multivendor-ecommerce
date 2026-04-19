@@ -3,6 +3,7 @@ import Header from "@/components/store/layout/header/header";
 import React from "react";
 import CategoriesHeader from "@/components/store/layout/categories-header/categories-header";
 import Footer from "@/components/store/layout/footer/footer";
+import { Toaster } from "react-hot-toast";
 
 export default function StoreLayout({
   children,
@@ -16,6 +17,7 @@ export default function StoreLayout({
       <div>{children}</div>
       <div className="h-96"></div>
       <Footer></Footer>
+      <Toaster position="top-center" />
     </div>
   );
 }

@@ -9,8 +9,6 @@ import {
 } from "@/lib/types";
 import { currentUser } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
-import { AnyNull } from "@prisma/client/runtime/client";
-import { spec } from "node:test/reporters";
 import slugify from "slugify";
 import { VariantImageType } from "@/lib/types";
 
@@ -121,7 +119,7 @@ export const upsertProduct = async (
       questions: {
         create: product.questions.map((question) => ({
           question: question.question,
-          value: question.answer,
+          answer: question.answer,
         })),
       },
       store: { connect: { id: store.id } },
@@ -382,7 +380,7 @@ export const retrieveProductDetails = async (
   productSlug: string,
   variantSlug: string,
 ) => {
-  return await db.product.findUnique({
+  const product = await db.product.findUnique({
     where: {
       slug: productSlug,
     },
@@ -406,6 +404,27 @@ export const retrieveProductDetails = async (
       },
     },
   });
+
+  if (!product) return null;
+
+  const variantImages = await db.productVariant.findMany({
+    where: {
+      productId: product.id,
+    },
+    select: {
+      slug: true,
+      variantImage: true,
+    },
+  });
+
+  return {
+    ...product,
+    variantImages: variantImages.map((v) => ({
+      url: `/product/${productSlug}/${v.slug}`,
+      img: v.variantImage || "",
+      slug: v.slug,
+    })),
+  };
 };
 
 const formatProductResponse = (product: ProductPageType) => {
@@ -455,5 +474,6 @@ const formatProductResponse = (product: ProductPageType) => {
     },
     shippingDetails: {},
     relatedProducts: [],
+    variantImages: product.variantImages,
   };
 };

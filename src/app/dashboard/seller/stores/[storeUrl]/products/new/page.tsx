@@ -23,15 +23,16 @@ import { getAllOfferTags } from "@/queries/offer-tag";
 const SellerNewProductPage = async ({
   params,
 }: {
-  params: { storeUrl: string };
+  params: Promise<{ storeUrl: string }>;
 }) => {
+  const { storeUrl } = await params;
   const categories = await getAllCategories();
   const offerTags = await getAllOfferTags();
   return (
     <div className="w-full">
       <ProductDetails
         categories={categories}
-        storeUrl={params.storeUrl}
+        storeUrl={storeUrl}
         offerTags={offerTags}
       />
     </div>
