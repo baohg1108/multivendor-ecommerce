@@ -11,6 +11,8 @@ import Countdown from "../../shared/countdown";
 import { Separator } from "@/components/ui/separator";
 import ColorWheel from "@/components/shared/color-wheel";
 import ProductVariantSelector from "./variant-selector";
+import SizeSelector from "./size-selector";
+import ProductAssurancePolicy from "./assurance-policy";
 
 interface Props {
   productData: ProductPageDataType;
@@ -122,8 +124,8 @@ const ProductInfo: FC<Props> = ({ productData, quantity, sizeId }) => {
         )}
       </div>
 
-      <Separator> </Separator>
-      {/* Color Selector */}
+      <Separator className="mt-2"></Separator>
+      {/* Color wheel + variant selector */}
       <div className="mt-4 space-y-2">
         <div className="relative flex items-center justify-between text-black font-bold">
           <span className="flex items-center gap-x-2">
@@ -138,6 +140,16 @@ const ProductInfo: FC<Props> = ({ productData, quantity, sizeId }) => {
           />
         )}
       </div>
+      {/* Size Selector */}
+      <div className="space-y-2 pb-2 mt-4">
+        <div>
+          <h1 className="text-black font-bold">Size</h1>
+        </div>
+        <SizeSelector sizes={sizes} sizeId={sizeId} />
+      </div>
+      {/* Product assurance policy */}
+      <Separator className="mt-4"></Separator>
+      <ProductAssurancePolicy />
     </div>
   );
 };
