@@ -211,7 +211,6 @@ export const ProductFormSchema = z.object({
     .min(5, { message: "Product keywords must have at least 5 items" })
     .max(10, { message: "Product keywords must have at most 10 items" }),
 
-  // ✅ Top-level — not nested inside colors
   colors: z
     .object({ color: z.string() })
     .array()
@@ -307,7 +306,7 @@ export const OfferTagFormSchema = z.object({
   name: z
     .string({
       required_error: "Category name is required.",
-      invalid_type_error: "Category nale must be a string.",
+      invalid_type_error: "Category name must be a string.",
     })
     .min(2, { message: "Category name must be at least 2 characters long." })
     .max(50, { message: "Category name cannot exceed 50 characters." })

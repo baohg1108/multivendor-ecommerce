@@ -1,11 +1,14 @@
 "use server";
 
+import page from "@/app/dashboard/seller/stores/[storeUrl]/products/[productId]/variants/new/page";
 import { db } from "@/lib/db";
-import { ProductWithVariantType } from "@/lib/types";
+import { ProductWithVariantType, VariantSimplified } from "@/lib/types";
 import { currentUser } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
+import { AnyNull } from "@prisma/client/runtime/client";
 import { spec } from "node:test/reporters";
 import slugify from "slugify";
+import { VariantImage } from "@/lib/types";
 
 const generateUniqueSlug = async (
   baseSlug: string,
@@ -277,4 +280,84 @@ export const deleteProduct = async (productId: string) => {
     },
   });
   return response;
+};
+
+//
+export const getProducts = async (
+  filters: any,
+  sortBy: "",
+  page: number = 1,
+  pageSize: number = 20,
+) => {
+  const currentPage = page;
+  const limit = pageSize;
+  const skip = (currentPage - 1) * limit;
+
+  const wherClause: any = {
+    AND: [],
+  };
+
+  // get all filtereds products, sorted products, and paginated products
+  const products = await db.product.findMany({
+    where: wherClause,
+    take: limit,
+    skip: skip,
+    include: {
+      variants: {
+        include: {
+          sizes: true,
+          colors: true,
+          images: true,
+        },
+      },
+    },
+  });
+
+  const productsWithFilteredVariants = products.map((product) => {
+    const filteredVariants = product.variants;
+
+    const variants: VariantSimplified[] = filteredVariants.map((variant) => ({
+      variantId: variant.id,
+      variantSlug: variant.slug,
+      variantName: variant.variantName,
+      images: variant.images,
+      sizes: variant.sizes,
+    }));
+
+    // extract variant image foro the product
+    const variantImages: VariantImage[] = filteredVariants.map((variant) => ({
+      url: `/product/${product.slug}/${variant.slug}`,
+      image: variant.variantImage
+        ? variant.variantImage
+        : variant.images[0].url,
+    }));
+
+    return {
+      id: product.id,
+      slug: product.slug,
+      name: product.name,
+      rating: product.rating,
+      sales: product.sales,
+      variants,
+      variantImages,
+    };
+  });
+
+  // retrevie products matching the filters
+  // const totalCount = await db.product.count({
+  //   where: wherClause,
+  // });
+
+  const totalCount = products.length;
+
+  // calculate total pages based on total count and page size
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  return {
+    products,
+    totalCount,
+    totalPages,
+    currentPage,
+    pageSize,
+  };
 };
