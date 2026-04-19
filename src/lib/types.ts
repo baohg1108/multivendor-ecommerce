@@ -1,5 +1,10 @@
 import { Prisma } from "@prisma/client";
-import { getAllStoreProducts, getProducts } from "@/queries/product";
+import {
+  getAllStoreProducts,
+  getProductPageData,
+  getProducts,
+  retrieveProductDetails,
+} from "@/queries/product";
 import type {
   Category,
   ProductVariantImage,
@@ -91,3 +96,13 @@ export type VariantImageType = {
   url: string;
   image: string;
 };
+
+//
+export type ProductPageType = Prisma.PromiseReturnType<
+  typeof retrieveProductDetails
+>;
+
+//
+export type ProductPageDataType = Prisma.PromiseReturnType<
+  typeof getProductPageData
+>;

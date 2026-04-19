@@ -60,7 +60,7 @@ export default function ProductCard({ product }: { product: ProductType }) {
           {/* <div className="h-4"></div> */}
           <div className="flex flex-items gap-x-1">
             <Button>Add to cart</Button>
-            <Button variant="black" size="icon">
+            <Button variant="outline" size="icon">
               <Heart className="w-5"></Heart>
             </Button>
           </div>
