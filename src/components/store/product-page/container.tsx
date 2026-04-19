@@ -1,5 +1,6 @@
 import { ProductPageDataType } from "@/lib/types";
 import ProductSwiper from "./product-swiper";
+import ProductInfo from "./product-info/product-info";
 
 interface Props {
   productData: ProductPageDataType;
@@ -21,6 +22,7 @@ const ProductPageContainer = ({ productData, sizeId, children }: Props) => {
         <ProductSwiper images={images} />
         <div className="w-full mt-4 md:mt-0 flex flex-col gap-4 md:flex-row">
           {/* Product main info */}
+          <ProductInfo productData={productData} quantity={1} sizeId={sizeId} />
           {/* buy action card */}
         </div>
       </div>

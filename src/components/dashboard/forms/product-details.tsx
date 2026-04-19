@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useForm, useWatch } from "react-hook-form";
+import type { FieldErrors } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -197,35 +198,39 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
   // Submit handler for form submission
   const handleSubmit = async (values: z.infer<typeof ProductFormSchema>) => {
     try {
+      const payload = {
+        productId: data?.productId ? data.productId : v4(),
+        variantId: data?.variantId ? data.variantId : v4(),
+        name: values.name,
+        description: values.description,
+        variantName: values.variantName,
+        variantDescription: values.variantDescription || "",
+        images: values.images,
+        variantImage: values.variantImages[0]?.url,
+        categoryId: values.categoryId,
+        subCategoryId: values.subCategoryId,
+        offerTagId: values.offerTagId,
+        isSale: values.isSale || false,
+        saleEndDate: values.saleEndDate,
+        brand: values.brand,
+        sku: values.sku,
+        colors: values.colors,
+        sizes: values.sizes,
+        product_specs: values.product_specs,
+        variant_specs: values.variant_specs,
+        keywords: values.keywords,
+        questions: values.questions,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      console.groupCollapsed("[ProductForm] VALID SUBMIT");
+      console.log("values from react-hook-form:", values);
+      console.log("payload sent to upsertProduct:", payload);
+      console.groupEnd();
+
       // upserting category data
-      await upsertProduct(
-        {
-          productId: data?.productId ? data.productId : v4(),
-          variantId: data?.variantId ? data.variantId : v4(),
-          name: values.name,
-          description: values.description,
-          variantName: values.variantName,
-          variantDescription: values.variantDescription || "",
-          images: values.images,
-          variantImage: values.variantImages[0]?.url,
-          categoryId: values.categoryId,
-          subCategoryId: values.subCategoryId,
-          offerTagId: values.offerTagId,
-          isSale: values.isSale || false,
-          saleEndDate: values.saleEndDate,
-          brand: values.brand,
-          sku: values.sku,
-          colors: values.colors,
-          sizes: values.sizes,
-          product_specs: values.product_specs,
-          variant_specs: values.variant_specs,
-          keywords: values.keywords,
-          questions: values.questions,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        storeUrl,
-      );
+      await upsertProduct(payload, storeUrl);
 
       toast.success(
         data?.productId && data?.variantId
@@ -248,9 +253,25 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
     }
   };
 
-  const handleInvalidSubmit = () => {
+  const handleInvalidSubmit = (
+    errors: FieldErrors<z.infer<typeof ProductFormSchema>>,
+  ) => {
+    const errorSummary = Object.entries(errors)
+      .map(([field, error]) => {
+        const message = error?.message;
+        return typeof message === "string" ? `${field}: ${message}` : field;
+      })
+      .slice(0, 5)
+      .join(" | ");
+
+    console.groupCollapsed("[ProductForm] INVALID SUBMIT");
+    console.log("react-hook-form errors:", errors);
+    console.log("current form values:", form.getValues());
+    console.groupEnd();
+
     toast.error("Cannot create product yet", {
       description:
+        errorSummary ||
         "Please check required fields (images, colors, sizes, category, subcategory, keywords) and try again.",
     });
   };
@@ -281,7 +302,17 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
     form.setValue("keywords", keywords);
     form.setValue("product_specs", productSpecs);
     form.setValue("variant_specs", variantSpecs);
-  }, [colors, sizes, keywords, productSpecs, variantSpecs, data, form]);
+    form.setValue("questions", questions);
+  }, [
+    colors,
+    sizes,
+    keywords,
+    productSpecs,
+    variantSpecs,
+    questions,
+    data,
+    form,
+  ]);
 
   return (
     <AlertDialog>

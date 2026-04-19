@@ -124,24 +124,33 @@ const ClickToAddInputs = <T extends Detail>({
                 )}
 
               {/* Input field */}
-              <Input
-                className="w-28"
-                type={typeof detail[property] === "number" ? "number" : "text"}
-                name={property}
-                placeholder={property}
-                value={detail[property] as string}
-                min={typeof detail[property] === "number" ? 0 : undefined}
-                step="0.01"
-                onChange={(e) =>
-                  handleDetailsChange(
-                    index,
-                    property,
-                    e.target.value === "number"
-                      ? parseFloat(e.target.value)
-                      : e.target.value,
-                  )
-                }
-              ></Input>
+              {(() => {
+                const isNumberField = typeof detail[property] === "number";
+
+                return (
+                  <Input
+                    className="w-28"
+                    type={isNumberField ? "number" : "text"}
+                    name={property}
+                    placeholder={property}
+                    value={
+                      (detail[property] as string | number | undefined) ?? ""
+                    }
+                    min={isNumberField ? 0 : undefined}
+                    step={isNumberField ? "0.01" : undefined}
+                    onChange={(e) => {
+                      if (!isNumberField) {
+                        handleDetailsChange(index, property, e.target.value);
+                        return;
+                      }
+
+                      const numericValue =
+                        e.target.value === "" ? 0 : Number(e.target.value);
+                      handleDetailsChange(index, property, numericValue);
+                    }}
+                  ></Input>
+                );
+              })()}
             </div>
           ))}
           {/* show buttons for each row  of inputs */}
