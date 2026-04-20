@@ -3,6 +3,7 @@ import {
   getAllStoreProducts,
   getProductPageData,
   getProducts,
+  getShippingDetails,
   retrieveProductDetails,
 } from "@/queries/product";
 import type {
@@ -105,4 +106,9 @@ export type ProductPageType = Prisma.PromiseReturnType<
 //
 export type ProductPageDataType = Prisma.PromiseReturnType<
   typeof getProductPageData
+>;
+
+//
+export type ProductShippingDetailsType = Prisma.PromiseReturnType<
+  typeof getShippingDetails
 >;

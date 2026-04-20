@@ -1,6 +1,8 @@
 import { ProductPageDataType } from "@/lib/types";
 import ProductSwiper from "./product-swiper";
 import ProductInfo from "./product-info/product-info";
+import ShipTo from "./shipping/ship-to";
+import ShippingDetails from "./shipping/shipping-details";
 
 interface Props {
   productData: ProductPageDataType;
@@ -13,7 +15,7 @@ const ProductPageContainer = ({ productData, sizeId, children }: Props) => {
     return null;
   }
 
-  const { images } = productData;
+  const { images, shippingDetails } = productData;
 
   return (
     <div className="relative">
@@ -24,6 +26,30 @@ const ProductPageContainer = ({ productData, sizeId, children }: Props) => {
           {/* Product main info */}
           <ProductInfo productData={productData} quantity={1} sizeId={sizeId} />
           {/* buy action card */}
+          <div className="w-[390px]">
+            <div className="z-20">
+              <div className="bg-white border rounded-md overflow-hidden overflow-y-auto p-4 pb-0">
+                {/* {Ship to} */}
+                {typeof shippingDetails !== "boolean" && (
+                  <>
+                    <ShipTo
+                      countryCode={shippingDetails.countryCode}
+                      countryName={shippingDetails.countryName}
+                      city={shippingDetails.city}
+                    />
+
+                    <div className="mt-3 space-y-3">
+                      <ShippingDetails
+                        shippingDetails={shippingDetails}
+                        quantity={1}
+                        weight={1}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div className="w-[calc(100% - 390px)] mt-6 pb-16">{children}</div>

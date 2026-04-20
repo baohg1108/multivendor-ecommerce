@@ -1,9 +1,9 @@
 "use server";
 
-import page from "@/app/dashboard/seller/stores/[storeUrl]/products/[productId]/variants/new/page";
 import { db } from "@/lib/db";
 import {
   ProductPageType,
+  ProductShippingDetailsType,
   ProductWithVariantType,
   VariantSimplified,
 } from "@/lib/types";
@@ -11,6 +11,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
 import slugify from "slugify";
 import { VariantImageType } from "@/lib/types";
+import { cookies } from "next/headers";
+import { Store } from "@prisma/client";
 
 const generateUniqueSlug = async (
   baseSlug: string,
@@ -39,13 +41,6 @@ const generateUniqueSlug = async (
   return slug;
 };
 
-// function: upsertProduct
-// description: upserts a product and its variant into the database, ensuring proper association
-// access level: seller only
-// parameters::
-// -product: ProductWithVariant object containing the product and variant data to be upserted
-// -storeUrl: The URL of the storr which the product belongs
-// return: newly created or updated product with variant details
 export const upsertProduct = async (
   product: ProductWithVariantType,
   storeUrl: string,
@@ -203,7 +198,7 @@ export const upsertProduct = async (
   }
 };
 
-// function:getProductMainInfo
+//
 export const getProductMainInfo = async (productId: string) => {
   const product = await db.product.findUnique({
     where: {
@@ -373,7 +368,21 @@ export const getProductPageData = async (
   const product = await retrieveProductDetails(productSlug, variantSlug);
 
   if (!product) return;
-  return formatProductResponse(product);
+
+  // retrieve user country
+  const userCountry = await getUserCountry();
+
+  // calculate and retrieve the shipping details
+  const productShippingDetails = await getShippingDetails(
+    product.shippingFeeMethod,
+    userCountry,
+    product.store,
+  );
+
+  // if (!productShippingDetails) {
+  // }
+
+  return formatProductResponse(product, productShippingDetails);
 };
 
 export const retrieveProductDetails = async (
@@ -427,7 +436,52 @@ export const retrieveProductDetails = async (
   };
 };
 
-const formatProductResponse = (product: ProductPageType) => {
+// const getUserCountry = () => {
+//   const userCountryCookie = getCookie("userCountry", { cookies }) || "";
+//   const defaultCountry = { name: "Viet Nam", code: "VN" };
+
+//   try {
+//     const parsedCountry = JSON.parse(userCountryCookie);
+//     if (
+//       parsedCountry &&
+//       typeof parsedCountry === "object" &&
+//       "name" in parsedCountry &&
+//       "code" in parsedCountry
+//     ) {
+//       return parsedCountry;
+//     }
+//     return defaultCountry;
+//   } catch (error) {
+//     console.error("Error parsing user country cookie:", error);
+//     return defaultCountry;
+//   }
+// };
+const getUserCountry = async () => {
+  const cookieStore = await cookies();
+  const userCountryCookie = cookieStore.get("userCountry")?.value || "";
+  const defaultCountry = { name: "Viet Nam", code: "VN" };
+
+  try {
+    const parsedCountry = JSON.parse(userCountryCookie);
+    if (
+      parsedCountry &&
+      typeof parsedCountry === "object" &&
+      "name" in parsedCountry &&
+      "code" in parsedCountry
+    ) {
+      return parsedCountry;
+    }
+    return defaultCountry;
+  } catch (error) {
+    console.error("Error parsing user country cookie:", error);
+    return defaultCountry;
+  }
+};
+
+const formatProductResponse = (
+  product: ProductPageType,
+  shippingDetails: ProductShippingDetailsType,
+) => {
   if (!product) return;
   const variant = product?.variants[0];
   const { store, category, subCategory, offerTag, questions } = product;
@@ -472,8 +526,79 @@ const formatProductResponse = (product: ProductPageType) => {
       ratingStatistics: [],
       reviewsWithImagesCount: 5,
     },
-    shippingDetails: {},
+    shippingDetails: shippingDetails,
     relatedProducts: [],
     variantImages: product.variantImages,
   };
+};
+
+export const getShippingDetails = async (
+  shippingFeeMethod: string,
+  userCountry: { name: string; code: string; city: string },
+  store: Store,
+) => {
+  const country = await db.country.findUnique({
+    where: {
+      name: userCountry.name,
+      code: userCountry.code,
+    },
+  });
+
+  if (country) {
+    const shippingRate = await db.shippingRate.findFirst({
+      where: {
+        countryId: country.id,
+        storeId: store.id,
+      },
+    });
+
+    // get shipping rate details, if specific rate for the user's country exists, otherwise use store's default shipping details
+    const returnPolicy = shippingRate?.returnPolicy || store.returnPolicy;
+    const shippingService =
+      shippingRate?.shippingService || store.defaultShippingService;
+    const shippingFeePerItem =
+      shippingRate?.shippingFeePerItem || store.defaultShippingFeePerItem;
+    const shippingFeeForAdditionalItem =
+      shippingRate?.shippingFeeForAdditionalItem ||
+      store.defaultShippingFeeForAdditionalItem;
+    const shippingFeePerKg =
+      shippingRate?.shippingFeePerKg || store.defaultShippingFeePerKg;
+    const shippingFeeFixed =
+      shippingRate?.shippingFeeFixed || store.defaultShippingFeeFixed;
+    const deliveryTimeMin =
+      shippingRate?.deliveryTimeMin || store.defaultDeliveryTimeMin;
+    const deliveryTimeMax =
+      shippingRate?.deliveryTimeMax || store.defaultDeliveryTimeMax;
+
+    const shippingDetails = {
+      shippingFeeMethod,
+      shippingService: shippingService,
+      shippingFee: 0,
+      extraShippingFee: 0,
+      deliveryTimeMin,
+      deliveryTimeMax,
+      returnPolicy,
+      countryCode: userCountry.code,
+      countryName: userCountry.name,
+      city: userCountry.city,
+    };
+
+    switch (shippingFeeMethod) {
+      case "ITEM":
+        shippingDetails.shippingFee = shippingFeePerItem;
+        shippingDetails.extraShippingFee = shippingFeeForAdditionalItem;
+        break;
+      case "WEIGHT":
+        shippingDetails.shippingFee = shippingFeePerKg;
+        break;
+      case "FIXED":
+        shippingDetails.shippingFee = shippingFeeFixed;
+        break;
+      default:
+        shippingDetails.shippingFee = shippingFeePerItem;
+        shippingDetails.extraShippingFee = shippingFeeForAdditionalItem;
+    }
+    return shippingDetails;
+  }
+  return false;
 };
