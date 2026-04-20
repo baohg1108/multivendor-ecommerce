@@ -42,7 +42,7 @@ const ProductPageContainer = ({ productData, sizeId, children }: Props) => {
                       <ShippingDetails
                         shippingDetails={shippingDetails}
                         quantity={1}
-                        weight={1}
+                        weight={productData.weight ?? 0}
                       />
                     </div>
                   </>

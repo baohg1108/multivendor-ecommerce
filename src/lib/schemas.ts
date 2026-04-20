@@ -205,6 +205,9 @@ export const ProductFormSchema = z.object({
     })
     .min(6, { message: "Product SKU must be at least 6 characters long" })
     .max(50, { message: "Product SKU must be at most 50 characters long" }),
+  weight: z.number().min(0.01, {
+    message: "Product weight must be at least 0.01 kg",
+  }),
   keywords: z
     .string()
     .array()

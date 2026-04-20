@@ -68,6 +68,7 @@ import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { NumberInput } from "@tremor/react";
 
 // Jodit react
 import JoditEditor from "jodit-react";
@@ -142,6 +143,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
       variant_specs: data?.variant_specs || [],
       keywords: data?.keywords || [],
       isSale: data?.isSale || false,
+      weight: data?.weight ?? 0,
       saleEndDate:
         data?.saleEndDate || format(new Date(), "yyyy-MM-dd'T'HH:mm:ss"),
     },
@@ -214,6 +216,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
         saleEndDate: values.saleEndDate,
         brand: values.brand,
         sku: values.sku,
+        weight: values.weight,
         colors: values.colors,
         sizes: values.sizes,
         product_specs: values.product_specs,
@@ -223,11 +226,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-
-      console.groupCollapsed("[ProductForm] VALID SUBMIT");
-      console.log("values from react-hook-form:", values);
-      console.log("payload sent to upsertProduct:", payload);
-      console.groupEnd();
 
       // upserting category data
       await upsertProduct(payload, storeUrl);
@@ -263,11 +261,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
       })
       .slice(0, 5)
       .join(" | ");
-
-    console.groupCollapsed("[ProductForm] INVALID SUBMIT");
-    console.log("react-hook-form errors:", errors);
-    console.log("current form values:", form.getValues());
-    console.groupEnd();
 
     toast.error("Cannot create product yet", {
       description:
@@ -500,7 +493,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                 {/* Variant Description */}
               </div>
 
-              {/*==================== Categories + Subcategories ====================*/}
+              {/*==================== Categories + Subcategories + Offer Tag ====================*/}
               <div className="flex gap-4">
                 <FormField
                   control={form.control}
@@ -580,6 +573,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   name="offerTagId"
                   render={({ field }) => (
                     <FormItem className="flex-1">
+                      <FormLabel>Offer Tag</FormLabel>
                       <Select
                         disabled={isLoading || categories.length == 0}
                         onValueChange={field.onChange}
@@ -609,7 +603,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                 />
               </div>
 
-              {/*==================== Brand, SKU ====================*/}
+              {/*==================== Brand, SKU, Weight ====================*/}
               <div className="flex flex-col lg:flex-row gap-4">
                 {/* brand */}
                 <FormField
@@ -641,6 +635,28 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                           placeholder="SKU"
                           {...field}
                           disabled={isLoading}
+                        />
+                      </FormControl>
+                      <FormMessage></FormMessage>
+                    </FormItem>
+                  )}
+                />
+                {/* weight */}
+                <FormField
+                  control={form.control}
+                  name="weight"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Product Weight</FormLabel>
+                      <FormControl>
+                        <NumberInput
+                          disabled={isLoading}
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                          placeholder="Weight"
+                          min={0.01}
+                          step={0.01}
+                          className="!shadow-none rounded-md !text-sm"
                         />
                       </FormControl>
                       <FormMessage></FormMessage>
