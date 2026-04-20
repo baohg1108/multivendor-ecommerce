@@ -307,12 +307,13 @@ model FreeShipping {
 model FreeShippingCountry {
   id String @id @default(uuid())
 
-  freeShippingId String       @unique
+  freeShippingId String
   freeShipping   FreeShipping @relation("FreeShippingCountries", fields: [freeShippingId], references: [id], onDelete: Cascade)
 
-  countryId String  @unique
+  countryId String
   country   Country @relation("FreeShippingToCountry", fields: [countryId], references: [id], onDelete: Cascade)
 
+  @@unique([freeShippingId, countryId])
   @@index([freeShippingId])
   @@index([countryId])
 }
