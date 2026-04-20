@@ -43,6 +43,9 @@ const ProductPageContainer = ({ productData, sizeId, children }: Props) => {
                         shippingDetails={shippingDetails}
                         quantity={1}
                         weight={productData.weight ?? 0}
+                        freeShippingForAllCountries={
+                          shippingDetails.freeShippingForAllCountries
+                        }
                       />
                     </div>
                   </>

@@ -542,7 +542,7 @@ const formatProductResponse = (
 
 export const getShippingDetails = async (
   shippingFeeMethod: string,
-  userCountry: { name: string; code: string; city: string; country: string },
+  userCountry: { name: string; code: string; city: string; region: string },
   store: Store,
   isFreeShipping: FreeShippingWithCountriesType | null,
 ) => {
@@ -558,6 +558,7 @@ export const getShippingDetails = async (
     countryName: userCountry.name,
     city: userCountry.city,
     isFreeShipping: false,
+    freeShippingForAllCountries: false,
   };
   const country = await db.country.findUnique({
     where: {
@@ -599,6 +600,10 @@ export const getShippingDetails = async (
 
     if (isFreeShipping) {
       const free_shipping_countries = isFreeShipping.eligibleCountries;
+      if (free_shipping_countries.length === 0) {
+        shippingDetails.isFreeShipping = true;
+        shippingDetails.freeShippingForAllCountries = true;
+      }
       const check_free_shipping = free_shipping_countries.find(
         (c) => c.countryId === country.id,
       );

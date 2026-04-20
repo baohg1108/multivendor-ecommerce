@@ -1,0 +1,1104 @@
+$ eslint
+[BABEL] Note: The code generator has deoptimised the styling of C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\query_compiler_fast_bg.wasm-base64.js as it exceeds the max of 500KB.
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\app\(store)\product\page.tsx
+  2:8  warning  'React' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\app\api\setUserCountryInCookies\route.ts
+  21:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\app\api\webhooks\route.ts
+   7:10  warning  'parse' is defined but never used               @typescript-eslint/no-unused-vars
+  52:11  warning  'id' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  53:9   warning  'eventType' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\app\auth\sign-up\[[...sign-up]]\page.tsx
+  1:10  warning  'SignIn' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\app\layout.tsx
+  14:3  warning  'Show' is defined but never used          @typescript-eslint/no-unused-vars
+  15:3  warning  'SignInButton' is defined but never used  @typescript-eslint/no-unused-vars
+  16:3  warning  'SignUpButton' is defined but never used  @typescript-eslint/no-unused-vars
+  17:3  warning  'UserButton' is defined but never used    @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\dashboard\forms\offer-tag-details.tsx
+  84:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\dashboard\forms\store-default-shipping-details.tsx.tsx
+  31:10  warning  'v4' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\dashboard\forms\subCategory-deatils.tsx
+  84:20  warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\dashboard\forms\subCategory-deatils.tsx:84:20
+  82 |   const isLoading = form.formState.isSubmitting;
+  83 |
+> 84 |   const formData = form.watch(); // Watch form data for changes
+     |                    ^^^^ React Hook Form's `useForm()` API returns a `watch()` function which cannot be memoized safely.
+  85 |   console.log("Form data:", formData);
+  86 |
+  87 |   // Reset form values when data changes  react-hooks/incompatible-library
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\dashboard\shared\colors-palette.tsx
+  48:9  warning  'spinnerIconColor' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\shared\country-selector.tsx
+   33:9   error    Error: Cannot access variable before it is declared
+
+`setQuery` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\shared\country-selector.tsx:33:9
+  31 |       if (mutableRef.current && !mutableRef.current.contains(target) && open) {
+  32 |         onToggle();
+> 33 |         setQuery("");
+     |         ^^^^^^^^ `setQuery` accessed before it is declared
+  34 |       }
+  35 |     };
+  36 |
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\shared\country-selector.tsx:43:17
+  41 |   }, [open, onToggle]);
+  42 |
+> 43 |   const [query, setQuery] = useState("");
+     |                 ^^^^^^^^ `setQuery` is declared here
+  44 |
+  45 |   return (
+  46 |     <div ref={ref}>  react-hooks/immutability
+   60:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @next/next/no-img-element
+  139:27  warning  Elements with the ARIA role "option" must have the following attributes defined: aria-selected                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  jsx-a11y/role-has-required-aria-props
+  146:27  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @next/next/no-img-element
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\store\cards\product\swiper.tsx
+  16:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\store\layout\categories-header\offerTags-links.tsx
+  15:23  error    React Hook "useMediaQuery" cannot be called inside a callback. React Hooks must be called in a React function component or a custom React Hook function  react-hooks/rules-of-hooks
+  21:9   warning  'splitPoint' is assigned a value but never used                                                                                                          @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\store\layout\header\header.tsx
+  9:10  warning  'countries' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\store\product-page\product-info\product-info.tsx
+  23:48  warning  'quantity' is defined but never used            @typescript-eslint/no-unused-vars
+  27:5   warning  'productId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  47:14  warning  'error' is defined but never used               @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\store\product-page\product-info\size-selector.tsx
+  3:10  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\store\product-page\product-swiper.tsx
+  15:41  error  React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render  react-hooks/rules-of-hooks
+  18:37  error  React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render  react-hooks/rules-of-hooks
+  19:39  error  React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render  react-hooks/rules-of-hooks
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\store\product-page\shipping\ship-to.tsx
+  10:43  warning  'countryCode' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\store\product-page\shipping\shipping-details.tsx
+  138:5   warning  'returnPolicy' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  153:13  error    'qty' is never reassigned. Use 'const' instead     prefer-const
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\store\shared\product-list.tsx
+  32:18  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\store\shared\product-list.tsx:32:18
+  30 |   return (
+  31 |     <div className="relative">
+> 32 |       {title && <Title></Title>}
+     |                  ^^^^^ This component is created during render
+  33 |       {products.length > 0 ? (
+  34 |         <div
+  35 |           className={cn(
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\store\shared\product-list.tsx:15:17
+  13 |
+  14 | const ProductList: React.FC<Props> = ({ products, title, link, arrow }) => {
+> 15 |   const Title = () =>
+     |                 ^^^^^
+> 16 |     link ? (
+     | ^^^^^^^^^^^^
+> 17 |       <Link href={link} className="h-12">
+     …
+     | ^^^^^^^^^^^^
+> 27 |       </h2>
+     | ^^^^^^^^^^^^
+> 28 |     );
+     | ^^^^^^ The component is created during render here
+  29 |
+  30 |   return (
+  31 |     <div className="relative">  react-hooks/static-components
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\ui\data-table.tsx
+  64:17  warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\components\ui\data-table.tsx:64:17
+  62 |
+  63 |   // React table instance
+> 64 |   const table = useReactTable({
+     |                 ^^^^^^^^^^^^^ TanStack Table's `useReactTable()` API returns functions that cannot be memoized safely
+  65 |     data,
+  66 |     columns,
+  67 |     getCoreRowModel: getCoreRowModel(),  react-hooks/incompatible-library
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\client.js
+  5:23  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\default.js
+  5:23  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\edge.js
+   19:3   warning  'skip' is assigned a value but never used         @typescript-eslint/no-unused-vars
+   28:3   warning  'warnOnce' is assigned a value but never used     @typescript-eslint/no-unused-vars
+   31:3   warning  'getRuntime' is assigned a value but never used   @typescript-eslint/no-unused-vars
+   32:3   warning  'createParam' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   33:5   error    A `require()` style import is forbidden           @typescript-eslint/no-require-imports
+  143:27  error    A `require()` style import is forbidden           @typescript-eslint/no-require-imports
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\index-browser.js
+   17:3   warning  'skip' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   18:5   error    A `require()` style import is forbidden    @typescript-eslint/no-require-imports
+  160:11  warning  'target' is defined but never used         @typescript-eslint/no-unused-vars
+  160:19  warning  'prop' is defined but never used           @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\index.d.ts
+     7:8    warning  '$Types' is defined but never used                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   102:15   warning  'T' is defined but never used                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   102:81   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   114:21   warning  'T' is defined but never used                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   114:60   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   125:79   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   137:58   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   153:47   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   308:13   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   309:14   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   313:13   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   314:11   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   320:49   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   325:53   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   325:78   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   338:23   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   367:11   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   394:17   error    Constraining the generic type `T` to `any` does nothing and is unnecessary                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unnecessary-type-constraint
+   394:27   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   394:50   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   400:15   error    Prefer using the primitive `bigint` as a type name, rather than the upper-cased `BigInt`                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-wrapper-object-types
+   410:27   error    Constraining the generic type `T` to `unknown` does nothing and is unnecessary                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unnecessary-type-constraint
+   441:23   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   471:26   error    Constraining the generic type `A` to `any` does nothing and is unnecessary                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unnecessary-type-constraint
+   471:36   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   471:53   error    The `Function` type accepts any function-like value.
+Prefer explicitly defining any function parameters and return type                                                                                                                                                                                                                                                                    @typescript-eslint/no-unsafe-function-type
+   479:32   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   520:23   error    Constraining the generic type `A1` to `any` does nothing and is unnecessary                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unnecessary-type-constraint
+   520:34   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   520:39   error    Constraining the generic type `A2` to `any` does nothing and is unnecessary                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unnecessary-type-constraint
+   520:50   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   575:9    error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   584:40   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   585:41   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   611:39   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   611:121  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   612:122  error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   615:111  error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   693:16   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   696:71   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   697:19   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   700:44   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   701:19   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   704:71   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   705:19   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   708:44   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   709:19   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   814:35   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   952:33   warning  'ExtArgs' is defined but never used                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  1012:31   warning  'ExtArgs' is defined but never used                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  1077:14   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1087:17   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1092:22   warning  'ExtArgs' is defined but never used                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  1097:121  error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1303:41   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1387:13   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1397:13   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1405:9    error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1411:80   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1424:42   warning  'Null' is defined but never used                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+  1424:56   warning  'ExtArgs' is defined but never used                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  1424:124  warning  'GlobalOmitOptions' is defined but never used                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  1424:144  error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1432:148  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1438:51   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1667:34   warning  'ExtArgs' is defined but never used                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  1700:34   warning  'ExtArgs' is defined but never used                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  1762:34   warning  'ExtArgs' is defined but never used                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\index.js
+   19:3   warning  'skip' is assigned a value but never used         @typescript-eslint/no-unused-vars
+   21:3   warning  'Debug' is assigned a value but never used        @typescript-eslint/no-unused-vars
+   28:3   warning  'warnOnce' is assigned a value but never used     @typescript-eslint/no-unused-vars
+   31:3   warning  'getRuntime' is assigned a value but never used   @typescript-eslint/no-unused-vars
+   32:3   warning  'createParam' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   33:5   error    A `require()` style import is forbidden           @typescript-eslint/no-require-imports
+   84:9   warning  'path' is assigned a value but never used         @typescript-eslint/no-unused-vars
+   84:16  error    A `require()` style import is forbidden           @typescript-eslint/no-require-imports
+  144:31  error    A `require()` style import is forbidden           @typescript-eslint/no-require-imports
+  146:28  error    A `require()` style import is forbidden           @typescript-eslint/no-require-imports
+  147:26  error    A `require()` style import is forbidden           @typescript-eslint/no-require-imports
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\query_compiler_fast_bg.js
+  1:292   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  1:2499  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  1:2863  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  1:2965  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  1:3531  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  2:930   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  2:1147  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  2:1360  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  2:1656  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  2:1838  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  2:2463  error    The array literal notation [] is preferable                            @typescript-eslint/no-array-constructor
+  2:2876  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  2:2954  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\runtime\client.d.ts
+    84:100  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+    90:5    error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   105:27   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   110:51   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   164:79   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   206:20   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   210:74   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   212:60   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   213:63   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   214:49   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   220:15   warning  'ColumnTypeEnum' is defined but only used as a type                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   258:31   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   283:44   error    The `Function` type accepts any function-like value.
+Prefer explicitly defining any function parameters and return type                                                                                                                                                                                                                                                                    @typescript-eslint/no-unsafe-function-type
+   287:48   error    The `Function` type accepts any function-like value.
+Prefer explicitly defining any function parameters and return type                                                                                                                                                                                                                                                                    @typescript-eslint/no-unsafe-function-type
+   366:34   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   372:43   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   373:44   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   412:23   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   413:16   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   416:17   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   429:18   warning  'debugCreate' is defined but only used as a type                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   429:61   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   451:48   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   451:52   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   451:56   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   451:60   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   453:79   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   453:103  error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   465:15   warning  'denylist' is defined but only used as a type                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   494:11   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   495:13   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   608:143  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   618:139  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   632:146  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   636:42   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   649:142  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   653:22   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   686:130  error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   688:129  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   705:15   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   706:23   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   706:45   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   707:19   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   732:97   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   739:4    error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   887:139  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   899:58   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+   913:26   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+   976:18   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1120:97   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1125:622  error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1125:761  error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1131:14   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1144:6    error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1150:58   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1150:63   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1156:28   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1162:26   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1165:38   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1166:41   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1184:25   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1186:85   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1204:67   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1204:100  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1213:91   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1220:89   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1224:192  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1233:65   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1233:98   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1238:77   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1247:89   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1254:45   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1256:21   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1274:29   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1274:44   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1274:58   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1280:66   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1281:189  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1319:146  error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1355:51   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1355:56   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1367:12   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1423:26   error    An interface declaring no members is equivalent to its supertype                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-empty-object-type
+  1566:21   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1567:20   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1568:14   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1599:26   error    An interface declaring no members is equivalent to its supertype                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-empty-object-type
+  1735:73   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1735:92   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1765:67   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1769:85   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1769:90   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1769:116  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1769:121  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1846:86   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1865:34   error    The `Function` type accepts any function-like value.
+Prefer explicitly defining any function parameters and return type                                                                                                                                                                                                                                                                    @typescript-eslint/no-unsafe-function-type
+  1876:15   warning  'officialPrismaAdapters' is defined but only used as a type                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+  1902:49   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1913:23   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  1961:31   warning  '$Type' is defined but never used                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+  1969:32   warning  'F' is defined but never used                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  1972:22   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1975:37   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1977:59   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1977:64   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  1978:38   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2094:89   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2108:45   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2209:31   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  2260:76   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2455:45   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2456:97   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2456:104  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2463:30   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2463:36   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2464:69   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2485:12   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2499:23   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  2505:22   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2509:17   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  2510:14   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  2511:14   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  2513:4    error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  2547:54   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2569:53   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2640:67   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2640:72   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2641:24   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  2643:27   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  3071:19   error    An interface declaring no members is equivalent to its supertype                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-empty-object-type
+  3105:44   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  3217:41   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  3217:46   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  3248:32   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  3248:40   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  3250:40   error    The `{}` ("empty object") type allows any non-nullish value, including literals like `0` and `""`.
+- If that's what you want, disable this lint rule with an inline comment or configure the 'allowObjectTypes' rule option.
+- If you want a type meaning "any object", you probably want `object` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead  @typescript-eslint/no-empty-object-type
+  3269:27   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\runtime\client.js
+   5:440    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:2829   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:2911   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:3061   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:3255   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:3412   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:4190   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:5443   warning  't' is defined but never used                                          @typescript-eslint/no-unused-vars
+   5:6390   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+   5:8523   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:8850   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:8946   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:10254  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:10350  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:10826  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:10932  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:11075  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:11433  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:11509  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:11831  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:11965  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:12048  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:12167  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:12231  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:12699  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:16130  warning  'e' is defined but never used                                          @typescript-eslint/no-unused-vars
+   5:16697  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+   5:17149  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:18085  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:18862  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:749    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:1452   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+   6:1809   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:1946   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:2133   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+   6:2352   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+   6:3075   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+   6:3887   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:3914   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:4310   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:4343   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:4443   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:4613   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:5633   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:5694   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:5796   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:5913   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:6280   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:9657   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:10389  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:11025  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:748    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:1081   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:1875   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:1947   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  11:276    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  11:577    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  11:1339   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  11:1836   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  11:1936   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  12:661    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  12:1229   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  12:1342   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  12:2255   error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+  12:3156   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  12:3250   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  12:3594   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  12:4723   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  12:5149   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:806    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:1128   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:1410   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:2155   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:2424   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:2739   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:4058   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:4407   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:4895   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:5289   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:5943   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:6577   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:6674   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:6786   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:6892   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:7547   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:8015   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:8052   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  13:8166   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  13:8633   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  14:6970   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  14:7233   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  14:8884   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  14:9808   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  14:10020  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  14:12483  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  14:12721  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  14:12768  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  14:12799  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  15:3254   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:3296   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:6733   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:6824   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:6850   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:8168   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  15:8915   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:10673  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:11026  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  15:11073  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  15:14012  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:18884  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:19334  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  15:24739  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:24809  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:25735  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:25869  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:26698  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  15:27446  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  15:27575  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:27816  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  15:27944  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:28390  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:28536  warning  'e' is defined but never used                                          @typescript-eslint/no-unused-vars
+  15:29542  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:30054  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  15:30211  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  15:30768  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:31073  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:31596  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:33265  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:33395  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:34510  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:36275  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:36504  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:36995  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:37310  warning  'l' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+  15:37325  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:37756  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:37853  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:43060  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:44707  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:48663  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:48876  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:49263  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:52058  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:54162  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:54556  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:54627  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:55641  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:56144  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:56503  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:56759  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:57511  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:57691  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:58253  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  15:58716  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:59201  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:59444  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:59640  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  15:59759  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:52     warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:280    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:3255   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:5013   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:7029   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:7188   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:7290   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:7452   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:7554   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:7609   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:7777   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  61:10158  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:10319  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:11099  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:11402  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:11716  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:12228  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:12407  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:13552  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:13789  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:14302  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:14860  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:14982  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:15392  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:15603  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:15792  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  61:16944  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:17250  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:17887  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  61:18901  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  62:1241   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  62:2254   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  62:3115   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  62:3195   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  62:3818   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  62:6308   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  62:6409   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  69:72     warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:171    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:264    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:380    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:463    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:3202   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  69:4178   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:4396   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:4481   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:4784   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:4947   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  69:5980   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:9951   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  70:2548   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  70:4428   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  70:4561   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  70:4747   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  70:4946   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  74:14     error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  74:178    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  74:227    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  74:284    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  74:341    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  74:413    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  74:1769   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  74:1863   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  79:214    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  79:5157   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  79:5454   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  79:6626   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  80:1721   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  80:1764   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  80:1806   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  80:1849   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  80:1889   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\runtime\index-browser.d.ts
+  18:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  23:51  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\runtime\index-browser.js
+  5:292   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  5:793   warning  'e' is defined but never used                                          @typescript-eslint/no-unused-vars
+  5:2077  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  5:2119  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  5:2159  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\generated\prisma\runtime\wasm-compiler-edge.js
+   5:441    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:1924   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:2125   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:4093   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:5129   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:5369   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:5623   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:5868   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:6277   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:6430   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:6538   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:6688   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:7682   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:7824   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:10050  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:10488  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:10599  warning  'x' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+   5:10624  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:11289  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:11547  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:11589  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:11874  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:12730  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:12771  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:13220  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:13618  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:13731  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:13848  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:13953  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:14385  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:14450  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:15113  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:15705  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:15784  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:15908  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:15925  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:15971  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:16458  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:17007  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:17521  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:17790  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:17992  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:18603  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:18877  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:18984  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:19352  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:19465  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:19694  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:20288  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:20506  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:20690  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:20844  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:21013  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:21225  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:21365  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:21708  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:21938  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:22177  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:22406  error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   5:22551  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:22758  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:23262  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:23423  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:23477  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:24398  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:24565  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:26887  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:26969  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:27120  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:27317  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:27477  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:28552  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:29826  warning  't' is defined but never used                                          @typescript-eslint/no-unused-vars
+   5:32939  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:33266  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:33362  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:34691  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:34787  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:35263  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:35369  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:35512  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:35870  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:35946  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:36268  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:36402  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:36485  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:36604  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:36668  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:37136  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:40739  warning  'e' is defined but never used                                          @typescript-eslint/no-unused-vars
+   5:41447  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+   5:41549  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:41914  warning  'Gg' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:41946  warning  'Wg' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:41968  warning  'zg' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:41979  warning  'Kg' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:41990  warning  'Zg' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42001  warning  'Yg' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42061  warning  'Xg' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42085  warning  'ey' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42109  warning  'ty' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42121  warning  'ry' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42133  warning  'ny' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42145  warning  'iy' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42157  warning  'oy' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42169  warning  'sy' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42181  warning  'ay' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42193  warning  'uy' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42205  warning  'ly' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   5:42470  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   5:43091  warning  's' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+   5:43247  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:667    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:1703   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:1880   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:2107   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+   6:2346   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+   6:3129   warning  'mc' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+   6:3877   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   6:3949   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   7:379    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   7:680    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   7:1463   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   7:2020   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   7:2120   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   8:743    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   8:1332   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   8:1445   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   8:2358   error    Unexpected aliasing of 'this' to local variable                        @typescript-eslint/no-this-alias
+   8:3260   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   8:3354   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   8:3719   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   8:4868   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   8:5294   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:807    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:1129   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:1412   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:2157   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:2426   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:2741   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:4062   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:4411   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:4899   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:5293   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:5947   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:6581   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:6679   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:6792   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:6899   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:7555   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:8024   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:8081   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+   9:8215   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+   9:8703   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:7095   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:7360   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:9006   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:9932   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:10144  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:12411  warning  'e' is defined but never used                                          @typescript-eslint/no-unused-vars
+  10:12502  warning  'zn' is defined but never used                                         @typescript-eslint/no-unused-vars
+  10:12650  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:12908  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  10:16071  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:16113  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:19680  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:19771  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:19797  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:21180  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  10:21948  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:23726  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:24199  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  10:24266  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  10:27263  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:32135  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:32606  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  10:38037  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:38108  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:39062  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:39256  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:41047  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:41381  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:41827  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:41973  warning  'e' is defined but never used                                          @typescript-eslint/no-unused-vars
+  10:42945  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:44237  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:44542  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:45065  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:46754  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:46884  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:48041  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:49808  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:50037  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:50528  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:50843  warning  'm' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+  10:50858  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:51289  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:51386  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:56633  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:58281  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:62237  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:62450  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:62837  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:65745  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:67849  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:68243  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:68314  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:69328  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:69833  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:70192  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:70448  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:71200  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:71380  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:71945  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  10:72463  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:72948  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:73191  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:73387  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  10:73506  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:72     warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:300    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:3315   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:5078   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:7121   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:7280   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:7382   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:7544   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:7646   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:7701   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:7889   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  56:10370  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:10531  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:11331  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:11649  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:11963  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:12496  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:12675  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:13820  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:14057  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:14570  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:15128  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:15250  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:15660  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:15871  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:16080  error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  56:17234  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:17541  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:18178  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  56:19192  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  57:1253   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  57:2266   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  57:3127   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  57:3207   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  57:3830   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  57:6361   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  57:6502   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  64:72     warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  64:171    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  64:264    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  64:380    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  64:463    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  64:3342   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  64:4372   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  64:4590   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  64:4675   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  64:4978   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  64:5161   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  64:6190   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  64:10217  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  65:2548   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  65:4428   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  65:4561   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  65:4747   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  65:4946   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:34     error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  69:198    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:247    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:304    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:361    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:434    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:1790   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  69:1871   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  74:214    warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  74:5157   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  74:5459   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  74:6631   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  75:1761   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  75:1804   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  75:1846   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  75:1889   error    A `require()` style import is forbidden                                @typescript-eslint/no-require-imports
+  75:1929   warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\lib\types.ts
+  17:16  warning  'Color' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\provider\modal-provider.tsx
+  20:63  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  35:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\provider\modal-provider.tsx:35:5
+  33 |
+  34 |   useEffect(() => {
+> 35 |     setIsMounted(true);
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  36 |   }, []);
+  37 |
+  38 |   const setOpen = async (  react-hooks/set-state-in-effect
+  40:31  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\queries\product.ts
+   28:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  286:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  295:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\src\queries\subCategory.ts
+  13:10  warning  'getAllCategories' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\Desktop\HCMUT\ecommerce\multivendor-ecommerce\types\colorthief.d.ts
+  1:10  warning  'Color' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 813 problems (290 errors, 523 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+
+error: script "lint" exited with code 1

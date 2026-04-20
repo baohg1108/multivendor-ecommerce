@@ -135,7 +135,6 @@ const ShippingDetails: FC<Props> = ({
     extraShippingFee,
     shippingFee,
     deliveryTimeMin,
-    returnPolicy,
     shippingFeeMethod,
     shippingService,
   } = shippingDetails;
@@ -150,11 +149,11 @@ const ShippingDetails: FC<Props> = ({
 
     switch (shippingFeeMethod) {
       case "ITEM":
-        let qty = quantity - 1;
+        const qty = Math.max(quantity - 1, 0);
         setShippingTotal(shippingFee + qty * extraShippingFee);
         break;
       case "WEIGHT":
-        setShippingTotal(shippingFee * quantity);
+        setShippingTotal(shippingFee * weight * quantity);
         break;
       case "FIXED":
         setShippingTotal(shippingFee);
@@ -163,7 +162,7 @@ const ShippingDetails: FC<Props> = ({
         setShippingTotal(0);
         break;
     }
-  }, [quantity, shippingDetails, countryName]);
+  }, [quantity, weight, shippingDetails, countryName]);
 
   return (
     <div>
