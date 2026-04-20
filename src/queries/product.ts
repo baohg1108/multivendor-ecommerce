@@ -443,7 +443,6 @@ export const retrieveProductDetails = async (
   };
 };
 
-// const getUserCountry = () => {
 //   const userCountryCookie = getCookie("userCountry", { cookies }) || "";
 //   const defaultCountry = { name: "Viet Nam", code: "VN" };
 
@@ -512,6 +511,7 @@ const formatProductResponse = (
     brand: product.brand,
     sku: variant.sku,
     weight: variant.weight ?? 0,
+    variantImage: variant.variantImage,
     store: {
       id: product.store.id,
       url: product.store.url,
