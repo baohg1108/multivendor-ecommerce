@@ -35,6 +35,7 @@ export default async function ProductVariantPage({
 
   const relatedProducts = { products: [] };
   const { specs, questions, shippingDetails } = productData;
+  console.log("shippingDetails:", shippingDetails);
 
   return (
     <div>

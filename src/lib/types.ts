@@ -15,6 +15,7 @@ import type {
 import { getStoreDefaultShippingDetails } from "@/queries/store";
 import { countries } from "../data/countries.js";
 import { Size, Color } from "@prisma/client";
+import { FreeShipping, FreeShippingCountry } from "@prisma/client";
 export interface DashboardSidebarMenuInterface {
   label: string;
   icon: string;
@@ -44,6 +45,7 @@ export type ProductWithVariantType = {
   saleEndDate?: string;
   brand: string;
   sku: string;
+  weight: number;
   colors: { color: string }[];
   sizes: { size: string; quantity: number; price: number; discount: number }[];
   product_specs: { name: string; value: string }[];
@@ -112,3 +114,7 @@ export type ProductPageDataType = Prisma.PromiseReturnType<
 export type ProductShippingDetailsType = Prisma.PromiseReturnType<
   typeof getShippingDetails
 >;
+
+export type FreeShippingWithCountriesType = FreeShipping & {
+  eligibleCountries: FreeShippingCountry[];
+};

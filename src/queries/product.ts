@@ -13,6 +13,7 @@ import slugify from "slugify";
 import { VariantImageType } from "@/lib/types";
 import { cookies } from "next/headers";
 import { Store } from "@prisma/client";
+import { FreeShippingWithCountriesType } from "@/lib/types";
 
 const generateUniqueSlug = async (
   baseSlug: string,
@@ -135,6 +136,7 @@ export const upsertProduct = async (
       isSale: product.isSale,
       saleEndDate: product.isSale ? product.saleEndDate : "",
       sku: product.sku,
+      weight: product.weight,
       keywords: product.keywords.join(","),
       specs: {
         create: product.variant_specs.map((spec) => ({
@@ -366,7 +368,6 @@ export const getProductPageData = async (
   variantSlug: string,
 ) => {
   const product = await retrieveProductDetails(productSlug, variantSlug);
-
   if (!product) return;
 
   // retrieve user country
@@ -377,6 +378,7 @@ export const getProductPageData = async (
     product.shippingFeeMethod,
     userCountry,
     product.store,
+    product.freeShipping,
   );
 
   // if (!productShippingDetails) {
@@ -400,6 +402,11 @@ export const retrieveProductDetails = async (
       store: true,
       specs: true,
       questions: true,
+      freeShipping: {
+        include: {
+          eligibleCountries: true,
+        },
+      },
       variants: {
         where: {
           slug: variantSlug,
@@ -504,6 +511,7 @@ const formatProductResponse = (
     saleEndDate: variant.saleEndDate,
     brand: product.brand,
     sku: variant.sku,
+    weight: variant.weight ?? 0,
     store: {
       id: product.store.id,
       url: product.store.url,
@@ -534,9 +542,23 @@ const formatProductResponse = (
 
 export const getShippingDetails = async (
   shippingFeeMethod: string,
-  userCountry: { name: string; code: string; city: string },
+  userCountry: { name: string; code: string; city: string; country: string },
   store: Store,
+  isFreeShipping: FreeShippingWithCountriesType | null,
 ) => {
+  const shippingDetails = {
+    shippingFeeMethod,
+    shippingService: "",
+    shippingFee: 0,
+    extraShippingFee: 0,
+    deliveryTimeMin: 0,
+    deliveryTimeMax: 0,
+    returnPolicy: "",
+    countryCode: userCountry.code,
+    countryName: userCountry.name,
+    city: userCountry.city,
+    isFreeShipping: false,
+  };
   const country = await db.country.findUnique({
     where: {
       name: userCountry.name,
@@ -553,51 +575,62 @@ export const getShippingDetails = async (
     });
 
     // get shipping rate details, if specific rate for the user's country exists, otherwise use store's default shipping details
-    const returnPolicy = shippingRate?.returnPolicy || store.returnPolicy;
+    const returnPolicy = shippingRate?.returnPolicy ?? store.returnPolicy;
     const shippingService =
-      shippingRate?.shippingService || store.defaultShippingService;
+      shippingRate?.shippingService ?? store.defaultShippingService;
     const shippingFeePerItem =
-      shippingRate?.shippingFeePerItem || store.defaultShippingFeePerItem;
+      shippingRate?.shippingFeePerItem ?? store.defaultShippingFeePerItem;
     const shippingFeeForAdditionalItem =
-      shippingRate?.shippingFeeForAdditionalItem ||
+      shippingRate?.shippingFeeForAdditionalItem ??
       store.defaultShippingFeeForAdditionalItem;
     const shippingFeePerKg =
-      shippingRate?.shippingFeePerKg || store.defaultShippingFeePerKg;
+      shippingRate?.shippingFeePerKg ?? store.defaultShippingFeePerKg;
     const shippingFeeFixed =
-      shippingRate?.shippingFeeFixed || store.defaultShippingFeeFixed;
+      shippingRate?.shippingFeeFixed ?? store.defaultShippingFeeFixed;
     const deliveryTimeMin =
-      shippingRate?.deliveryTimeMin || store.defaultDeliveryTimeMin;
+      shippingRate?.deliveryTimeMin ?? store.defaultDeliveryTimeMin;
     const deliveryTimeMax =
-      shippingRate?.deliveryTimeMax || store.defaultDeliveryTimeMax;
+      shippingRate?.deliveryTimeMax ?? store.defaultDeliveryTimeMax;
 
-    const shippingDetails = {
-      shippingFeeMethod,
-      shippingService: shippingService,
-      shippingFee: 0,
-      extraShippingFee: 0,
-      deliveryTimeMin,
-      deliveryTimeMax,
-      returnPolicy,
-      countryCode: userCountry.code,
-      countryName: userCountry.name,
-      city: userCountry.city,
-    };
+    shippingDetails.shippingService = shippingService;
+    shippingDetails.returnPolicy = returnPolicy;
+    shippingDetails.deliveryTimeMin = deliveryTimeMin;
+    shippingDetails.deliveryTimeMax = deliveryTimeMax;
+
+    if (isFreeShipping) {
+      const free_shipping_countries = isFreeShipping.eligibleCountries;
+      const check_free_shipping = free_shipping_countries.find(
+        (c) => c.countryId === country.id,
+      );
+
+      if (check_free_shipping) {
+        shippingDetails.isFreeShipping = true;
+      }
+    }
 
     switch (shippingFeeMethod) {
       case "ITEM":
-        shippingDetails.shippingFee = shippingFeePerItem;
-        shippingDetails.extraShippingFee = shippingFeeForAdditionalItem;
+        shippingDetails.shippingFee = shippingDetails.isFreeShipping
+          ? 0
+          : shippingFeePerItem;
+        shippingDetails.extraShippingFee = shippingDetails.isFreeShipping
+          ? 0
+          : shippingFeeForAdditionalItem;
         break;
       case "WEIGHT":
-        shippingDetails.shippingFee = shippingFeePerKg;
+        shippingDetails.shippingFee = shippingDetails.isFreeShipping
+          ? 0
+          : shippingFeePerKg;
         break;
       case "FIXED":
-        shippingDetails.shippingFee = shippingFeeFixed;
+        shippingDetails.shippingFee = shippingDetails.isFreeShipping
+          ? 0
+          : shippingFeeFixed;
         break;
       default:
-        shippingDetails.shippingFee = shippingFeePerItem;
-        shippingDetails.extraShippingFee = shippingFeeForAdditionalItem;
+        break;
     }
+
     return shippingDetails;
   }
   return false;
