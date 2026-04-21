@@ -1,8 +1,11 @@
-import { getProductPageData } from "@/queries/product";
+import { getProductPageData, getProducts } from "@/queries/product";
 import { redirect, notFound } from "next/navigation";
 import ProductPageContainer from "@/components/store/product-page/container";
 import { Separator } from "@/components/ui/separator";
-
+import RelatedProducts from "@/components/store/product-page/shipping/related-product";
+import ProductDescription from "@/components/store/product-page/product-description";
+import ProductSpecs from "@/components/store/product-page/product-specs";
+import ProductQuestions from "@/components/store/product-page/product-questions";
 interface PageProps {
   params: Promise<{ productSlug: string; variantSlug: string }>;
   searchParams: Promise<{ size?: string }>;
@@ -33,8 +36,19 @@ export default async function ProductVariantPage({
     redirect(`/product/${productSlug}/${variantSlug}?size=${sizes[0].id}`);
   }
 
-  const relatedProducts = { products: [] };
-  const { specs, questions } = productData;
+  // display the product page with the selected size
+  const { specs, questions, shippingDetails, category, subCategory } =
+    productData;
+
+  const relatedProducts = await getProducts(
+    {
+      category: category.url,
+      // subCategory: subCategory.url,
+    },
+    "",
+    1,
+    12,
+  );
 
   return (
     <div>
@@ -44,6 +58,7 @@ export default async function ProductVariantPage({
             <>
               <Separator />
               {/* Related Products */}
+              <RelatedProducts products={relatedProducts.products} />
             </>
           )}
 
@@ -53,12 +68,19 @@ export default async function ProductVariantPage({
           <>
             <Separator className="mt-6" />
             {/* Product Description */}
+            <ProductDescription
+              text={[
+                productData.description,
+                productData.variantDescription || "",
+              ]}
+            ></ProductDescription>
           </>
 
           {(specs.product.length > 0 || specs.variant.length > 0) && (
             <>
               <Separator className="mt-6" />
               {/* Specs table */}
+              <ProductSpecs specs={specs}></ProductSpecs>
             </>
           )}
 
@@ -66,6 +88,7 @@ export default async function ProductVariantPage({
             <>
               <Separator className="mt-6" />
               {/* Questions */}
+              <ProductQuestions questions={questions} />
             </>
           )}
 

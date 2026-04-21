@@ -9,7 +9,7 @@ import {
   WhatsappIcon,
   PinterestShareButton,
   PinterestIcon,
-} from "next- ";
+} from "next-share";
 import { cn } from "@/lib/utils";
 
 interface Props {
