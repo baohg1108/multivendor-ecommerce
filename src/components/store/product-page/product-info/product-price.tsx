@@ -1,8 +1,8 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { cn } from "@/lib/utils";
-
+import { CartProductType } from "@/lib/types";
 interface SimplifiedSize {
   id: string;
   size: string;
@@ -16,12 +16,28 @@ interface Props {
   sizeId?: string | undefined;
   sizes: SimplifiedSize[];
   isCard?: boolean;
+  handleChange?: (property: keyof CartProductType, value: any) => void;
 }
 
-const ProductPrice: FC<Props> = ({ sizeId, sizes, isCard }) => {
+const ProductPrice: FC<Props> = ({ sizeId, sizes, isCard, handleChange }) => {
   if (!sizes || sizes.length === 0) {
     return null;
   }
+
+  useEffect(() => {
+    if (!sizeId) return;
+
+    const selectedSize = sizes.find((size) => size.id === sizeId);
+    if (!selectedSize) return;
+
+    const selectedPrice = Number(selectedSize.price) || 0;
+    const selectedDiscount =
+      Number(selectedSize.discount ?? selectedSize.discountPrice ?? 0) || 0;
+    const discountedPrice = selectedPrice * (1 - selectedDiscount / 100);
+
+    handleChange?.("price", discountedPrice);
+    handleChange?.("stock", selectedSize.quantity);
+  }, [sizeId, sizes, handleChange]);
 
   // 1: function to calculate discounted price for each size
   if (!sizeId) {
@@ -78,12 +94,6 @@ const ProductPrice: FC<Props> = ({ sizeId, sizes, isCard }) => {
     Number(selectedSize.discount ?? selectedSize.discountPrice ?? 0) || 0;
   const selectedQuantity = Number(selectedSize.quantity) || 0;
   const discountedPrice = selectedPrice * (1 - selectedDiscount / 100);
-  //  const discountedPrice = sizes.map((size) => {
-  //     const price = Number(size.price) || 0;
-  //     const discount = Number(size.discount) || 0;
-
-  //     return price * (1 - discount / 100);
-  //   });
 
   return (
     <div>

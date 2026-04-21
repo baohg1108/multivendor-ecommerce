@@ -1,5 +1,5 @@
 "use client";
-import { ProductPageDataType } from "@/lib/types";
+import { CartProductType, ProductPageDataType } from "@/lib/types";
 import Link from "next/link";
 import { FC } from "react";
 import Image from "next/image";
@@ -13,14 +13,21 @@ import ColorWheel from "@/components/shared/color-wheel";
 import ProductVariantSelector from "./variant-selector";
 import SizeSelector from "./size-selector";
 import ProductAssurancePolicy from "./assurance-policy";
+import { useEffect, useState } from "react";
 
 interface Props {
   productData: ProductPageDataType;
   quantity: number;
   sizeId: string | undefined;
+  handleChange: (property: keyof CartProductType, value: any) => void;
 }
 
-const ProductInfo: FC<Props> = ({ productData, quantity, sizeId }) => {
+const ProductInfo: FC<Props> = ({
+  productData,
+  quantity,
+  sizeId,
+  handleChange,
+}) => {
   if (!productData) return null;
 
   const {
@@ -77,7 +84,6 @@ const ProductInfo: FC<Props> = ({ productData, quantity, sizeId }) => {
         </Link>
 
         {/* Sku - rating - num reviews */}
-
         <div className="whitespace-nowrap">
           <span className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap text-gray-500">
             SKU: {sku}
@@ -115,8 +121,13 @@ const ProductInfo: FC<Props> = ({ productData, quantity, sizeId }) => {
           </Link>
         </div>
       </div>
+      {/* Product Price and Sale Countdown */}
       <div className="my-2 relative flex flex-col sm:flex-row justify-between">
-        <ProductPrice sizes={sizes} sizeId={sizeId} />
+        <ProductPrice
+          sizes={sizes}
+          sizeId={sizeId}
+          handleChange={handleChange}
+        />
         {isSale && saleEndDate && (
           <div className="mt-4 pb-2">
             <Countdown targetDate={saleEndDate} />
@@ -145,7 +156,11 @@ const ProductInfo: FC<Props> = ({ productData, quantity, sizeId }) => {
         <div>
           <h1 className="text-black font-bold">Size</h1>
         </div>
-        <SizeSelector sizes={sizes} sizeId={sizeId} />
+        <SizeSelector
+          sizes={sizes}
+          sizeId={sizeId}
+          handleChange={handleChange}
+        />
       </div>
       {/* Product assurance policy */}
       <Separator className="mt-4"></Separator>
