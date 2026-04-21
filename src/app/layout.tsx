@@ -43,7 +43,10 @@ export default function RootLayout({
   return (
     <ClerkProvider afterSignOutUrl="/">
       <html lang="en" suppressHydrationWarning>
-        <body className={`${interFont.className} ${barlowFont.variable} `}>
+        <body
+          suppressHydrationWarning
+          className={`${interFont.className} ${barlowFont.variable} `}
+        >
           <ThemeProvider
             attribute="class"
             defaultTheme="light"

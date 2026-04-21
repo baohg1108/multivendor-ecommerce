@@ -8,6 +8,7 @@ import ProductSpecs from "@/components/store/product-page/product-specs";
 import ProductQuestions from "@/components/store/product-page/product-questions";
 import StoreCard from "@/components/store/cards/store-card";
 import StoreProducts from "@/components/store/product-page/store-products";
+import ProductReviews from "@/components/store/product-page/reviews/product-review";
 interface PageProps {
   params: Promise<{ productSlug: string; variantSlug: string }>;
   searchParams: Promise<{ size?: string }>;
@@ -39,8 +40,15 @@ export default async function ProductVariantPage({
   }
 
   // display the product page with the selected size
-  const { specs, questions, shippingDetails, category, subCategory, store } =
-    productData;
+  const {
+    specs,
+    questions,
+    shippingDetails,
+    category,
+    subCategory,
+    store,
+    reviewsStatistics,
+  } = productData;
 
   const relatedProducts = await getProducts(
     {
@@ -66,6 +74,12 @@ export default async function ProductVariantPage({
 
           <Separator className="mt-6" />
           {/* Product reviews */}
+          <ProductReviews
+            productId={productData.productId}
+            rating={productData.rating}
+            statistics={reviewsStatistics}
+            reviews={productData.reviews}
+          ></ProductReviews>
 
           <>
             <Separator className="mt-6" />

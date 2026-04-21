@@ -68,7 +68,8 @@ const StoreCard: FC<StoreCardProps> = ({ store }) => {
             </div>
             <div className="text-sm leading-5 mt-1">
               <strong>100%</strong>
-              <span> Positive Feedback</span> &nbsp;|&nbsp;
+              <span> Positive Feedback</span>
+              <span className="mx-1">|</span>
               <strong>{followersCount}</strong>
               <span> Followers</span>
               {/* {storeFollowersCount > 0 && (
