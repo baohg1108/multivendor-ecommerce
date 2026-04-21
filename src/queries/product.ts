@@ -451,14 +451,8 @@ export const retrieveProductDetails = async (
       questions: true,
       reviews: {
         include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              picture: true,
-            },
-          },
           images: true,
+          user: true,
         },
       },
       freeShipping: {
@@ -501,26 +495,6 @@ export const retrieveProductDetails = async (
     })),
   };
 };
-
-//   const userCountryCookie = getCookie("userCountry", { cookies }) || "";
-//   const defaultCountry = { name: "Viet Nam", code: "VN" };
-
-//   try {
-//     const parsedCountry = JSON.parse(userCountryCookie);
-//     if (
-//       parsedCountry &&
-//       typeof parsedCountry === "object" &&
-//       "name" in parsedCountry &&
-//       "code" in parsedCountry
-//     ) {
-//       return parsedCountry;
-//     }
-//     return defaultCountry;
-//   } catch (error) {
-//     console.error("Error parsing user country cookie:", error);
-//     return defaultCountry;
-//   }
-// };
 
 const getUserCountry = async () => {
   const cookieStore = await cookies();

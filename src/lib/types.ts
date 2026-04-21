@@ -14,9 +14,9 @@ import type {
 } from "@prisma/client";
 import { getStoreDefaultShippingDetails } from "@/queries/store";
 import { countries } from "../data/countries.js";
-import { Size, Color } from "@prisma/client";
+import { Size, User } from "@prisma/client";
 import { FreeShipping, FreeShippingCountry } from "@prisma/client";
-import { db } from "@/lib/db";
+import { Review, ReviewImage } from "@prisma/client";
 export interface DashboardSidebarMenuInterface {
   label: string;
   icon: string;
@@ -116,13 +116,18 @@ export type ProductShippingDetailsType = Prisma.PromiseReturnType<
   typeof getShippingDetails
 >;
 
+export type RatingStatisticsType = Prisma.PromiseReturnType<
+  typeof getRatingStatistics
+>;
+
+export type StatisticsCardType = Prisma.PromiseReturnType<
+  typeof getRatingStatistics
+>["getRatingStatistics"];
+
 export type FreeShippingWithCountriesType = FreeShipping & {
   eligibleCountries: FreeShippingCountry[];
 };
 
-export type RatingStatisticsType = Prisma.PromiseReturnType<
-  typeof getRatingStatistics
->;
 export type CartProductType = {
   productId: string;
   variantId: string;
@@ -146,4 +151,9 @@ export type CartProductType = {
   deliveryTimeMax: number;
   isFreeShipping: boolean;
   freeShippingForAllCountries: boolean;
+};
+
+export type ReviewWithImageType = Review & {
+  images: ReviewImage[];
+  user: User;
 };
