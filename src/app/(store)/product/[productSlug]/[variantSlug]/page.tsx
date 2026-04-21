@@ -8,7 +8,7 @@ import ProductSpecs from "@/components/store/product-page/product-specs";
 import ProductQuestions from "@/components/store/product-page/product-questions";
 import StoreCard from "@/components/store/cards/store-card";
 import StoreProducts from "@/components/store/product-page/store-products";
-import ProductReviews from "@/components/store/product-page/reviews/product-review";
+import ProductReviews from "@/components/store/product-page/reviews/product-reviews";
 interface PageProps {
   params: Promise<{ productSlug: string; variantSlug: string }>;
   searchParams: Promise<{ size?: string }>;
@@ -48,6 +48,7 @@ export default async function ProductVariantPage({
     subCategory,
     store,
     reviewsStatistics,
+    reviews,
   } = productData;
 
   const relatedProducts = await getProducts(
@@ -77,8 +78,8 @@ export default async function ProductVariantPage({
           <ProductReviews
             productId={productData.productId}
             rating={productData.rating}
-            statistics={reviewsStatistics}
-            reviews={productData.reviews}
+            statistics={reviewsStatistics.ratingStatistics}
+            reviews={reviews}
           ></ProductReviews>
 
           <>
