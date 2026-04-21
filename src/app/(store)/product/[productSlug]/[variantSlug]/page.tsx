@@ -6,6 +6,8 @@ import RelatedProducts from "@/components/store/product-page/shipping/related-pr
 import ProductDescription from "@/components/store/product-page/product-description";
 import ProductSpecs from "@/components/store/product-page/product-specs";
 import ProductQuestions from "@/components/store/product-page/product-questions";
+import StoreCard from "@/components/store/cards/store-card";
+import StoreProducts from "@/components/store/product-page/store-products";
 interface PageProps {
   params: Promise<{ productSlug: string; variantSlug: string }>;
   searchParams: Promise<{ size?: string }>;
@@ -37,7 +39,7 @@ export default async function ProductVariantPage({
   }
 
   // display the product page with the selected size
-  const { specs, questions, shippingDetails, category, subCategory } =
+  const { specs, questions, shippingDetails, category, subCategory, store } =
     productData;
 
   const relatedProducts = await getProducts(
@@ -88,13 +90,31 @@ export default async function ProductVariantPage({
             <>
               <Separator className="mt-6" />
               {/* Questions */}
-              <ProductQuestions questions={questions} />
+              {/* <ProductQuestions questions={productData.questions} /> */}
+              <ProductQuestions
+                questions={productData.questions.map((q) => ({
+                  ...q,
+                  answer: q.answer ?? "",
+                }))}
+              />
             </>
           )}
 
           <Separator className="my-6" />
           {/* Store card */}
+          {/* <StoreCard store={productData.store} /> */}
+          <StoreCard
+            store={{
+              ...productData.store,
+              isUserFollowingStore: productData.store.isUserFollowingsStore,
+            }}
+          />
           {/* Store Product */}
+          <StoreProducts
+            storeUrl={store.url}
+            storeName={store.name}
+            count={12}
+          />
         </ProductPageContainer>
       </div>
     </div>

@@ -395,6 +395,9 @@ export const getProductPageData = async (
   productSlug: string,
   variantSlug: string,
 ) => {
+  // get user current
+  const user = await currentUser();
+
   const product = await retrieveProductDetails(productSlug, variantSlug);
   if (!product) return;
 
@@ -409,10 +412,21 @@ export const getProductPageData = async (
     product.freeShipping,
   );
 
-  // if (!productShippingDetails) {
-  // }
+  // fetch store followers count
+  const storeFollowersCount = await getStoreFollowersCount(product.store.id);
 
-  return formatProductResponse(product, productShippingDetails);
+  // check if user is following store
+  const isUserFollowingStore = await checkIfUserFollowingStore(
+    product.storeId,
+    user?.id || "",
+  );
+
+  return formatProductResponse(
+    product,
+    productShippingDetails,
+    storeFollowersCount,
+    isUserFollowingStore,
+  );
 };
 
 export const retrieveProductDetails = async (
@@ -490,6 +504,7 @@ export const retrieveProductDetails = async (
 //     return defaultCountry;
 //   }
 // };
+
 const getUserCountry = async () => {
   const cookieStore = await cookies();
   const userCountryCookie = cookieStore.get("userCountry")?.value || "";
@@ -515,6 +530,8 @@ const getUserCountry = async () => {
 const formatProductResponse = (
   product: ProductPageType,
   shippingDetails: ProductShippingDetailsType,
+  storeFollowersCount: number,
+  isUserFollowingStore: boolean,
 ) => {
   if (!product) return;
   const variant = product?.variants[0];
@@ -545,8 +562,8 @@ const formatProductResponse = (
       url: product.store.url,
       name: product.store.name,
       logo: store.logo,
-      followersCount: 10,
-      isUserFollowingsStore: true,
+      followersCount: storeFollowersCount,
+      isUserFollowingsStore: isUserFollowingStore,
     },
     colors,
     sizes,
@@ -566,6 +583,48 @@ const formatProductResponse = (
     relatedProducts: [],
     variantImages: product.variantImages,
   };
+};
+
+const getStoreFollowersCount = async (storeId: string) => {
+  const storeFollowersCount = await db.store.findUnique({
+    where: {
+      id: storeId,
+    },
+    select: {
+      _count: {
+        select: {
+          followers: true,
+        },
+      },
+    },
+  });
+  return storeFollowersCount?._count.followers || 0;
+};
+
+const checkIfUserFollowingStore = async (
+  storeId: string,
+  userId: string | undefined,
+) => {
+  let isUserFollowingStore = false;
+  if (userId) {
+    const storeFollowersInfo = await db.store.findUnique({
+      where: {
+        id: storeId,
+      },
+      select: {
+        followers: {
+          where: {
+            id: userId,
+          },
+          select: { id: true },
+        },
+      },
+    });
+    if (storeFollowersInfo && storeFollowersInfo.followers.length > 0) {
+      isUserFollowingStore = true;
+    }
+  }
+  return isUserFollowingStore;
 };
 
 export const getShippingDetails = async (
