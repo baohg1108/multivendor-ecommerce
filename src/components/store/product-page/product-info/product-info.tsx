@@ -13,7 +13,6 @@ import ColorWheel from "@/components/shared/color-wheel";
 import ProductVariantSelector from "./variant-selector";
 import SizeSelector from "./size-selector";
 import ProductAssurancePolicy from "./assurance-policy";
-import { useEffect, useState } from "react";
 
 interface Props {
   productData: ProductPageDataType;
@@ -41,11 +40,29 @@ const ProductInfo: FC<Props> = ({
     variantName,
     store,
     rating,
+    reviewsStatistics,
     numberReviews,
     sizes,
   } = productData;
 
-  const roundedRating = Math.round(rating);
+  const ratingBreakdown =
+    (reviewsStatistics?.ratingStatistics?.ratingStatistics as
+      | Array<{ rating: number; numReviews: number }>
+      | undefined) ?? [];
+  const totalReviews =
+    reviewsStatistics?.ratingStatistics?.totalReviews ?? numberReviews ?? 0;
+  const averageRatingFromReviews =
+    totalReviews > 0
+      ? ratingBreakdown.reduce(
+          (sum, item) => sum + item.rating * item.numReviews,
+          0,
+        ) / totalReviews
+      : 0;
+  const displayRating =
+    typeof rating === "number" && rating > 0
+      ? rating
+      : averageRatingFromReviews;
+  const roundedRating = Math.round(displayRating);
 
   const copySkuToClipboard = async () => {
     try {
@@ -112,11 +129,11 @@ const ProductInfo: FC<Props> = ({
 
           <Link href={"#reviews"} className="text-[#ffd804] underline">
             (
-            {numberReviews === 0
+            {totalReviews === 0
               ? "No reviews yet"
-              : numberReviews === 1
+              : totalReviews === 1
                 ? "1 review"
-                : `${numberReviews} reviews`}
+                : `${totalReviews} reviews`}
             )
           </Link>
         </div>

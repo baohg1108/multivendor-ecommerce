@@ -16,6 +16,7 @@ import { getStoreDefaultShippingDetails } from "@/queries/store";
 import { countries } from "../data/countries.js";
 import { Size, Color } from "@prisma/client";
 import { FreeShipping, FreeShippingCountry } from "@prisma/client";
+import { db } from "@/lib/db";
 export interface DashboardSidebarMenuInterface {
   label: string;
   icon: string;
@@ -119,6 +120,9 @@ export type FreeShippingWithCountriesType = FreeShipping & {
   eligibleCountries: FreeShippingCountry[];
 };
 
+export type RatingStatisticsType = Prisma.PromiseReturnType<
+  typeof getRatingStatistics
+>;
 export type CartProductType = {
   productId: string;
   variantId: string;

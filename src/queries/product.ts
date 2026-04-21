@@ -14,6 +14,8 @@ import { VariantImageType } from "@/lib/types";
 import { cookies } from "next/headers";
 import { Store } from "@prisma/client";
 import { FreeShippingWithCountriesType } from "@/lib/types";
+import { Review } from "@prisma/client";
+import { RatingStatisticsType } from "@/lib/types";
 
 const generateUniqueSlug = async (
   baseSlug: string,
@@ -421,11 +423,14 @@ export const getProductPageData = async (
     user?.id || "",
   );
 
+  const ratingStatistics = await getRatingStatistics(product.id);
+
   return formatProductResponse(
     product,
     productShippingDetails,
     storeFollowersCount,
     isUserFollowingStore,
+    ratingStatistics,
   );
 };
 
@@ -444,6 +449,18 @@ export const retrieveProductDetails = async (
       store: true,
       specs: true,
       questions: true,
+      reviews: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              picture: true,
+            },
+          },
+          images: true,
+        },
+      },
       freeShipping: {
         include: {
           eligibleCountries: true,
@@ -532,10 +549,12 @@ const formatProductResponse = (
   shippingDetails: ProductShippingDetailsType,
   storeFollowersCount: number,
   isUserFollowingStore: boolean,
+  ratingStatistics: RatingStatisticsType,
 ) => {
   if (!product) return;
   const variant = product?.variants[0];
-  const { store, category, subCategory, offerTag, questions } = product;
+  const { store, category, subCategory, offerTag, questions, reviews } =
+    product;
   const { images, colors, sizes } = variant;
 
   return {
@@ -573,11 +592,12 @@ const formatProductResponse = (
     },
     questions,
     rating: product.rating,
-    review: [],
-    numberReviews: 122,
+    // review: product.reviews,
+    reviews,
+    numberReviews: ratingStatistics.totalReviews,
     reviewsStatistics: {
-      ratingStatistics: [],
-      reviewsWithImagesCount: 5,
+      ratingStatistics: ratingStatistics,
+      reviewsWithImagesCount: ratingStatistics.reviewsWithImagesCount,
     },
     shippingDetails: shippingDetails,
     relatedProducts: [],
@@ -726,4 +746,42 @@ export const getShippingDetails = async (
     return shippingDetails;
   }
   return false;
+};
+
+export const getRatingStatistics = async (productId: string) => {
+  const ratingStars = await db.review.groupBy({
+    by: ["rating"],
+    where: { productId },
+    _count: {
+      rating: true,
+    },
+  });
+
+  const totalReviews = ratingStars.reduce(
+    (sum, item) => sum + item._count.rating,
+    0,
+  );
+  const ratingCounts = Array(5).fill(0);
+
+  ratingStars.forEach((stat) => {
+    const rating = Math.floor(stat.rating);
+    if (rating >= 1 && rating <= 5) {
+      ratingCounts[rating - 1] = stat._count.rating;
+    }
+  });
+
+  return {
+    ratingStatistics: ratingCounts.map((count, index) => ({
+      rating: index + 1,
+      numReviews: count,
+      percentage: totalReviews > 0 ? (count / totalReviews) * 100 : 0,
+    })),
+    reviewsWithImagesCount: await db.review.count({
+      where: {
+        productId,
+        images: { some: {} },
+      },
+    }),
+    totalReviews,
+  };
 };
