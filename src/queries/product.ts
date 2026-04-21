@@ -283,7 +283,7 @@ export const deleteProduct = async (productId: string) => {
 
 //
 export const getProducts = async (
-  filters: any,
+  filters: any = {},
   sortBy: "",
   page: number = 1,
   pageSize: number = 20,
@@ -295,6 +295,34 @@ export const getProducts = async (
   const wherClause: any = {
     AND: [],
   };
+
+  // apply category filter url
+  if (filters.category) {
+    const category = await db.category.findUnique({
+      where: {
+        url: filters.category,
+      },
+      select: { id: true },
+    });
+
+    if (category) {
+      wherClause.AND.push({ categoryId: category.id });
+    }
+  }
+
+  // apply sub-category filter url
+  if (filters.subCategory) {
+    const subCategory = await db.subCategory.findUnique({
+      where: {
+        url: filters.subCategory,
+      },
+      select: { id: true },
+    });
+
+    if (subCategory) {
+      wherClause.AND.push({ subCategoryId: subCategory.id });
+    }
+  }
 
   // get all filtereds products, sorted products, and paginated products
   const products = await db.product.findMany({
