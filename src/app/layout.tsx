@@ -22,7 +22,7 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 
 // Fonts
-const interFont = Inter({ subsets: ["latin"] });
+const interFont = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const barlowFont = Barlow({
   subsets: ["latin"],
   weight: ["500", "700"],
@@ -45,7 +45,7 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body
           suppressHydrationWarning
-          className={`${interFont.className} ${barlowFont.variable} `}
+          className={`${interFont.variable} ${barlowFont.variable}`}
         >
           <ThemeProvider
             attribute="class"

@@ -31,7 +31,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import ImageUpload from "../shared/image-upload";
@@ -46,7 +45,7 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import type { ProductWithVariantType } from "@/lib/types";
+import type { Country, ProductWithVariantType } from "@/lib/types";
 
 import ImagesPreviewGrid from "../shared/images-preview-grid";
 import ClickToAddInputs from "./click-to-add";
@@ -60,7 +59,7 @@ import { upsertProduct } from "@/queries/product";
 import { v4 } from "uuid";
 import type { SubCategory } from "@prisma/client";
 import { format } from "date-fns";
-import { OfferTag } from "@prisma/client";
+import { OfferTag, ShippingFeeMethod } from "@prisma/client";
 
 // React date picker
 import DateTimePicker from "react-datetime-picker";
@@ -73,11 +72,32 @@ import { NumberInput } from "@tremor/react";
 // Jodit react
 import JoditEditor from "jodit-react";
 import InputFieldset from "../shared/input-fieldset";
+
+import { Dot, ArrowRight } from "lucide-react";
+import { MultiSelect } from "react-multi-select-component";
+import { useTheme } from "next-themes";
+import { useMemo } from "react";
+
+const shippingFeeMethods = [
+  {
+    value: ShippingFeeMethod.ITEM,
+    description: "ITEM(Fees calculated based on number of products)",
+  },
+  {
+    value: ShippingFeeMethod.WEIGHT,
+    description: "WEIGHT(Fees calculated based on product weight)",
+  },
+  {
+    value: ShippingFeeMethod.FIXED,
+    description: "FIXED(Fees calculated based on fixed amount)",
+  },
+];
 interface ProductDetailsProps {
   data?: Partial<ProductWithVariantType>;
   categories: Category[];
   storeUrl: string;
   offerTags: OfferTag[];
+  countries: Country[];
 }
 
 export const ProductDetails: React.FC<ProductDetailsProps> = ({
@@ -85,6 +105,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
   categories,
   storeUrl,
   offerTags,
+  countries,
 }) => {
   // Initializing nessary hooks and states
   const router = useRouter();
@@ -92,6 +113,16 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
   // Jodit editor ref
   const productDescEditor = React.useRef(null);
   const variantDescEditor = React.useRef(null);
+
+  // jodit configuation
+  const { theme } = useTheme();
+
+  const config = useMemo(() => {
+    return {
+      theme: theme === "dark" ? "dark" : "default",
+      readOnly: false,
+    };
+  }, [theme]);
 
   // State of subCategories
   const [subCategories, setSubCategories] = React.useState<SubCategory[]>([]);
@@ -148,13 +179,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
       saleEndDate:
         data?.saleEndDate || format(new Date(), "yyyy-MM-dd'T'HH:mm:ss"),
       freeShippingForAllCountries: data?.freeShippingForAllCountries,
-      // freeShippingCountriesIds: data?.freeShippingCountriesIds,
-      freeShippingCountriesIds: Array.isArray(data?.freeShippingCountriesIds)
-        ? data?.freeShippingCountriesIds
-        : data?.freeShippingCountriesIds
-          ? [data?.freeShippingCountriesIds]
-          : [],
-
+      freeShippingCountriesIds: data?.freeShippingCountriesIds || [],
       shippingFeeMethod: data?.shippingFeeMethod,
     },
   });
@@ -163,6 +188,17 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
     control: form.control,
     name: "categoryId",
   });
+
+  const freeShippingForAllCountries = useWatch({
+    control: form.control,
+    name: "freeShippingForAllCountries",
+  });
+
+  const freeShippingCountriesIds =
+    useWatch({
+      control: form.control,
+      name: "freeShippingCountriesIds",
+    }) || [];
 
   // UseEffect to get subCategories when user pick/change category
   useEffect(() => {
@@ -233,6 +269,9 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
         variant_specs: values.variant_specs,
         keywords: values.keywords,
         questions: values.questions,
+        freeShippingForAllCountries: values.freeShippingForAllCountries,
+        freeShippingCountriesIds: values.freeShippingCountriesIds,
+        shippingFeeMethod: values.shippingFeeMethod,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -317,6 +356,28 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
     form,
   ]);
 
+  // countries options
+  type CountryOption = {
+    label: string;
+    value: string;
+  };
+
+  const countryOptions: CountryOption[] = countries.map((c) => ({
+    label: c.name,
+    value: c.code,
+  }));
+
+  const handleDeleteFreeShippingCountry = (index: number) => {
+    const updatedValues = freeShippingCountriesIds.filter(
+      (_, i) => i !== index,
+    );
+    form.setValue("freeShippingCountriesIds", updatedValues, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    });
+  };
+
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -327,7 +388,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
               ? `Update ${data?.name} product information`
               : "Let's create a product. You can edit product settings later from the settings tabs."}
           </CardDescription>
-          {/* <p className="sr-only">{debugContext}</p> */}
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -473,7 +533,8 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                           <FormControl>
                             <JoditEditor
                               ref={productDescEditor}
-                              value={form.getValues().description}
+                              config={config}
+                              value={form.getValues().variantDescription || ""}
                               onChange={(content) => {
                                 form.setValue("description", content);
                               }}
@@ -506,13 +567,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   </TabsContent>
                 </Tabs>
               </InputFieldset>
-
-              {/* ==================== Product Description + Variant Description ====================
-              <div className="flex flex-col lg:flex-row gap-4 hidden">
-                {/* Product Description */}
-
-              {/* Variant Description */}
-              {/* </div> */}
 
               {/*==================== Categories + Subcategories + Offer Tag ====================*/}
               <InputFieldset label="Categories">
@@ -696,9 +750,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
               </InputFieldset>
 
               {/* ==================== Variant Images +  Keyword ==================== */}
-              {/* Keyword */}
               <div className="flex flex-col lg:flex-row gap-4">
-                {/* Variant Images */}
                 <FormField
                   control={form.control}
                   name="variantImages"
@@ -759,7 +811,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   ></FormField>
                 </div>
               </div>
-              {/* Variant Keywords */}
               <div className="flex flex-wrap gap-1">
                 {keywords.map((k, i) => (
                   <div
@@ -779,7 +830,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
 
               {/* ==================== Size, Quantity, Prices, and Discounts ==================== */}
               <InputFieldset label="Size, Quantity, Prices, and Discounts">
-                {" "}
                 <div className="w-full flex flex-col gap-3 xl:pl-5">
                   <ClickToAddInputs
                     details={sizes}
@@ -801,8 +851,10 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
               </InputFieldset>
 
               {/* ==================== Product and variant specs  ====================*/}
-              {/* Product specs */}
-              <InputFieldset label="Specifications">
+              <InputFieldset
+                label="Specifications"
+                description="Note: The product specifications are the main specs for the product (Will display in every variant page). You can add extra specs specific to this variant using 'Variant Specifications'"
+              >
                 <Tabs defaultValue="productSpecs" className="w-full">
                   <TabsList className="w-full grid-cols-2 grid">
                     <TabsTrigger value="productSpecs">
@@ -875,61 +927,246 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
               </InputFieldset>
 
               {/* ==================== Is on Sale + Sale end date ==================== */}
-              {/* Is on Sale */}
-              <div className="flex border rounded-md">
-                <FormField
-                  control={form.control}
-                  name="isSale"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 p-4">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
+              {/* Is On Sale */}
+              <InputFieldset
+                label="Sale"
+                description="Is your product on sale ?"
+              >
+                <div>
+                  <label
+                    htmlFor="yes"
+                    className="ml-5 flex items-center gap-x-2 cursor-pointer"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="isSale"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <>
+                              <input
+                                type="checkbox"
+                                id="yes"
+                                checked={field.value}
+                                onChange={field.onChange}
+                                hidden
+                              />
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </>
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <span>Yes</span>
+                  </label>
+                  {form.getValues().isSale && (
+                    <div className="mt-5">
+                      <p className="text-sm text-main-secondary dark:text-gray-400 pb-3 flex">
+                        <Dot className="-me-1" />
+                        When sale does end ?
+                      </p>
+
+                      <div className="flex items-center gap-x-5">
+                        <FormField
+                          control={form.control}
+                          name="saleEndDate"
+                          render={({ field }) => (
+                            <FormItem className="ml-4">
+                              <FormControl>
+                                <DateTimePicker
+                                  className="inline-flex items-center gap-2 p-2 border rounded-md shadow-sm"
+                                  calendarIcon={
+                                    <span className="text-gray-500 hover:text-gray-600">
+                                      📅
+                                    </span>
+                                  }
+                                  clearIcon={
+                                    <span className="text-gray-500 hover:text-gray-600">
+                                      ✖️
+                                    </span>
+                                  }
+                                  onChange={(date) => {
+                                    field.onChange(
+                                      date
+                                        ? format(date, "yyyy-MM-dd'T'HH:mm:ss")
+                                        : "",
+                                    );
+                                  }}
+                                  value={
+                                    field.value ? new Date(field.value) : null
+                                  }
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
                         />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Is on Sale</FormLabel>
-                        <FormDescription>
-                          Is this product as on sale
-                        </FormDescription>
+                        <ArrowRight className="w-4 text-[#1087ff]" />
+                        <span>
+                          {(() => {
+                            const saleEndDate = form.getValues().saleEndDate;
+                            if (
+                              typeof saleEndDate === "string" &&
+                              saleEndDate.length > 0
+                            ) {
+                              return format(
+                                new Date(saleEndDate),
+                                "dd/MM/yyyy HH:mm",
+                              );
+                            }
+                            return "No end date selected";
+                          })()}
+                        </span>
                       </div>
+                    </div>
+                  )}
+                </div>
+              </InputFieldset>
+
+              {/* Shipping fee method */}
+              <InputFieldset label="Product shipping fee method">
+                <FormField
+                  disabled={isLoading}
+                  control={form.control}
+                  name="shippingFeeMethod"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <Select
+                        disabled={isLoading}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              defaultValue={field.value}
+                              placeholder="Select Shipping Fee Calculation method"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {shippingFeeMethods.map((method) => (
+                            <SelectItem key={method.value} value={method.value}>
+                              {method.description}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
-                {/* Sale end date */}
-                {form.getValues().isSale && (
-                  <FormField
-                    control={form.control}
-                    name="saleEndDate"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 p-4">
-                        <FormControl>
-                          <DateTimePicker
-                            onChange={(date) => {
-                              field.onChange(
-                                date
-                                  ? format(date, "yyyy-MM-dd'T'HH:mm:ss")
-                                  : "",
-                              );
-                            }}
-                            value={field.value ? new Date(field.value) : null}
-                          ></DateTimePicker>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                )}
-              </div>
+              </InputFieldset>
+
+              {/* Fee Shipping */}
+              <InputFieldset
+                label="Free Shipping (Optional)"
+                description="Free Shipping Worldwide ?"
+              >
+                <div>
+                  <label
+                    htmlFor="freeShippingForAll"
+                    className="ml-5 flex items-center gap-x-2 cursor-pointer"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="freeShippingForAllCountries"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <>
+                              <input
+                                type="checkbox"
+                                id="freeShippingForAll"
+                                checked={field.value}
+                                onChange={field.onChange}
+                                hidden
+                              />
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </>
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <span>Yes</span>
+                  </label>
+                </div>
+                <div>
+                  <p className="mt-4 text-sm text-main-secondary dark:text-gray-400 pb-3 flex">
+                    <Dot className="-me-1" />
+                    If not select the countries you want to ship this product to
+                    for free
+                  </p>
+                </div>
+                <div className="">
+                  {!freeShippingForAllCountries && (
+                    <div>
+                      <FormField
+                        control={form.control}
+                        name="freeShippingCountriesIds"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <MultiSelect
+                                className="!max-w-[800px]"
+                                options={countryOptions}
+                                value={field.value || []}
+                                onChange={(selected: CountryOption[]) => {
+                                  field.onChange(selected);
+                                }}
+                                labelledBy="Select"
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      <p className="mt-4 text-sm text-main-secondary dark:text-gray-400 pb-3 flex">
+                        <Dot className="-me-1" />
+                        List of countries you offer free shipping for this
+                        product :&nbsp;
+                        {freeShippingCountriesIds &&
+                          freeShippingCountriesIds.length === 0 &&
+                          "None"}
+                      </p>
+
+                      {/* Free shipping counties */}
+                      <div className="flex flex-wrap gap-1">
+                        {freeShippingCountriesIds?.map((country, index) => (
+                          <div
+                            key={country.value}
+                            className="text-xs inline-flex items-center px-3 py-1 bg-blue-200 text-blue-primary rounded-md gap-x-2"
+                          >
+                            <span>{country.label}</span>
+                            <span
+                              className="cursor-pointer hover:text-red-500"
+                              onClick={() =>
+                                handleDeleteFreeShippingCountry(index)
+                              }
+                            >
+                              x
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {/* Button */}
+              </InputFieldset>
 
               <Button type="submit" disabled={isLoading}>
                 {isLoading
-                  ? "Loading..."
-                  : data?.productId && data?.variantId
+                  ? "loading..."
+                  : data?.productId && data.variantId
                     ? "Save product information"
-                    : "Create Product"}
+                    : "Create product"}
               </Button>
-              {/* Form fields would go here */}
             </form>
           </Form>
         </CardContent>

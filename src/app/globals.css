@@ -4,13 +4,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
-  --font-barlow: var(--font-barlow);
-}
-
 @theme inline {
-  --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans);
+  --font-heading: var(--font-barlow);
+  --font-sans: var(--font-inter);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -132,7 +128,6 @@
   }
 }
 
-/*Product images preview dashboard*/
 .grid_3_image_1 {
   height: 100%;
   grid-column: 1/2;
@@ -171,13 +166,13 @@
 .grid_5_image_3 {
   grid-column: 2 !important;
   grid-row: span 2;
-  height: 266.66 px;
+  height: 266.66px;
 }
 
 .grid_5_image_4 {
   grid-column: 2 !important;
   grid-row: span 2;
-  height: 266.66 px;
+  height: 266.66px;
 }
 
 .grid_5_image_5 {
@@ -209,7 +204,6 @@
   transform: translate(2px, 3px);
 }
 
-/* Delete button */
 .Btn {
   z-index: 99;
   display: flex;
@@ -228,7 +222,6 @@
   background: linear-gradient(to top, #2a66f9, #bee3ff);
 }
 
-/* Plus sign */
 .sign {
   width: 100%;
   transition-duration: 0.3s;
@@ -246,13 +239,12 @@
   fill: white;
 }
 
-/* text */
 .text {
   position: absolute;
   right: 0%;
   width: 0%;
   opacity: 0;
-  font-size: 1.2 em;
+  font-size: 1.2em;
   font-weight: 600;
   transition-duration: 0.3s;
 }
@@ -266,11 +258,41 @@
   width: 80px !important;
 }
 
-.scrollbar ::-webkit-scrollbar {
+.scrollbar::-webkit-scrollbar {
   width: 5px;
 }
 
-.scrollbar ::-webkit-scrollbar-thumb {
+.scrollbar::-webkit-scrollbar-thumb {
   background: #e0e0e0;
   border-radius: 5px;
+}
+
+/* Jodit editor dark mode */
+.jodit_theme_dark.jodit-container {
+  background-color: #1a1b1f !important;
+  border-color: #eeeeee2e !important;
+}
+
+.jodit_theme_dark .jodit-toolbar__box:not(:empty) {
+  background-color: #1a1b1f !important;
+}
+
+.jodit_theme_dark .jodit-wysiwyg {
+  background-color: #1a1b1f !important;
+}
+
+.jodit_theme_dark .jodit-toolbar-button__button:hover svg {
+  stroke: #575757 !important;
+  fill: #575757 !important;
+}
+
+/* Calendar dark mode  */
+.dark .react-calendar {
+  background: #1a1b1f !important;
+}
+.dark .react-calendar__tile:enabled:hover {
+  color: #000;
+}
+.dark .react-calendar__tile--now {
+  color: #000;
 }
