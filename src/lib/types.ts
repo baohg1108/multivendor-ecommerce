@@ -10,6 +10,7 @@ import {
 import type {
   Category,
   ProductVariantImage,
+  ShippingFeeMethod,
   ShippingRate,
   SubCategory,
 } from "@prisma/client";
@@ -38,7 +39,7 @@ export type ProductWithVariantType = {
   description: string;
   variantName: string;
   variantDescription: string;
-  images: { url: string }[];
+  images: { id?: string; url: string }[];
   variantImage: string;
   categoryId: string;
   subCategoryId: string;
@@ -48,13 +49,22 @@ export type ProductWithVariantType = {
   brand: string;
   sku: string;
   weight: number;
-  colors: { color: string }[];
-  sizes: { size: string; quantity: number; price: number; discount: number }[];
-  product_specs: { name: string; value: string }[];
-  variant_specs: { name: string; value: string }[];
-
+  colors: { id?: string; color: string }[];
+  sizes: {
+    id?: string;
+    size: string;
+    quantity: number;
+    price: number;
+    discount: number;
+  }[];
+  product_specs: { id?: string; name: string; value: string }[];
+  variant_specs: { id?: string; name: string; value: string }[];
   keywords: string[];
-  questions: { question: string; answer: string }[];
+  questions: { id?: string; question: string; answer: string }[];
+  freeShippingForAllCountries: boolean;
+  freeShippingCountriesIds: { id?: string; label: string; value: string }[];
+  shippingFeeMethod: ShippingFeeMethod;
+
   createdAt: Date;
   updatedAt: Date;
 };

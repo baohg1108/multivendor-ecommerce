@@ -4,9 +4,19 @@ import React, { useState } from "react";
 
 import { SketchPicker } from "react-color";
 
-export interface Detail {
-  [key: string]: string | number | boolean | undefined;
+export interface Detail<T = { [key: string]: string | number | undefined }> {
+  [key: string]: T[keyof T];
 }
+
+// interface CustomType {
+//   name: string;
+//   isActive: boolean;
+// }
+
+// const detail: Detail<{name:string, isActive:boolean}> = {
+//   name: "Hoang Gia Bao",
+//   isActive: true
+// };
 
 const PlusButton = ({ onClick }: { onClick: () => void }) => {
   return (
@@ -40,6 +50,8 @@ interface ClickToAddInputProps<T extends Detail> {
   initialDetail: T;
   header?: string;
   colorPicker?: boolean;
+  containerClassName?: string;
+  inputClassName?: string;
 }
 
 const ClickToAddInputs = <T extends Detail>({
@@ -48,6 +60,8 @@ const ClickToAddInputs = <T extends Detail>({
   initialDetail = {} as T,
   header,
   colorPicker,
+  containerClassName,
+  inputClassName,
 }: ClickToAddInputProps<T>) => {
   // state to manage toggling color picker
   const [colorPickerIndex, setColorPickerIndex] = useState<number | null>(null);
