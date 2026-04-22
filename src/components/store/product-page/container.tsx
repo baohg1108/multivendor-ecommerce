@@ -10,6 +10,7 @@ import React, { useCallback, useState } from "react";
 import { isProductValidToAdd } from "@/lib/utils";
 import QuantitySelector from "./quantity-selector";
 import SocialShare from "../shared/social-share";
+import { ProductVariantImage } from "@prisma/client";
 
 interface ProductPageContainerProps {
   productData: ProductPageDataType;
@@ -24,6 +25,11 @@ const ProductPageContainer = ({
 }: ProductPageContainerProps) => {
   const resolvedProductData = productData as NonNullable<ProductPageDataType>;
   const { images, shippingDetails } = resolvedProductData;
+  const [variantImages, setVariantImages] =
+    useState<ProductVariantImage[]>(images);
+  const [activeImage, setActiveImage] = useState<ProductVariantImage | null>(
+    images[0],
+  );
   const hasShippingDetails = typeof shippingDetails !== "boolean";
   const resolvedShippingDetails = hasShippingDetails
     ? shippingDetails
@@ -92,7 +98,11 @@ const ProductPageContainer = ({
   return (
     <div className="relative">
       <div className="w-full xl:flex xl:gap-4">
-        <ProductSwiper images={images} />
+        <ProductSwiper
+          images={variantImages.length > 0 ? variantImages : images}
+          activeImage={activeImage || images[0]}
+          setActiveImage={setActiveImage}
+        />
         <div className="w-full mt-4 md:mt-0 flex flex-col gap-4 md:flex-row">
           {/* Product Info Main */}
           <ProductInfo
@@ -100,6 +110,8 @@ const ProductPageContainer = ({
             quantity={1}
             sizeId={sizeId}
             handleChange={handleChange}
+            setVariantImages={setVariantImages}
+            setActiveImage={setActiveImage}
           />
           {/* shipping details - buy action button */}
           <div className="w-[390px]">

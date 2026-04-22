@@ -8,14 +8,15 @@ import {
   VariantSimplified,
 } from "@/lib/types";
 import { currentUser } from "@clerk/nextjs/server";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import slugify from "slugify";
 import { VariantImageType } from "@/lib/types";
 import { cookies } from "next/headers";
 import { Store } from "@prisma/client";
 import { FreeShippingWithCountriesType } from "@/lib/types";
-import { Review } from "@prisma/client";
 import { RatingStatisticsType } from "@/lib/types";
+
+export type SortOrder = "asc" | "desc";
 
 const generateUniqueSlug = async (
   baseSlug: string,
@@ -454,6 +455,7 @@ export const retrieveProductDetails = async (
           images: true,
           user: true,
         },
+        take: 4,
       },
       freeShipping: {
         include: {
@@ -476,22 +478,31 @@ export const retrieveProductDetails = async (
 
   if (!product) return null;
 
-  const variantImages = await db.productVariant.findMany({
+  // get variant info
+  const variantsInfo = await db.productVariant.findMany({
     where: {
       productId: product.id,
     },
-    select: {
-      slug: true,
-      variantImage: true,
+    include: {
+      images: true,
+      sizes: true,
+      colors: true,
+      product: {
+        select: { slug: true },
+      },
     },
   });
 
   return {
     ...product,
-    variantImages: variantImages.map((v) => ({
-      url: `/product/${productSlug}/${v.slug}`,
-      img: v.variantImage || "",
-      slug: v.slug,
+    variantsInfo: variantsInfo.map((variant) => ({
+      variantName: variant.variantName,
+      variantUrl: `/product/${productSlug}/${variant.slug}`,
+      variantImage: variant.variantImage || "",
+      variantSlug: variant.slug,
+      sizes: variant.sizes,
+      images: variant.images,
+      colors: variant.colors.map((color) => color.name).join(","),
     })),
   };
 };
@@ -575,7 +586,7 @@ const formatProductResponse = (
     },
     shippingDetails: shippingDetails,
     relatedProducts: [],
-    variantImages: product.variantImages,
+    variantInfo: product.variantsInfo,
   };
 };
 
@@ -756,6 +767,57 @@ export const getRatingStatistics = async (productId: string) => {
         images: { some: {} },
       },
     }),
+    totalReviews,
+  };
+};
+
+export const getProductFilteredReviews = async (
+  productId: string,
+  filters: { rating?: number; hasImages?: boolean },
+  sort: { orderBy: "latest" | "oldest" | "highest" } | undefined,
+  page: number = 1,
+  pageSize: number = 2,
+) => {
+  const reviewFilter: Prisma.ReviewWhereInput = {
+    productId,
+  };
+
+  if (filters.rating) {
+    reviewFilter.rating = filters.rating;
+  }
+
+  if (filters.hasImages) {
+    reviewFilter.images = { some: {} };
+  }
+
+  const sortOpion: { createdAt?: SortOrder; rating?: SortOrder } =
+    sort && sort.orderBy === "latest"
+      ? { createdAt: "desc" }
+      : sort && sort.orderBy === "oldest"
+        ? { createdAt: "asc" }
+        : sort && sort.orderBy === "highest"
+          ? { rating: "desc" }
+          : { createdAt: "desc" };
+
+  const skip = (page - 1) * pageSize;
+  const take = pageSize;
+
+  const [reviews, totalReviews] = await Promise.all([
+    db.review.findMany({
+      where: reviewFilter,
+      include: {
+        images: true,
+        user: true,
+      },
+      orderBy: sortOpion,
+      skip,
+      take,
+    }),
+    db.review.count({ where: reviewFilter }),
+  ]);
+
+  return {
+    reviews,
     totalReviews,
   };
 };

@@ -13,12 +13,16 @@ import ColorWheel from "@/components/shared/color-wheel";
 import ProductVariantSelector from "./variant-selector";
 import SizeSelector from "./size-selector";
 import ProductAssurancePolicy from "./assurance-policy";
+import { Dispatch, SetStateAction } from "react";
+import { ProductVariantImage } from "@prisma/client";
 
 interface Props {
   productData: ProductPageDataType;
   quantity: number;
   sizeId: string | undefined;
   handleChange: (property: keyof CartProductType, value: any) => void;
+  setVariantImages: Dispatch<SetStateAction<ProductVariantImage[]>>;
+  setActiveImage: Dispatch<SetStateAction<ProductVariantImage | null>>;
 }
 
 const ProductInfo: FC<Props> = ({
@@ -26,6 +30,8 @@ const ProductInfo: FC<Props> = ({
   quantity,
   sizeId,
   handleChange,
+  setVariantImages,
+  setActiveImage,
 }) => {
   if (!productData) return null;
 
@@ -34,7 +40,7 @@ const ProductInfo: FC<Props> = ({
     name,
     sku,
     colors,
-    variantImages,
+    variantInfo,
     isSale,
     saleEndDate,
     variantName,
@@ -161,10 +167,12 @@ const ProductInfo: FC<Props> = ({
             <ColorWheel colors={colors} size={25} />
           </span>
         </div>
-        {variantImages.length > 0 && (
+        {variantInfo.length > 0 && (
           <ProductVariantSelector
-            variants={variantImages}
+            variants={variantInfo}
             slug={productData.variantSlug}
+            setVariantImages={setVariantImages}
+            setActiveImage={setActiveImage}
           />
         )}
       </div>

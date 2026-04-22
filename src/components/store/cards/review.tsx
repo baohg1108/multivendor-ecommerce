@@ -1,8 +1,8 @@
 "use client";
 import ColorWheel from "@/components/shared/color-wheel";
 import { ReviewWithImageType } from "@/lib/types";
+import { Star } from "lucide-react";
 import Image from "next/image";
-import ReactStars from "react-rating-stars-component";
 
 export default function ReviewCard({
   review,
@@ -43,6 +43,7 @@ export default function ReviewCard({
       </div>
       <div className="flex flex-1 flex-col justify-between leading-5 overflow-hidden px-1.5">
         <div className="space-y-2">
+          {/*
           <ReactStars
             key={review.rating}
             count={5}
@@ -53,6 +54,19 @@ export default function ReviewCard({
             isHalf
             edit={false}
           />
+          */}
+          <div className="flex items-center gap-0.5">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <Star
+                key={`${review.id}-${index}`}
+                className={`h-5 w-5 ${
+                  index < review.rating
+                    ? "fill-[#FFD804] text-[#FFD804]"
+                    : "fill-[#F5F5F5] text-[#F5F5F5]"
+                }`}
+              />
+            ))}
+          </div>
           <div className="flex items-center gap-x-2">
             <ColorWheel colors={colors} size={24} />
             <div className="text-gray-500 text-sm">{review.variant}</div>
