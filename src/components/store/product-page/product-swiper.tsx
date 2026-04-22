@@ -1,25 +1,30 @@
 "use client";
 
 import { ProductVariantImage } from "@prisma/client";
-import { useState, type MouseEvent } from "react";
+import { Dispatch, SetStateAction, useState, type MouseEvent } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 export default function ProductSwiper({
   images,
+  activeImage,
+  setActiveImage,
 }: {
   images: ProductVariantImage[];
+  activeImage: ProductVariantImage | null;
+  setActiveImage: Dispatch<SetStateAction<ProductVariantImage | null>>;
 }) {
-  if (!images?.length) return null;
-
-  const [activeImage, setActiveImage] = useState<ProductVariantImage>(
-    images[0],
-  );
   const [isZooming, setIsZooming] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
+  if (!images?.length) return null;
+
+  // const [activeImage, setActiveImage] = useState<ProductVariantImage>(
+  //   images[0],
+  // );
 
   const handleMouseMove = (event: MouseEvent<HTMLDivElement>) => {
-    const { left, top, width, height } = event.currentTarget.getBoundingClientRect();
+    const { left, top, width, height } =
+      event.currentTarget.getBoundingClientRect();
     const x = ((event.clientX - left) / width) * 100;
     const y = ((event.clientY - top) / height) * 100;
 
@@ -41,7 +46,9 @@ export default function ProductSwiper({
               className={cn(
                 "w-16 h-16 rounded grid place-items-center overflow-hidden border border-gray-100 cursor-pointer transition-all duration-75 ease-in",
                 {
-                  "border-main-primary": activeImage.url === img.url,
+                  "border-main-primary": activeImage
+                    ? activeImage.id === img.id
+                    : false,
                 },
               )}
             >
@@ -63,8 +70,8 @@ export default function ProductSwiper({
           onMouseMove={handleMouseMove}
         >
           <Image
-            src={activeImage.url}
-            alt={activeImage.alt || "Product image"}
+            src={activeImage?.url || ""}
+            alt={activeImage?.alt || "Product image"}
             width={600}
             height={600}
             priority

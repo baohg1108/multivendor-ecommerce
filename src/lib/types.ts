@@ -5,6 +5,7 @@ import {
   getProducts,
   getShippingDetails,
   retrieveProductDetails,
+  getRatingStatistics,
 } from "@/queries/product";
 import type {
   Category,
@@ -122,7 +123,7 @@ export type RatingStatisticsType = Prisma.PromiseReturnType<
 
 export type StatisticsCardType = Prisma.PromiseReturnType<
   typeof getRatingStatistics
->["getRatingStatistics"];
+>["ratingStatistics"];
 
 export type FreeShippingWithCountriesType = FreeShipping & {
   eligibleCountries: FreeShippingCountry[];
@@ -156,4 +157,36 @@ export type CartProductType = {
 export type ReviewWithImageType = Review & {
   images: ReviewImage[];
   user: User;
+};
+
+export type ReviewsFiltersType = {
+  rating?: number;
+  hasImages?: boolean;
+};
+
+export type ReviewsOrderType = {
+  orderBy: "latest" | "oldest" | "highest";
+};
+
+export type VariantInfoType = {
+  variantName: string;
+  variantImage: string;
+  variantUrl: string;
+  variantSlug: string;
+  images: ProductVariantImage[];
+  sizes: Size[];
+  colors: string;
+};
+
+export type FeaturedCategoryType = Category;
+
+export type ReviewDetailsType = {
+  id: string;
+  review: string;
+  rating: number;
+  images: { url: string }[];
+  size: string;
+  color: string;
+  variant: string;
+  quantity: string;
 };
