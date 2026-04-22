@@ -1,3 +1,5 @@
+import { ShippingFeeMethod } from "@prisma/client";
+import { freemem } from "os";
 import * as z from "zod";
 
 // Category form schema
@@ -258,6 +260,21 @@ export const ProductFormSchema = z.object({
       { message: "All question inputs must be filled correctly" },
     ),
   saleEndDate: z.string().optional(),
+  freeShippingForAllCountries: z.boolean().default(false),
+  freeShippingCountriesIds: z
+    .object({
+      id: z.string().optional(),
+      label: z.string(),
+      value: z.string(),
+    })
+    .array()
+    .optional()
+    .refine(
+      (ids) => ids?.every((item) => item.label && item.value),
+      "Each country must have a valid name and ID",
+    )
+    .default([]),
+  shippingFeeMethod: z.nativeEnum(ShippingFeeMethod),
 });
 
 // Store default shipping details form schema

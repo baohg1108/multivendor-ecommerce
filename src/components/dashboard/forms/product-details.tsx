@@ -72,6 +72,7 @@ import { NumberInput } from "@tremor/react";
 
 // Jodit react
 import JoditEditor from "jodit-react";
+import InputFieldset from "../shared/input-fieldset";
 interface ProductDetailsProps {
   data?: Partial<ProductWithVariantType>;
   categories: Category[];
@@ -146,6 +147,15 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
       weight: data?.weight ?? 0,
       saleEndDate:
         data?.saleEndDate || format(new Date(), "yyyy-MM-dd'T'HH:mm:ss"),
+      freeShippingForAllCountries: data?.freeShippingForAllCountries,
+      // freeShippingCountriesIds: data?.freeShippingCountriesIds,
+      freeShippingCountriesIds: Array.isArray(data?.freeShippingCountriesIds)
+        ? data?.freeShippingCountriesIds
+        : data?.freeShippingCountriesIds
+          ? [data?.freeShippingCountriesIds]
+          : [],
+
+      shippingFeeMethod: data?.shippingFeeMethod,
     },
   });
 
@@ -399,109 +409,159 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
               </div>
 
               {/*==================== Name + Variantname ====================*/}
-              <div className="flex flex-col lg:flex-row gap-4">
-                {/* Product Name */}
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Product Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Product Name"
-                          {...field}
-                          disabled={isLoading}
-                        />
-                      </FormControl>
-                      <FormMessage></FormMessage>
-                    </FormItem>
-                  )}
-                />
-                {/* Variant Name */}
-                <FormField
-                  control={form.control}
-                  name="variantName"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Variant Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Variant Name"
-                          {...field}
-                          disabled={isLoading}
-                        />
-                      </FormControl>
-                      <FormMessage></FormMessage>
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <InputFieldset label="Name">
+                <div className="flex flex-col lg:flex-row gap-4">
+                  {/* Product Name */}
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        {/* <FormLabel>Product Name</FormLabel> */}
+                        <FormControl>
+                          <Input
+                            placeholder="Product Name"
+                            {...field}
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage></FormMessage>
+                      </FormItem>
+                    )}
+                  />
+                  {/* Variant Name */}
+                  <FormField
+                    control={form.control}
+                    name="variantName"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        {/* <FormLabel>Variant Name</FormLabel> */}
+                        <FormControl>
+                          <Input
+                            placeholder="Variant Name"
+                            {...field}
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage></FormMessage>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </InputFieldset>
 
               {/* ==================== Product and variant description editors (Tabs) */}
-              <Tabs defaultValue="product" className="w-full">
-                <TabsList className="w-full grid-cols-2 grid">
-                  <TabsTrigger value="product">Product Description</TabsTrigger>
-                  <TabsTrigger value="variant">Variant Description</TabsTrigger>
-                </TabsList>
-                <TabsContent value="product">
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={() => (
-                      <FormItem className="flex-1">
-                        <FormControl>
-                          <JoditEditor
-                            ref={productDescEditor}
-                            value={form.getValues().description}
-                            onChange={(content) => {
-                              form.setValue("description", content);
-                            }}
-                          ></JoditEditor>
-                        </FormControl>
-                        <FormMessage></FormMessage>
-                      </FormItem>
-                    )}
-                  />
-                </TabsContent>
-                <TabsContent value="variant">
-                  <FormField
-                    control={form.control}
-                    name="variantDescription"
-                    render={() => (
-                      <FormItem className="flex-1">
-                        <FormControl>
-                          <JoditEditor
-                            ref={variantDescEditor}
-                            value={form.getValues().variantDescription || ""}
-                            onChange={(content) => {
-                              form.setValue("variantDescription", content);
-                            }}
-                          ></JoditEditor>
-                        </FormControl>
-                        <FormMessage></FormMessage>
-                      </FormItem>
-                    )}
-                  />
-                </TabsContent>
-              </Tabs>
+              <InputFieldset
+                label="Description"
+                description="Note: The product description is the main description for the product (Will display in every variant page). You can add an extra description specific to this variant using"
+              >
+                <Tabs defaultValue="product" className="w-full">
+                  <TabsList className="w-full grid-cols-2 grid">
+                    <TabsTrigger value="product">
+                      Product Description
+                    </TabsTrigger>
+                    <TabsTrigger value="variant">
+                      Variant Description
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="product">
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={() => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <JoditEditor
+                              ref={productDescEditor}
+                              value={form.getValues().description}
+                              onChange={(content) => {
+                                form.setValue("description", content);
+                              }}
+                            ></JoditEditor>
+                          </FormControl>
+                          <FormMessage></FormMessage>
+                        </FormItem>
+                      )}
+                    />
+                  </TabsContent>
+                  <TabsContent value="variant">
+                    <FormField
+                      control={form.control}
+                      name="variantDescription"
+                      render={() => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <JoditEditor
+                              ref={variantDescEditor}
+                              value={form.getValues().variantDescription || ""}
+                              onChange={(content) => {
+                                form.setValue("variantDescription", content);
+                              }}
+                            ></JoditEditor>
+                          </FormControl>
+                          <FormMessage></FormMessage>
+                        </FormItem>
+                      )}
+                    />
+                  </TabsContent>
+                </Tabs>
+              </InputFieldset>
 
-              {/*==================== Product Description + Variant Description ====================*/}
+              {/* ==================== Product Description + Variant Description ====================
               <div className="flex flex-col lg:flex-row gap-4 hidden">
                 {/* Product Description */}
 
-                {/* Variant Description */}
-              </div>
+              {/* Variant Description */}
+              {/* </div> */}
 
               {/*==================== Categories + Subcategories + Offer Tag ====================*/}
-              <div className="flex gap-4">
-                <FormField
-                  control={form.control}
-                  name="categoryId"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Product Category</FormLabel>
-                      <FormControl>
+              <InputFieldset label="Categories">
+                <div className="flex gap-4">
+                  <FormField
+                    control={form.control}
+                    name="categoryId"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Product Category</FormLabel>
+                        <FormControl>
+                          <Select
+                            disabled={isLoading || categories.length == 0}
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue
+                                  defaultValue={field.value}
+                                  placeholder="Select a category"
+                                />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {categories.map((category) => (
+                                <SelectItem
+                                  key={category.id}
+                                  value={category.id}
+                                >
+                                  {category.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage></FormMessage>
+                      </FormItem>
+                    )}
+                  />
+                  {/* Offer Tag */}
+                  <FormField
+                    disabled={isLoading}
+                    control={form.control}
+                    name="offerTagId"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Offer Tag</FormLabel>
                         <Select
                           disabled={isLoading || categories.length == 0}
                           onValueChange={field.onChange}
@@ -512,158 +572,128 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                             <SelectTrigger>
                               <SelectValue
                                 defaultValue={field.value}
-                                placeholder="Select a category"
+                                placeholder="Select an offer"
                               />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {categories.map((category) => (
-                              <SelectItem key={category.id} value={category.id}>
-                                {category.name}
-                              </SelectItem>
-                            ))}
+                            {offerTags &&
+                              offerTags.map((offer) => (
+                                <SelectItem key={offer.id} value={offer.id}>
+                                  {offer.name}
+                                </SelectItem>
+                              ))}
                           </SelectContent>
                         </Select>
-                      </FormControl>
-                      <FormMessage></FormMessage>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="subCategoryId"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Product SubCategory</FormLabel>
-                      <FormControl>
-                        <Select
-                          disabled={
-                            isLoading ||
-                            !selectedCategoryId ||
-                            subCategories.length == 0
-                          }
-                          onValueChange={field.onChange}
-                          value={field.value}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue
-                                defaultValue={field.value}
-                                placeholder="Select a subcategory"
-                              />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {subCategories.map((sub) => (
-                              <SelectItem key={sub.id} value={sub.id}>
-                                {sub.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage></FormMessage>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  disabled={isLoading}
-                  control={form.control}
-                  name="offerTagId"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Offer Tag</FormLabel>
-                      <Select
-                        disabled={isLoading || categories.length == 0}
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        defaultValue={field.value}
-                      >
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="subCategoryId"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Product SubCategory</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              defaultValue={field.value}
-                              placeholder="Select an offer"
-                            />
-                          </SelectTrigger>
+                          <Select
+                            disabled={
+                              isLoading ||
+                              !selectedCategoryId ||
+                              subCategories.length == 0 ||
+                              !form.getValues().categoryId
+                            }
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue
+                                  defaultValue={field.value}
+                                  placeholder="Select a subcategory"
+                                />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {subCategories.map((sub) => (
+                                <SelectItem key={sub.id} value={sub.id}>
+                                  {sub.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </FormControl>
-                        <SelectContent>
-                          {offerTags &&
-                            offerTags.map((offer) => (
-                              <SelectItem key={offer.id} value={offer.id}>
-                                {offer.name}
-                              </SelectItem>
-                            ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                        <FormMessage></FormMessage>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </InputFieldset>
 
               {/*==================== Brand, SKU, Weight ====================*/}
-              <div className="flex flex-col lg:flex-row gap-4">
-                {/* brand */}
-                <FormField
-                  control={form.control}
-                  name="brand"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Product Brand</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Product Brand"
-                          {...field}
-                          disabled={isLoading}
-                        />
-                      </FormControl>
-                      <FormMessage></FormMessage>
-                    </FormItem>
-                  )}
-                />
-                {/* sku */}
-                <FormField
-                  control={form.control}
-                  name="sku"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>SKU</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="SKU"
-                          {...field}
-                          disabled={isLoading}
-                        />
-                      </FormControl>
-                      <FormMessage></FormMessage>
-                    </FormItem>
-                  )}
-                />
-                {/* weight */}
-                <FormField
-                  control={form.control}
-                  name="weight"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Product Weight</FormLabel>
-                      <FormControl>
-                        <NumberInput
-                          disabled={isLoading}
-                          defaultValue={field.value}
-                          onValueChange={field.onChange}
-                          placeholder="Weight"
-                          min={0.01}
-                          step={0.01}
-                          className="!shadow-none rounded-md !text-sm"
-                        />
-                      </FormControl>
-                      <FormMessage></FormMessage>
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <InputFieldset label="Sku, Weight">
+                <div className="flex flex-col lg:flex-row gap-4">
+                  {/* brand */}
+                  <FormField
+                    control={form.control}
+                    name="brand"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Product Brand</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Product Brand"
+                            {...field}
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage></FormMessage>
+                      </FormItem>
+                    )}
+                  />
+                  {/* sku */}
+                  <FormField
+                    control={form.control}
+                    name="sku"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>SKU</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="SKU"
+                            {...field}
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage></FormMessage>
+                      </FormItem>
+                    )}
+                  />
+                  {/* weight */}
+                  <FormField
+                    control={form.control}
+                    name="weight"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Product Weight</FormLabel>
+                        <FormControl>
+                          <NumberInput
+                            disabled={isLoading}
+                            defaultValue={field.value}
+                            onValueChange={field.onChange}
+                            placeholder="Weight"
+                            min={0.01}
+                            step={0.01}
+                            className="!shadow-none rounded-md !text-sm"
+                          />
+                        </FormControl>
+                        <FormMessage></FormMessage>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </InputFieldset>
 
               {/* ==================== Variant Images +  Keyword ==================== */}
               {/* Keyword */}
@@ -729,8 +759,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
                   ></FormField>
                 </div>
               </div>
-
-              {/* ========== */}
+              {/* Variant Keywords */}
               <div className="flex flex-wrap gap-1">
                 {keywords.map((k, i) => (
                   <div
@@ -749,92 +778,101 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({
               </div>
 
               {/* ==================== Size, Quantity, Prices, and Discounts ==================== */}
-              <div className="w-full flex flex-col gap-3 xl:pl-5">
-                <ClickToAddInputs
-                  details={sizes}
-                  setDetails={setSizes}
-                  initialDetail={{
-                    size: "",
-                    quantity: 1,
-                    price: 0.01,
-                    discount: 0,
-                  }}
-                  header="Sizes, Quantity, Prices, and Discounts"
-                ></ClickToAddInputs>
-                {errors.sizes && (
-                  <span className="text-sm font-medium text-destructive">
-                    {errors.sizes.message}
-                  </span>
-                )}
-              </div>
+              <InputFieldset label="Size, Quantity, Prices, and Discounts">
+                {" "}
+                <div className="w-full flex flex-col gap-3 xl:pl-5">
+                  <ClickToAddInputs
+                    details={sizes}
+                    setDetails={setSizes}
+                    initialDetail={{
+                      size: "",
+                      quantity: 1,
+                      price: 0.01,
+                      discount: 0,
+                    }}
+                    header="Sizes, Quantity, Prices, and Discounts"
+                  ></ClickToAddInputs>
+                  {errors.sizes && (
+                    <span className="text-sm font-medium text-destructive">
+                      {errors.sizes.message}
+                    </span>
+                  )}
+                </div>
+              </InputFieldset>
 
               {/* ==================== Product and variant specs  ====================*/}
               {/* Product specs */}
-              <Tabs defaultValue="productSpecs" className="w-full">
-                <TabsList className="w-full grid-cols-2 grid">
-                  <TabsTrigger value="productSpecs">
-                    Product Specification
-                  </TabsTrigger>
-                  <TabsTrigger value="variantSpecs">
-                    Variant Specification
-                  </TabsTrigger>
-                </TabsList>
-                <TabsContent value="productSpecs">
-                  <div className="w-full flex flex-col gap-3 xl:pl-5">
-                    <ClickToAddInputs
-                      details={productSpecs}
-                      setDetails={setProductSpecs}
-                      initialDetail={{
-                        name: "",
-                        value: "",
-                      }}
-                      header="Fill Product Specification here"
-                    ></ClickToAddInputs>
-                    {errors.product_specs && (
-                      <span className="text-sm font-medium text-destructive">
-                        {errors.product_specs.message}
-                      </span>
-                    )}
-                  </div>
-                </TabsContent>
-                {/* variant specs */}
-                <TabsContent value="variantSpecs">
-                  <div className="w-full flex flex-col gap-3 xl:pl-5">
-                    <ClickToAddInputs
-                      details={variantSpecs}
-                      setDetails={setVariantSpecs}
-                      initialDetail={{
-                        name: "",
-                        value: "",
-                      }}
-                      header="Fill Product Variant Specification here"
-                    ></ClickToAddInputs>
-                    {errors.product_specs && (
-                      <span className="text-sm font-medium text-destructive">
-                        {errors.product_specs.message}
-                      </span>
-                    )}
-                  </div>
-                </TabsContent>
-              </Tabs>
+              <InputFieldset label="Specifications">
+                <Tabs defaultValue="productSpecs" className="w-full">
+                  <TabsList className="w-full grid-cols-2 grid">
+                    <TabsTrigger value="productSpecs">
+                      Product Specification
+                    </TabsTrigger>
+                    <TabsTrigger value="variantSpecs">
+                      Variant Specification
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="productSpecs">
+                    <div className="w-full flex flex-col gap-3 xl:pl-5">
+                      <ClickToAddInputs
+                        details={productSpecs}
+                        setDetails={setProductSpecs}
+                        initialDetail={{
+                          name: "",
+                          value: "",
+                        }}
+                        header="Fill Product Specification here"
+                      ></ClickToAddInputs>
+                      {errors.product_specs && (
+                        <span className="text-sm font-medium text-destructive">
+                          {errors.product_specs.message}
+                        </span>
+                      )}
+                    </div>
+                  </TabsContent>
+                  {/* variant specs */}
+                  <TabsContent value="variantSpecs">
+                    <div className="w-full flex flex-col gap-3 xl:pl-5">
+                      <ClickToAddInputs
+                        details={variantSpecs}
+                        setDetails={setVariantSpecs}
+                        initialDetail={{
+                          name: "",
+                          value: "",
+                        }}
+                        header="Fill Product Variant Specification here"
+                      ></ClickToAddInputs>
+                      {errors.variant_specs && (
+                        <span className="text-sm font-medium text-destructive">
+                          {errors.variant_specs.message}
+                        </span>
+                      )}
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </InputFieldset>
 
-              {/* Questions  */}
-              <div className="w-full flex flex-col gap-3 xl:pl-5">
-                <ClickToAddInputs
-                  details={questions}
-                  setDetails={setQuestions}
-                  initialDetail={{
-                    question: "",
-                    answer: "",
-                  }}
-                  header="Answer and Question"
-                ></ClickToAddInputs>
-                {errors.questions && (
-                  <span className="text-sm font-medium text-destructive">
-                    {errors.questions.message}
-                  </span>
-                )}
-              </div>
+              {/* Questions & Answers */}
+              <InputFieldset label="Answers & Questions">
+                <div className="w-full flex flex-col gap-3">
+                  <ClickToAddInputs
+                    details={questions}
+                    setDetails={setQuestions}
+                    initialDetail={{
+                      question: "",
+                      answer: "",
+                    }}
+                    containerClassName="flex-1"
+                    inputClassName="w-full"
+                    // header="Answer and Question"
+                  ></ClickToAddInputs>
+                  {errors.questions && (
+                    <span className="text-sm font-medium text-destructive">
+                      {errors.questions.message}
+                    </span>
+                  )}
+                </div>
+              </InputFieldset>
 
               {/* ==================== Is on Sale + Sale end date ==================== */}
               {/* Is on Sale */}
