@@ -3,6 +3,7 @@ import { Minus, PaintBucket, Plus } from "lucide-react";
 import React, { useState } from "react";
 
 import { SketchPicker } from "react-color";
+import { cn } from "@/lib/utils";
 
 export interface Detail<T = { [key: string]: string | number | undefined }> {
   [key: string]: T[keyof T];
@@ -104,7 +105,10 @@ const ClickToAddInputs = <T extends Detail>({
       {details.map((detail, index) => (
         <div key={index} className="flex items-center gap-x-4">
           {Object.keys(detail).map((property, propIndex) => (
-            <div key={propIndex} className="flex items-center gap-x-4">
+            <div
+              key={propIndex}
+              className={cn("flex items-center gap-x-4", containerClassName)}
+            >
               {/* Color picker toggle */}
               {property === "color" && colorPicker && (
                 <div className="flex gap-x-4">
@@ -120,7 +124,7 @@ const ClickToAddInputs = <T extends Detail>({
                     <PaintBucket></PaintBucket>
                   </button>
                   <span
-                    className="w-8 h-8 rouunded-full"
+                    className="w-8 h-8 rounded-full"
                     style={{ backgroundColor: detail[property] as string }}
                   ></span>
                 </div>
@@ -137,36 +141,27 @@ const ClickToAddInputs = <T extends Detail>({
                   ></SketchPicker>
                 )}
 
-              {/* Input field */}
-              {(() => {
-                const isNumberField = typeof detail[property] === "number";
-
-                return (
-                  <Input
-                    className="w-28"
-                    type={isNumberField ? "number" : "text"}
-                    name={property}
-                    placeholder={property}
-                    value={
-                      (detail[property] as string | number | undefined) ?? ""
-                    }
-                    min={isNumberField ? 0 : undefined}
-                    step={isNumberField ? "0.01" : undefined}
-                    onChange={(e) => {
-                      if (!isNumberField) {
-                        handleDetailsChange(index, property, e.target.value);
-                        return;
-                      }
-
-                      const numericValue =
-                        e.target.value === "" ? 0 : Number(e.target.value);
-                      handleDetailsChange(index, property, numericValue);
-                    }}
-                  ></Input>
-                );
-              })()}
+              <Input
+                className={cn("w-28 capitalize", inputClassName)}
+                type={typeof detail[property] === "number" ? "number" : "text"}
+                name={property}
+                placeholder={property}
+                value={detail[property] as string}
+                min={typeof detail[property] === "number" ? 0 : undefined}
+                step={0.01}
+                onChange={(e) => {
+                  handleDetailsChange(
+                    index,
+                    property,
+                    e.target.type === "number"
+                      ? parseFloat(e.target.value)
+                      : e.target.value,
+                  );
+                }}
+              ></Input>
             </div>
           ))}
+
           {/* show buttons for each row  of inputs */}
           <MinusButton onClick={() => handleRemoveDetail(index)}></MinusButton>
           <PlusButton onClick={handleAddDetail}></PlusButton>

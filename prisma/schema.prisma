@@ -198,6 +198,8 @@ model ProductVariantImage {
   url String
   alt String @default("")
 
+  order Int?
+
   productVariantId String
   productVariant   ProductVariant @relation("ProductVariantToVariantImages", fields: [productVariantId], references: [id])
 
