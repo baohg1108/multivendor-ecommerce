@@ -6,11 +6,14 @@ import ProductInfo from "./product-info/product-info";
 import ShipTo from "./shipping/ship-to";
 import ShippingDetails from "./shipping/shipping-details";
 import ReturnsSecurityPrivacyCard from "./returns-security-privacy-card";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { isProductValidToAdd } from "@/lib/utils";
 import QuantitySelector from "./quantity-selector";
 import SocialShare from "../shared/social-share";
 import { ProductVariantImage } from "@prisma/client";
+import { useCartStore } from "@/cart-store/useCartStore";
+import { toast } from "sonner";
+import useFromStore from "@/hooks/useFromStore";
 
 interface ProductPageContainerProps {
   productData: ProductPageDataType;
@@ -24,12 +27,16 @@ const ProductPageContainer = ({
   children,
 }: ProductPageContainerProps) => {
   const resolvedProductData = productData as NonNullable<ProductPageDataType>;
-  const { images, shippingDetails } = resolvedProductData;
+  const { images, shippingDetails, sizes, productId, variantId } =
+    resolvedProductData;
+
   const [variantImages, setVariantImages] =
     useState<ProductVariantImage[]>(images);
+
   const [activeImage, setActiveImage] = useState<ProductVariantImage | null>(
     images[0],
   );
+
   const hasShippingDetails = typeof shippingDetails !== "boolean";
   const resolvedShippingDetails = hasShippingDetails
     ? shippingDetails
@@ -79,6 +86,8 @@ const ProductPageContainer = ({
   const [productToBeAddedToCart, setProductToBeAddedToCart] =
     useState<CartProductType>(data);
 
+  // const { stock } = productToBeAddedToCart;
+
   //
   const handleChange = useCallback(
     (
@@ -94,6 +103,27 @@ const ProductPageContainer = ({
   );
 
   const isProductValid = isProductValidToAdd(productToBeAddedToCart);
+
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const cartItems = useFromStore(useCartStore, (state) => state.cart);
+
+  const handleAddToCard = () => {
+    addToCart(productToBeAddedToCart);
+    toast.success("Product added to cart successfully!");
+  };
+
+  const maxQty = useMemo(() => {
+    const search_product = cartItems?.find(
+      (p) =>
+        p.productId === productId &&
+        p.variantId === variantId &&
+        p.sizeId === sizeId,
+    );
+    return search_product
+      ? search_product.stock - search_product.quantity
+      : productToBeAddedToCart.stock;
+  }, [cartItems, productId, variantId, sizeId, productToBeAddedToCart.stock]);
 
   return (
     <div className="relative">
@@ -146,10 +176,16 @@ const ProductPageContainer = ({
                   {sizeId && (
                     <div className="w-full flex justify-end mt-4">
                       <QuantitySelector
+                        productId={productId}
+                        variantId={variantId}
                         sizeId={productToBeAddedToCart.sizeId}
                         quantity={productToBeAddedToCart.quantity}
                         stock={productToBeAddedToCart.stock}
                         handleChange={handleChange}
+                        sizes={sizes.map((s) => ({
+                          sizeId: s.id,
+                          sizeName: s.size,
+                        }))}
                       />
                     </div>
                   )}
@@ -161,6 +197,7 @@ const ProductPageContainer = ({
                   <button
                     disabled={!isProductValid}
                     className="w-full py-2.5 h-11 rounded-3xl font-bold border border-[#f97316] text-[#f97316] bg-[#fff7ed] hover:bg-[#ffedd5] active:scale-[0.98] transition-all duration-300 ease-in-out disabled:text-[#fdba74] disabled:border-[#fdba74] disabled:bg-[#fff7ed] disabled:cursor-not-allowed select-none"
+                    onClick={() => handleAddToCard()}
                   >
                     Add to cart
                   </button>
